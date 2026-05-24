@@ -1,0 +1,8 @@
+node_modules/
+dist/
+build/
+.next/
+.expo/
+.turbo/
+pnpm-lock.yaml
+phase0.md

@@ -1,0 +1,1 @@
+console.log("Seed data will be added after the Prisma schema is implemented.");

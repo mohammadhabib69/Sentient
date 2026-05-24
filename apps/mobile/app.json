@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Sentient",
+    "slug": "sentient",
+    "scheme": "sentient",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    }
+  }
+}

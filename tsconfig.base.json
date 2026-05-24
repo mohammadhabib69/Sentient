@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "ignoreDeprecations": "6.0",
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@sentient/api": ["packages/api/src"],
+      "@sentient/agents": ["packages/agents/src"],
+      "@sentient/billing": ["packages/billing/src"],
+      "@sentient/database": ["packages/database/src"],
+      "@sentient/events": ["packages/events/src"],
+      "@sentient/graph": ["packages/graph/src"],
+      "@sentient/queue": ["packages/queue/src"],
+      "@sentient/realtime": ["packages/realtime/src"],
+      "@sentient/shared": ["packages/shared/src"],
+      "@sentient/webhooks": ["packages/webhooks/src"]
+    }
+  }
+}

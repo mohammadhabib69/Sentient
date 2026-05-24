@@ -1,0 +1,45 @@
+{
+  "name": "@sentient/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsup src/index.ts src/server.ts --format esm,cjs --dts --clean",
+    "lint": "eslint src --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rimraf dist coverage"
+  },
+  "dependencies": {
+    "@sentient/agents": "workspace:*",
+    "@sentient/billing": "workspace:*",
+    "@sentient/database": "workspace:*",
+    "@sentient/events": "workspace:*",
+    "@sentient/graph": "workspace:*",
+    "@sentient/queue": "workspace:*",
+    "@sentient/realtime": "workspace:*",
+    "@sentient/shared": "workspace:*",
+    "@sentient/webhooks": "workspace:*",
+    "cors": "2.8.6",
+    "dotenv": "17.4.2",
+    "express": "5.2.1",
+    "helmet": "8.2.0",
+    "morgan": "1.10.1"
+  },
+  "devDependencies": {
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.6",
+    "@types/morgan": "1.9.10"
+  }
+}
