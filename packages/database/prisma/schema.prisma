@@ -1,0 +1,424 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Plan {
+  FREE       @map("free")
+  PRO        @map("pro")
+  BUSINESS   @map("business")
+  ENTERPRISE @map("enterprise")
+
+  @@map("plan")
+}
+
+enum UserRole {
+  SUPER_ADMIN @map("super_admin")
+  ORG_ADMIN   @map("org_admin")
+  MANAGER     @map("manager")
+  MEMBER      @map("member")
+  GUEST       @map("guest")
+
+  @@map("user_role")
+}
+
+enum ProjectStatus {
+  ACTIVE    @map("active")
+  PAUSED    @map("paused")
+  ARCHIVED  @map("archived")
+  COMPLETED @map("completed")
+
+  @@map("project_status")
+}
+
+enum TaskStatus {
+  TODO        @map("todo")
+  IN_PROGRESS @map("in_progress")
+  REVIEW      @map("review")
+  DONE        @map("done")
+  BLOCKED     @map("blocked")
+
+  @@map("task_status")
+}
+
+enum Priority {
+  LOW      @map("low")
+  MEDIUM   @map("medium")
+  HIGH     @map("high")
+  CRITICAL @map("critical")
+
+  @@map("priority")
+}
+
+enum AgentType {
+  OPERATIONS @map("operations")
+  FINANCE    @map("finance")
+  CUSTOMER   @map("customer")
+  DEV        @map("dev")
+  CUSTOM     @map("custom")
+
+  @@map("agent_type")
+}
+
+enum ApprovalMode {
+  ALWAYS        @map("always")
+  AUTO_LOW_RISK @map("auto_low_risk")
+  NEVER         @map("never")
+
+  @@map("approval_mode")
+}
+
+enum AgentActionStatus {
+  PENDING  @map("pending")
+  APPROVED @map("approved")
+  REJECTED @map("rejected")
+  EXECUTED @map("executed")
+  FAILED   @map("failed")
+
+  @@map("agent_action_status")
+}
+
+enum ActorType {
+  USER   @map("user")
+  AGENT  @map("agent")
+  SYSTEM @map("system")
+
+  @@map("actor_type")
+}
+
+enum SubscriptionStatus {
+  ACTIVE   @map("active")
+  PAST_DUE @map("past_due")
+  CANCELED @map("canceled")
+  TRIALING @map("trialing")
+
+  @@map("subscription_status")
+}
+
+model Organization {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  slug         String   @unique
+  plan         Plan     @default(FREE)
+  graphNodeId  String   @map("graph_node_id")
+  stripeCustId String?  @unique @map("stripe_cust_id")
+  settings     Json     @default("{}")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  users         User[]
+  workspaces    Workspace[]
+  projects      Project[]
+  tasks         Task[]
+  agents        Agent[]
+  agentActions  AgentAction[]
+  events        Event[]
+  notifications Notification[]
+  files         File[]
+  subscriptions Subscription[]
+  webhooks      Webhook[]
+
+  @@index([plan])
+  @@map("organizations")
+}
+
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  orgId         String    @map("org_id") @db.Uuid
+  email         String
+  name          String
+  avatarUrl     String?   @map("avatar_url")
+  role          UserRole  @default(MEMBER)
+  /// ABAC policy attributes used together with RBAC role checks.
+  attributes    Json      @default("{}")
+  passwordHash  String?   @map("password_hash")
+  googleId      String?   @map("google_id")
+  emailVerified Boolean   @default(false) @map("email_verified")
+  lastActiveAt  DateTime? @map("last_active_at") @db.Timestamptz(6)
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization         Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  sessions             Session[]
+  createdWorkspaces    Workspace[]    @relation("WorkspaceCreator")
+  createdProjects      Project[]      @relation("ProjectCreator")
+  createdTasks         Task[]         @relation("TaskCreator")
+  assignedTasks        Task[]         @relation("TaskAssignee")
+  createdAgents        Agent[]        @relation("AgentCreator")
+  approvedAgentActions AgentAction[]  @relation("AgentActionApprover")
+  notifications        Notification[]
+  uploadedFiles        File[]         @relation("FileUploader")
+
+  @@unique([orgId, email])
+  @@index([orgId, role])
+  @@index([lastActiveAt])
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  refreshToken String   @unique @map("refresh_token")
+  deviceInfo   Json     @default("{}") @map("device_info")
+  expiresAt    DateTime @map("expires_at") @db.Timestamptz(6)
+  revoked      Boolean  @default(false)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revoked])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model Workspace {
+  id          String   @id @default(uuid()) @db.Uuid
+  orgId       String   @map("org_id") @db.Uuid
+  name        String
+  description String?
+  graphNodeId String   @map("graph_node_id")
+  settings    Json     @default("{}")
+  createdBy   String   @map("created_by") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator      User         @relation("WorkspaceCreator", fields: [createdBy], references: [id])
+  projects     Project[]
+
+  @@index([orgId])
+  @@index([createdBy])
+  @@map("workspaces")
+}
+
+model Project {
+  id          String        @id @default(uuid()) @db.Uuid
+  workspaceId String        @map("workspace_id") @db.Uuid
+  orgId       String        @map("org_id") @db.Uuid
+  name        String
+  status      ProjectStatus @default(ACTIVE)
+  priority    Priority      @default(MEDIUM)
+  dueDate     DateTime?     @map("due_date") @db.Date
+  graphNodeId String        @map("graph_node_id")
+  metadata    Json          @default("{}")
+  createdBy   String        @map("created_by") @db.Uuid
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  workspace    Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator      User         @relation("ProjectCreator", fields: [createdBy], references: [id])
+  tasks        Task[]
+
+  @@index([workspaceId, status])
+  @@index([orgId, status])
+  @@index([orgId, priority])
+  @@index([dueDate])
+  @@index([createdBy])
+  @@map("projects")
+}
+
+model Task {
+  id             String     @id @default(uuid()) @db.Uuid
+  projectId      String     @map("project_id") @db.Uuid
+  orgId          String     @map("org_id") @db.Uuid
+  title          String
+  description    String?
+  status         TaskStatus @default(TODO)
+  priority       Priority   @default(MEDIUM)
+  assigneeId     String?    @map("assignee_id") @db.Uuid
+  parentTaskId   String?    @map("parent_task_id") @db.Uuid
+  dueDate        DateTime?  @map("due_date") @db.Timestamptz(6)
+  estimatedHours Decimal?   @map("estimated_hours") @db.Decimal(10, 2)
+  graphNodeId    String     @map("graph_node_id")
+  position       Int        @default(0)
+  createdBy      String     @map("created_by") @db.Uuid
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  assignee     User?        @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  parentTask   Task?        @relation("TaskHierarchy", fields: [parentTaskId], references: [id], onDelete: SetNull)
+  subtasks     Task[]       @relation("TaskHierarchy")
+  creator      User         @relation("TaskCreator", fields: [createdBy], references: [id])
+
+  @@index([projectId, status, position])
+  @@index([orgId, status])
+  @@index([orgId, priority])
+  @@index([assigneeId, status])
+  @@index([parentTaskId])
+  @@index([dueDate])
+  @@index([createdBy])
+  @@map("tasks")
+}
+
+model Agent {
+  id           String       @id @default(uuid()) @db.Uuid
+  orgId        String       @map("org_id") @db.Uuid
+  name         String
+  type         AgentType
+  config       Json         @default("{}")
+  memoryNs     String       @map("memory_ns")
+  isActive     Boolean      @default(true) @map("is_active")
+  approvalMode ApprovalMode @default(ALWAYS) @map("approval_mode")
+  actionsCount BigInt       @default(0) @map("actions_count")
+  createdBy    String       @map("created_by") @db.Uuid
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization  @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator      User          @relation("AgentCreator", fields: [createdBy], references: [id])
+  actions      AgentAction[]
+  memories     AgentMemory[]
+
+  @@unique([orgId, memoryNs])
+  @@index([orgId, type, isActive])
+  @@index([createdBy])
+  @@map("agents")
+}
+
+model AgentAction {
+  id         String            @id @default(uuid()) @db.Uuid
+  agentId    String            @map("agent_id") @db.Uuid
+  orgId      String            @map("org_id") @db.Uuid
+  actionType String            @map("action_type")
+  payload    Json              @default("{}")
+  status     AgentActionStatus @default(PENDING)
+  approvedBy String?           @map("approved_by") @db.Uuid
+  approvedAt DateTime?         @map("approved_at") @db.Timestamptz(6)
+  executedAt DateTime?         @map("executed_at") @db.Timestamptz(6)
+  result     Json?
+  expiresAt  DateTime          @map("expires_at") @db.Timestamptz(6)
+  createdAt  DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  agent        Agent        @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  approver     User?        @relation("AgentActionApprover", fields: [approvedBy], references: [id], onDelete: SetNull)
+
+  @@index([agentId, status])
+  @@index([orgId, status, createdAt])
+  @@index([approvedBy])
+  @@index([expiresAt])
+  @@map("agent_actions")
+}
+
+model AgentMemory {
+  id        String                      @id @default(uuid()) @db.Uuid
+  agentId   String                      @map("agent_id") @db.Uuid
+  namespace String
+  content   String
+  /// pgvector embedding for OpenAI text-embedding-3-small; dimension is fixed at 1536.
+  embedding Unsupported("vector(1536)")
+  metadata  Json                        @default("{}")
+  createdAt DateTime                    @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId, namespace])
+  @@index([namespace])
+  @@map("agent_memory")
+}
+
+model Event {
+  id            String    @default(uuid()) @db.Uuid
+  orgId         String    @map("org_id") @db.Uuid
+  type          String
+  aggregateId   String    @map("aggregate_id") @db.Uuid
+  aggregateType String    @map("aggregate_type")
+  payload       Json      @default("{}")
+  /// Polymorphic actor reference. actor_id may point to users.id, agents.id, or a system identity.
+  actorId       String    @map("actor_id") @db.Uuid
+  actorType     ActorType @map("actor_type")
+  version       Int
+  occurredAt    DateTime  @default(now()) @map("occurred_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@id([id, occurredAt])
+  @@index([orgId, occurredAt])
+  @@index([aggregateType, aggregateId, version])
+  @@index([type, occurredAt])
+  @@map("events")
+}
+
+model Notification {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  orgId     String    @map("org_id") @db.Uuid
+  type      String
+  title     String
+  body      String
+  data      Json      @default("{}")
+  read      Boolean   @default(false)
+  readAt    DateTime? @map("read_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
+  @@index([orgId, createdAt])
+  @@map("notifications")
+}
+
+model File {
+  id         String   @id @default(uuid()) @db.Uuid
+  orgId      String   @map("org_id") @db.Uuid
+  uploadedBy String   @map("uploaded_by") @db.Uuid
+  /// Polymorphic target type: task, project, workspace, or profile.
+  entityType String   @map("entity_type")
+  /// Polymorphic target id. Indexed with entity_type but intentionally not FK-constrained.
+  entityId   String   @map("entity_id") @db.Uuid
+  filename   String
+  storageKey String   @map("storage_key")
+  mimeType   String   @map("mime_type")
+  sizeBytes  BigInt   @map("size_bytes")
+  version    Int      @default(1)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  uploader     User         @relation("FileUploader", fields: [uploadedBy], references: [id])
+
+  @@index([orgId, entityType, entityId])
+  @@index([uploadedBy])
+  @@index([storageKey])
+  @@map("files")
+}
+
+model Subscription {
+  id                 String             @id @default(uuid()) @db.Uuid
+  orgId              String             @map("org_id") @db.Uuid
+  stripeSubId        String?            @unique @map("stripe_sub_id")
+  plan               Plan               @default(FREE)
+  status             SubscriptionStatus @default(ACTIVE)
+  agentLimit         Int                @default(1) @map("agent_limit")
+  actionsLimit       BigInt             @default(100) @map("actions_limit")
+  actionsUsed        BigInt             @default(0) @map("actions_used")
+  currentPeriodStart DateTime           @map("current_period_start") @db.Timestamptz(6)
+  currentPeriodEnd   DateTime           @map("current_period_end") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, status])
+  @@index([currentPeriodEnd])
+  @@map("subscriptions")
+}
+
+model Webhook {
+  id            String    @id @default(uuid()) @db.Uuid
+  orgId         String    @map("org_id") @db.Uuid
+  name          String
+  url           String
+  events        String[]
+  secret        String
+  isActive      Boolean   @default(true) @map("is_active")
+  lastTriggered DateTime? @map("last_triggered") @db.Timestamptz(6)
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, isActive])
+  @@index([lastTriggered])
+  @@map("webhooks")
+}

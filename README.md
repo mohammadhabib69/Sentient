@@ -22,11 +22,28 @@ This repository contains the Phase 0 monorepo scaffold for the modular monolith 
 
 ```bash
 pnpm install
+cp .env.example .env
+docker compose up -d
 pnpm build
 pnpm lint
 pnpm typecheck
 pnpm test
 ```
+
+For development-specific Docker logging and port overrides:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+```
+
+Local infrastructure endpoints:
+
+- PostgreSQL / TimescaleDB: `localhost:5432`
+- Redis: `localhost:6379`
+- Neo4j Browser: `http://localhost:7474`
+- Neo4j Bolt: `bolt://localhost:7687`
+- MinIO API: `http://localhost:9000`
+- MinIO Console: `http://localhost:9001`
 
 Run local development servers:
 

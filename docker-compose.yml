@@ -1,0 +1,115 @@
+# Sentient local infrastructure.
+# Start with: docker compose up -d
+name: sentient
+
+services:
+  # PostgreSQL with TimescaleDB extensions. This is the primary relational database
+  # and will also host time-series event data during Phase 0.
+  postgres:
+    image: timescale/timescaledb-ha:pg16
+    container_name: sentient-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sentient}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sentient}
+      POSTGRES_DB: ${POSTGRES_DB:-sentient}
+      PGDATA: /home/postgres/pgdata/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - sentient-postgres-data:/home/postgres/pgdata/data
+    networks:
+      - sentient-network
+    healthcheck:
+      test: ["CMD-SHELL", 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redis provides cache, session, pub/sub, and BullMQ queue infrastructure.
+  redis:
+    image: redis:7-alpine
+    container_name: sentient-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - sentient-redis-data:/data
+    networks:
+      - sentient-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Neo4j stores the business knowledge graph for organizations, users, projects,
+  # tasks, agents, and their relationships.
+  neo4j:
+    image: neo4j:5
+    container_name: sentient-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-sentient-neo4j-password}
+      NEO4J_USER: ${NEO4J_USER:-neo4j}
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-sentient-neo4j-password}
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: 1G
+      NEO4J_server_memory_pagecache_size: 512m
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"
+      - "${NEO4J_BOLT_PORT:-7687}:7687"
+    volumes:
+      - sentient-neo4j-data:/data
+      - sentient-neo4j-logs:/logs
+      - sentient-neo4j-import:/var/lib/neo4j/import
+      - sentient-neo4j-plugins:/plugins
+    networks:
+      - sentient-network
+    healthcheck:
+      test: ["CMD-SHELL", 'cypher-shell -u "$${NEO4J_USER}" -p "$${NEO4J_PASSWORD}" "RETURN 1;"']
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
+
+  # MinIO is an S3-compatible object store for local file upload and attachment
+  # development. Production can swap this endpoint for AWS S3 or Supabase storage.
+  minio:
+    image: minio/minio
+    container_name: sentient-minio
+    restart: unless-stopped
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-sentient}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-sentient-minio-password}
+    ports:
+      - "${MINIO_API_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - sentient-minio-data:/data
+    networks:
+      - sentient-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  sentient-network:
+    name: sentient-network
+    driver: bridge
+
+volumes:
+  sentient-postgres-data:
+  sentient-redis-data:
+  sentient-neo4j-data:
+  sentient-neo4j-logs:
+  sentient-neo4j-import:
+  sentient-neo4j-plugins:
+  sentient-minio-data:

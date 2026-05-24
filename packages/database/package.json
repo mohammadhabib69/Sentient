@@ -20,9 +20,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "clean": "rimraf dist coverage generated",
-    "db:generate": "node -e \"console.log('Prisma schema will be added in the Phase 0 database step.')\"",
-    "db:migrate": "node -e \"console.log('Database migrations will be added in the Phase 0 database step.')\"",
-    "db:seed": "tsx src/seed.ts"
+    "db:generate": "prisma generate --schema prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "db:seed": "tsx src/seed.ts",
+    "db:studio": "prisma studio --schema prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "7.8.0"
