@@ -5,8 +5,15 @@
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@sentient/shared": ["../../packages/shared/src"]
+      "@sentient/shared": [
+        "../../packages/shared/src"
+      ]
     }
   },
-  "include": ["expo-env.d.ts", "app/**/*.ts", "app/**/*.tsx"]
+  "include": [
+    "expo-env.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    ".expo/types/**/*.ts"
+  ]
 }

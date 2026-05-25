@@ -98,6 +98,15 @@ sentient/
 7. Document `.env.example`.
 8. Add CI/CD workflows and GitHub branch protection.
 
+## Documentation
+
+- [Setup Guide](docs/SETUP.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Database](docs/DATABASE.md)
+- [Development Guidelines](docs/DEVELOPMENT.md)
+- [Branch Protection](docs/branch-protection.md)
+- [Contributing](CONTRIBUTING.md)
+
 ## Git Remote
 
 The intended GitHub remote is:
