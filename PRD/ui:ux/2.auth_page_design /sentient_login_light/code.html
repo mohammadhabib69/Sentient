@@ -1,0 +1,238 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Login - Sentient</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8b9293",
+                        "tertiary-fixed-dim": "#b8cbbd",
+                        "inverse-on-surface": "#2f3130",
+                        "on-surface": "#e2e3e0",
+                        "amber-alert": "#D4874A",
+                        "secondary-container": "#1f4f44",
+                        "mist-teal": "#74959B",
+                        "on-primary-fixed": "#001f24",
+                        "on-tertiary-fixed": "#0e1f16",
+                        "tertiary-container": "#829589",
+                        "on-secondary": "#02382e",
+                        "on-background": "#e2e3e0",
+                        "primary-fixed-dim": "#aaccd3",
+                        "tertiary": "#b8cbbd",
+                        "on-primary": "#13353a",
+                        "on-tertiary": "#23342a",
+                        "inverse-primary": "#436469",
+                        "surface-container-lowest": "#0d0f0e",
+                        "primary-fixed": "#c6e9ef",
+                        "surface-container-highest": "#333534",
+                        "primary-container": "#75969c",
+                        "secondary-fixed": "#bbedde",
+                        "on-secondary-fixed-variant": "#1f4f44",
+                        "error-container": "#93000a",
+                        "primary": "#aaccd3",
+                        "tertiary-fixed": "#d4e7d9",
+                        "surface-dim": "#121413",
+                        "surface-container-high": "#282a29",
+                        "on-secondary-fixed": "#00201a",
+                        "background": "#121413",
+                        "on-secondary-container": "#8fbfb1",
+                        "error-red": "#C0504A",
+                        "secondary-fixed-dim": "#a0d0c2",
+                        "inverse-surface": "#e2e3e0",
+                        "glass-border": "rgba(116, 149, 155, 0.18)",
+                        "on-primary-fixed-variant": "#2b4c51",
+                        "deep-forest": "#2C3D33",
+                        "secondary": "#a0d0c2",
+                        "forest-green": "#49776B",
+                        "surface-bright": "#383a38",
+                        "surface": "#121413",
+                        "surface-container-low": "#1a1c1b",
+                        "on-tertiary-fixed-variant": "#394b40",
+                        "on-tertiary-container": "#1d2d24",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#414849",
+                        "on-error": "#690005",
+                        "on-primary-container": "#0a2e33",
+                        "surface-variant": "#333534",
+                        "surface-tint": "#aaccd3",
+                        "glass-fill": "rgba(44, 61, 51, 0.45)",
+                        "surface-container": "#1e201f",
+                        "on-surface-variant": "#c1c8c9",
+                        "light-bg": "#F5F7F6",
+                        "light-glass-bg": "rgba(255, 255, 255, 0.80)",
+                        "light-glass-border": "#DDE6E0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "2rem",
+                        "sidebar-gap": "1rem",
+                        "container-max": "1280px",
+                        "sm": "0.5rem",
+                        "gutter": "1.5rem",
+                        "xs": "0.25rem",
+                        "md": "1rem",
+                        "lg": "1.5rem",
+                        "sidebar-width": "240px",
+                        "2xl": "4rem"
+                    },
+                    "fontFamily": {
+                        "metric-lg": ["JetBrains Mono"],
+                        "headline-2xl": ["Geist", "sans-serif"],
+                        "body-sm": ["Geist", "sans-serif"],
+                        "body-lg": ["Geist", "sans-serif"],
+                        "headline-xl": ["Geist", "sans-serif"],
+                        "mono-xs": ["JetBrains Mono"],
+                        "hero-900": ["Geist", "sans-serif"],
+                        "label-caps": ["Geist", "sans-serif"],
+                        "body-md": ["Geist", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "metric-lg": ["18px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "headline-2xl": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-xl": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "mono-xs": ["11px", {"lineHeight": "1", "fontWeight": "400"}],
+                        "hero-900": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "900"}],
+                        "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-md": ["15px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            /* Forcing light mode as requested by user despite the dark mode global config */
+            background-color: #F5F7F6; 
+            color: #121413;
+        }
+        
+        .particle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            background-image: radial-gradient(circle at 2px 2px, rgba(116, 149, 155, 0.15) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.80);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid #DDE6E0;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-glass {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid #DDE6E0;
+            transition: all 0.2s ease;
+        }
+        
+        .input-glass:focus {
+            border-color: #74959B;
+            box-shadow: 0 0 0 2px rgba(116, 149, 155, 0.2);
+            outline: none;
+        }
+
+        .btn-google {
+            background-color: white;
+            border: 1px solid #DDE6E0;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-google:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center relative overflow-hidden font-body-md text-body-md text-surface-container-highest">
+<!-- Subtle Particle Background -->
+<div class="particle-bg"></div>
+<!-- Main Content Container -->
+<main class="relative z-10 w-full max-w-[480px] px-gutter py-xl">
+<!-- Login Card -->
+<div class="login-card rounded-xl p-8 flex flex-col items-center">
+<!-- Logo & Brand -->
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-forest-green" style="font-size: 32px; font-variation-settings: 'FILL' 1;">
+                    data_exploration
+                </span>
+<span class="font-headline-xl text-headline-xl tracking-tighter text-surface-container-lowest">Sentient</span>
+</div>
+<!-- Headings -->
+<div class="text-center mb-8">
+<h1 class="font-headline-2xl text-headline-2xl text-surface-container-lowest mb-2">Welcome back</h1>
+<p class="font-body-md text-body-md text-outline">Sign in to your reality engine</p>
+</div>
+<!-- Google SSO Button -->
+<button class="btn-google w-full flex items-center justify-center gap-3 py-3 rounded-lg mb-6 font-body-md text-body-md font-medium text-surface-container-highest" type="button">
+<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+                Continue with Google
+            </button>
+<!-- Divider -->
+<div class="w-full flex items-center mb-6">
+<div class="flex-grow border-t border-light-glass-border"></div>
+<span class="px-3 font-label-caps text-label-caps text-outline">OR</span>
+<div class="flex-grow border-t border-light-glass-border"></div>
+</div>
+<!-- Login Form -->
+<form class="w-full flex flex-col gap-4">
+<!-- Email Input -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-surface-container-highest" for="email">Email Address</label>
+<input class="input-glass w-full rounded-lg px-4 py-3 font-body-md text-body-md text-surface-container-lowest placeholder-outline" id="email" placeholder="agent@sentient.io" required="" type="email">
+</div>
+<!-- Password Input -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-surface-container-highest" for="password">Password</label>
+<input class="input-glass w-full rounded-lg px-4 py-3 font-body-md text-body-md text-surface-container-lowest placeholder-outline" id="password" placeholder="••••••••" required="" type="password">
+</div>
+<!-- Remember / Forgot -->
+<div class="flex justify-between items-center py-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded border-light-glass-border text-forest-green focus:ring-forest-green bg-white/50 w-4 h-4" type="checkbox">
+<span class="font-body-sm text-body-sm text-outline group-hover:text-surface-container-highest transition-colors">Remember me</span>
+</label>
+<a class="font-body-sm text-body-sm text-forest-green hover:text-secondary-container transition-colors font-medium" href="#">Forgot password?</a>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-forest-green hover:bg-secondary-container text-white font-body-md text-body-md font-medium rounded-lg py-3 transition-colors mt-2" type="submit">
+                    Sign In
+                </button>
+</form>
+<!-- Sign Up Link -->
+<div class="mt-8 text-center">
+<p class="font-body-sm text-body-sm text-outline">
+                    Don't have an account? 
+                    <a class="text-forest-green hover:text-secondary-container font-medium transition-colors" href="#">Start free →</a>
+</p>
+</div>
+</div>
+</main>
+</body></html>

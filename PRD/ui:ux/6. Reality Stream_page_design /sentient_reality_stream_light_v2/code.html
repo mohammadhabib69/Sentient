@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reality Stream - Aether Mission Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "inverse-primary": "#436469",
+                "secondary": "#a0d0c2",
+                "primary-container": "#75969c",
+                "mist-teal": "#74959B",
+                "background": "#1E201F",
+                "primary": "#aaccd3",
+                "secondary-fixed": "#bbedde",
+                "on-primary-container": "#0a2e33",
+                "on-tertiary-fixed-variant": "#394b40",
+                "on-primary-fixed": "#001f24",
+                "surface-container-low": "#1a1c1b",
+                "on-secondary-fixed": "#00201a",
+                "on-secondary": "#02382e",
+                "on-surface-variant": "#c1c8c9",
+                "on-secondary-fixed-variant": "#1f4f44",
+                "inverse-surface": "#e2e3e0",
+                "surface-container": "#1e201f",
+                "tertiary": "#b8cbbd",
+                "on-background": "#e2e3e0",
+                "on-primary": "#13353a",
+                "inverse-on-surface": "#2f3130",
+                "glass-fill": "rgba(44, 61, 51, 0.45)",
+                "primary-fixed-dim": "#aaccd3",
+                "deep-forest": "#2C3D33",
+                "on-secondary-container": "#8fbfb1",
+                "on-error-container": "#ffdad6",
+                "surface-bright": "#383a38",
+                "surface-tint": "#aaccd3",
+                "on-tertiary": "#23342a",
+                "tertiary-container": "#829589",
+                "surface": "#121413",
+                "error": "#ffb4ab",
+                "secondary-container": "#1f4f44",
+                "on-tertiary-fixed": "#0e1f16",
+                "outline": "#8b9293",
+                "on-tertiary-container": "#1d2d24",
+                "forest-green": "#49776B",
+                "primary-fixed": "#c6e9ef",
+                "surface-variant": "#333534",
+                "error-red": "#C0504A",
+                "amber-alert": "#D4874A",
+                "error-container": "#93000a",
+                "glass-border": "rgba(116, 149, 155, 0.18)",
+                "on-error": "#690005",
+                "secondary-fixed-dim": "#a0d0c2",
+                "tertiary-fixed-dim": "#b8cbbd",
+                "outline-variant": "#414849",
+                "surface-container-highest": "#333534",
+                "surface-container-lowest": "#0d0f0e",
+                "on-primary-fixed-variant": "#2b4c51",
+                "on-surface": "#e2e3e0",
+                "surface-dim": "#121413",
+                "surface-container-high": "#282a29",
+                "tertiary-fixed": "#d4e7d9"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "md": "1rem",
+                "2xl": "4rem",
+                "sidebar-gap": "1rem",
+                "xs": "0.25rem",
+                "container-max": "1280px",
+                "lg": "1.5rem",
+                "gutter": "1.5rem",
+                "xl": "2rem",
+                "sm": "0.5rem",
+                "sidebar-width": "240px"
+        },
+        "fontFamily": {
+                "hero-900": [
+                        "Geist Sans"
+                ],
+                "label-caps": [
+                        "Geist Sans"
+                ],
+                "headline-xl": [
+                        "Geist Sans"
+                ],
+                "headline-2xl": [
+                        "Geist Sans"
+                ],
+                "mono-xs": [
+                        "JetBrains Mono"
+                ],
+                "body-lg": [
+                        "Geist Sans"
+                ],
+                "metric-lg": [
+                        "JetBrains Mono"
+                ],
+                "body-md": [
+                        "Geist Sans"
+                ],
+                "body-sm": [
+                        "Geist Sans"
+                ]
+        },
+        "fontSize": {
+                "hero-900": [
+                        "72px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.04em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "label-caps": [
+                        "11px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.1em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-xl": [
+                        "24px",
+                        {
+                                "lineHeight": "1.3",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-2xl": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "700"
+                        }
+                ],
+                "mono-xs": [
+                        "11px",
+                        {
+                                "lineHeight": "1",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "metric-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-md": [
+                        "15px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Ambient Background - Light Mode */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(116, 149, 155, 0.15) 0%, transparent 70%),
+                        radial-gradient(circle at 100% 100%, rgba(73, 119, 107, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
+</head>
+<body class="bg-[#F5F7F6] text-[#1E201F] font-body-md min-h-screen flex antialiased">
+<!-- Desktop SideNavBar -->
+<nav class="hidden md:flex flex-col bg-white/65 backdrop-blur-[28px] border-r border-black/5 fixed left-0 top-0 bottom-0 w-[240px] z-40">
+<div class="p-lg">
+<h1 class="font-headline-xl text-headline-xl font-bold text-primary">Aether OS</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Intelligence Engine v4.0</p>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-1 px-sm">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all text-[#4A5E52]" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all text-[#4A5E52]" href="#">
+<span class="material-symbols-outlined text-xl">smart_toy</span>
+<span class="font-body-sm text-body-sm">Agents</span>
+</a>
+<!-- Active Tab: Reality Stream -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/5 transition-all text-primary font-bold active:translate-x-1 duration-150 relative text-[#4A5E52]" href="#">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full"></div>
+<span class="material-symbols-outlined text-xl">stream</span>
+<span class="font-body-sm text-body-sm">Reality Stream</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all text-[#4A5E52]" href="#">
+<span class="material-symbols-outlined text-xl">hub</span>
+<span class="font-body-sm text-body-sm">Graph</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all text-[#4A5E52]" href="#">
+<span class="material-symbols-outlined text-xl">inventory_2</span>
+<span class="font-body-sm text-body-sm">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all text-[#4A5E52]" href="#">
+<span class="material-symbols-outlined text-xl">analytics</span>
+<span class="font-body-sm text-body-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all text-[#4A5E52]" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+</div>
+<div class="mt-auto p-md border-t border-glass-border flex flex-col gap-2">
+<button class="w-full bg-forest-green hover:bg-forest-green/90 text-white font-body-sm text-body-sm py-2 rounded-lg transition-colors mb-sm shadow-[0_0_15px_rgba(73,119,107,0.3)] border border-white/10">
+                Deploy Agent
+            </button>
+<div class="flex items-center justify-between px-2 text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-2 hover:text-on-surface cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-lg">sensors</span>
+<span>Status</span>
+</div>
+<div class="flex items-center gap-2 hover:text-on-surface cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-lg">logout</span>
+</div>
+</div>
+<div class="flex items-center gap-3 mt-sm px-2">
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-glass-border flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">System Operator</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<main class="flex-1 flex flex-col min-w-0 md:ml-[240px] relative h-screen">
+<!-- TopAppBar -->
+<header class="bg-white/80 backdrop-blur-[28px] border-b border-black/5 sticky top-0 z-30 flex items-center justify-between px-lg py-sm">
+<div class="flex items-center gap-3">
+<div class="flex items-center text-on-surface-variant text-sm font-body-sm">
+<span class="hover:text-primary cursor-pointer transition-colors">Mission Control</span>
+<span class="material-symbols-outlined text-[16px] mx-1">chevron_right</span>
+<span class="text-on-surface font-semibold">Reality Stream</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden lg:flex items-center bg-surface-container-low border border-glass-border rounded-full px-4 py-1.5 focus-within:border-mist-teal transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant mr-2 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm font-body-sm text-on-surface placeholder:text-on-surface-variant w-64" placeholder="Search system..." type="text"/>
+</div>
+<div class="flex items-center gap-2 text-mist-teal">
+<button class="w-8 h-8 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center active:scale-95 duration-200">
+<span class="material-symbols-outlined">contrast</span>
+</button>
+<button class="w-8 h-8 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center active:scale-95 duration-200 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-forest-green"></span>
+</button>
+<button class="w-8 h-8 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center active:scale-95 duration-200">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Content Area - 3 Pane Layout -->
+<div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+<!-- Left Pane: Filters (260px) -->
+<aside class="w-full lg:w-[260px] flex-shrink-0 flex flex-col gap-lg bg-white/40 backdrop-blur-[28px] border-r border-black/5 p-md overflow-y-auto custom-scrollbar z-20">
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Filters</h2>
+<button class="font-mono-xs text-mono-xs text-mist-teal hover:text-primary transition-colors">Reset</button>
+</div>
+<!-- Event Type -->
+<div class="flex flex-col gap-sm">
+<span class="font-mono-xs text-mono-xs text-outline">EVENT TYPE</span>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1.5 rounded-full border border-primary/50 bg-primary/10 text-primary font-body-sm text-body-sm transition-colors hover:bg-primary/20">All</button>
+<button class="px-3 py-1.5 rounded-full border border-glass-border bg-surface-container hover:bg-surface-bright text-on-surface-variant font-body-sm text-body-sm transition-colors">Agent Actions</button>
+<button class="px-3 py-1.5 rounded-full border border-glass-border bg-surface-container hover:bg-surface-bright text-on-surface-variant font-body-sm text-body-sm transition-colors">User Actions</button>
+<button class="px-3 py-1.5 rounded-full border border-amber-alert/30 bg-amber-alert/5 text-amber-alert hover:bg-amber-alert/10 font-body-sm text-body-sm transition-colors">Anomalies</button>
+<button class="px-3 py-1.5 rounded-full border border-glass-border bg-surface-container hover:bg-surface-bright text-on-surface-variant font-body-sm text-body-sm transition-colors">System</button>
+<button class="px-3 py-1.5 rounded-full border border-error-red/30 bg-error-red/5 text-error-red hover:bg-error-red/10 font-body-sm text-body-sm transition-colors">Errors</button>
+</div>
+</div>
+<!-- Dropdowns -->
+<div class="flex flex-col gap-sm mt-4">
+<span class="font-mono-xs text-mono-xs text-outline">ACTOR</span>
+<select class="w-full bg-surface-container border border-glass-border rounded-lg px-3 py-2 font-body-sm text-body-sm text-on-surface focus:border-mist-teal focus:ring-1 focus:ring-mist-teal outline-none appearance-none">
+<option>Any Actor</option>
+<option>Agent: Flux</option>
+<option>Agent: Nova</option>
+<option>User: Operator</option>
+</select>
+</div>
+<div class="flex flex-col gap-sm mt-4">
+<span class="font-mono-xs text-mono-xs text-outline">ENTITY TYPE</span>
+<select class="w-full bg-surface-container border border-glass-border rounded-lg px-3 py-2 font-body-sm text-body-sm text-on-surface focus:border-mist-teal focus:ring-1 focus:ring-mist-teal outline-none appearance-none">
+<option>All Entities</option>
+<option>Project File</option>
+<option>Database Record</option>
+<option>API Endpoint</option>
+</select>
+</div>
+<!-- Time Range -->
+<div class="flex flex-col gap-sm mt-auto pt-md border-t border-glass-border">
+<span class="font-mono-xs text-mono-xs text-outline">TIME RANGE</span>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-1.5 rounded-lg border border-glass-border bg-surface-container hover:bg-surface-bright text-on-surface-variant font-mono-xs text-mono-xs text-center transition-colors">1h</button>
+<button class="py-1.5 rounded-lg border border-primary/50 bg-primary/10 text-primary font-mono-xs text-mono-xs text-center transition-colors">24h</button>
+<button class="py-1.5 rounded-lg border border-glass-border bg-surface-container hover:bg-surface-bright text-on-surface-variant font-mono-xs text-mono-xs text-center transition-colors">7d</button>
+</div>
+</div>
+</aside>
+<!-- Center Pane: Event Timeline -->
+<section class="flex-1 flex flex-col min-w-0 bg-transparent overflow-hidden z-10">
+<!-- Timeline Header -->
+<div class="px-lg py-md border-b border-black/5 bg-white/80 backdrop-blur-[28px] flex items-center justify-between sticky top-0 z-10"><div><div class="flex items-center gap-3"><h2 class="font-headline-xl text-[20px] font-bold text-[#1E201F]">Live Feed</h2><div class="flex items-center gap-2 px-2 py-0.5 rounded-full bg-forest-green/10 border border-forest-green/20"><span class="w-2 h-2 rounded-full bg-forest-green animate-pulse shadow-[0_0_8px_rgba(73,119,107,0.8)]"></span><span class="font-label-caps text-label-caps text-forest-green">LIVE</span></div></div></div><div class="flex gap-2"><button class="p-2 rounded-lg hover:bg-black/5 text-[#4A5E52] transition-colors"><span class="material-symbols-outlined text-sm">pause</span></button><button class="p-2 rounded-lg hover:bg-black/5 text-[#4A5E52] transition-colors"><span class="material-symbols-outlined text-sm">download</span></button></div></div>
+<!-- Timeline List -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-lg flex flex-col gap-4 relative pb-32">
+<!-- Vertical Track -->
+<div class="absolute left-[47px] top-0 bottom-0 w-px bg-surface-variant/50 hidden sm:block"></div>
+<!-- Event 1: Agent Action (Teal) -->
+<div class="relative flex items-start gap-md group cursor-pointer">
+<div class="z-10 w-10 h-10 rounded-full bg-surface-container-low flex-shrink-0 border border-mist-teal/50 flex items-center justify-center text-mist-teal shadow-[0_0_12px_rgba(116,149,155,0.15)] mt-2">
+<span class="font-label-caps text-xs">FL</span>
+</div>
+<div class="flex-1 bg-white/70 backdrop-blur-[12px] border border-black/5 rounded-xl p-md relative overflow-hidden transition-all hover:bg-white hover:shadow-md">
+<div class="absolute left-0 top-0 bottom-0 w-[4px] bg-mist-teal"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="font-body-md font-semibold text-on-surface">Flux</span>
+<span class="font-label-caps text-[9px] px-2 py-0.5 rounded bg-mist-teal/10 text-mist-teal border border-mist-teal/20">SUGGESTION</span>
+</div>
+<span class="font-mono-xs text-mono-xs text-outline-variant">10:42:05.112 UTC</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 leading-relaxed">Analyzed routing algorithm variance. Suggested optimizing pathing node distribution to reduce latency by 14%.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 bg-surface-container-low rounded-md border border-glass-border px-3 py-1.5">
+<span class="material-symbols-outlined text-outline text-[14px]">description</span>
+<span class="font-mono-xs text-mono-xs text-on-surface">route_map_v2.json</span>
+</div>
+<div class="font-body-sm text-[13px] text-on-surface-variant group-hover:text-mist-teal transition-colors flex items-center gap-1">
+                                    View Details <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Event 2: Anomaly (Amber) -->
+<div class="relative flex items-start gap-md group cursor-pointer">
+<div class="z-10 w-10 h-10 rounded-full bg-surface-container-low flex-shrink-0 border border-amber-alert/50 flex items-center justify-center text-amber-alert shadow-[0_0_12px_rgba(212,135,74,0.15)] mt-2">
+<span class="font-label-caps text-xs">NV</span>
+</div>
+<div class="flex-1 bg-white/70 backdrop-blur-[12px] border border-black/5 rounded-xl p-md relative overflow-hidden transition-all hover:bg-white hover:shadow-md">
+<div class="absolute left-0 top-0 bottom-0 w-[4px] bg-amber-alert"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="font-body-md font-semibold text-on-surface">Nova</span>
+<span class="font-label-caps text-[9px] px-2 py-0.5 rounded bg-amber-alert/10 text-amber-alert border border-amber-alert/20">ANOMALY</span>
+</div>
+<span class="font-mono-xs text-mono-xs text-outline-variant">10:40:18.004 UTC</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 leading-relaxed">Detected uncharacteristic spike in resource request frequency from cluster beta-9. Sandboxing automated.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 bg-surface-container-low rounded-md border border-glass-border px-3 py-1.5">
+<span class="material-symbols-outlined text-outline text-[14px]">dns</span>
+<span class="font-mono-xs text-mono-xs text-on-surface">cluster-beta-9</span>
+</div>
+<div class="font-body-sm text-[13px] text-amber-alert hover:text-amber-alert/80 transition-colors flex items-center gap-1">
+                                    Investigate <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Event 3: User Action (Muted) -->
+<div class="relative flex items-start gap-md group cursor-pointer">
+<div class="z-10 w-10 h-10 rounded-full bg-surface-container-low flex-shrink-0 border border-outline-variant flex items-center justify-center text-outline mt-2">
+<span class="material-symbols-outlined text-[18px]">person</span>
+</div>
+<div class="flex-1 bg-white/70 backdrop-blur-[12px] border border-black/5 rounded-xl p-md relative overflow-hidden transition-all hover:bg-white hover:shadow-md">
+<div class="absolute left-0 top-0 bottom-0 w-[4px] bg-outline-variant"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="font-body-md font-semibold text-on-surface">Operator K.</span>
+<span class="font-label-caps text-[9px] px-2 py-0.5 rounded bg-surface-variant text-outline border border-glass-border">APPROVAL</span>
+</div>
+<span class="font-mono-xs text-mono-xs text-outline-variant">10:35:00.992 UTC</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 leading-relaxed">Manually approved deployment of suggested routing optimizations to production environment.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 bg-surface-container-low rounded-md border border-glass-border px-3 py-1.5">
+<span class="material-symbols-outlined text-outline text-[14px]">done_all</span>
+<span class="font-mono-xs text-mono-xs text-on-surface">deploy_req_882</span>
+</div>
+<div class="font-body-sm text-[13px] text-on-surface-variant group-hover:text-outline transition-colors flex items-center gap-1">
+                                    View Details <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Event 4: System Error (Red) -->
+<div class="relative flex items-start gap-md group cursor-pointer">
+<div class="z-10 w-10 h-10 rounded-full bg-surface-container-low flex-shrink-0 border border-error-red/50 flex items-center justify-center text-error-red shadow-[0_0_12px_rgba(192,80,74,0.15)] mt-2">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+</div>
+<div class="flex-1 bg-white/70 backdrop-blur-[12px] border border-black/5 rounded-xl p-md relative overflow-hidden transition-all hover:bg-white hover:shadow-md">
+<div class="absolute left-0 top-0 bottom-0 w-[4px] bg-error-red"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="font-body-md font-semibold text-on-surface">System Kernel</span>
+<span class="font-label-caps text-[9px] px-2 py-0.5 rounded bg-error-red/10 text-error-red border border-error-red/20">CRITICAL</span>
+</div>
+<span class="font-mono-xs text-mono-xs text-outline-variant">10:15:02.000 UTC</span>
+</div>
+<p class="font-body-sm text-body-sm text-error-red/90 mb-4 leading-relaxed">Authentication heartbeat failure on remote shard. Connection reset by peer.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 bg-surface-container-low rounded-md border border-glass-border px-3 py-1.5">
+<span class="material-symbols-outlined text-outline text-[14px]">router</span>
+<span class="font-mono-xs text-mono-xs text-on-surface">shard_auth_01</span>
+</div>
+<div class="font-body-sm text-[13px] text-error-red hover:text-error-red/80 transition-colors flex items-center gap-1">
+                                    View Logs <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Pane: Contextual Intelligence (Slide-in) -->
+<aside class="hidden xl:flex w-[320px] flex-shrink-0 flex-col bg-white/90 backdrop-blur-[28px] border-l border-black/5 z-20 overflow-y-auto custom-scrollbar">
+<div class="p-md border-b border-black/5 flex justify-between items-center sticky top-0 bg-white/90 backdrop-blur-[28px]">
+<h3 class="font-headline-xl text-[16px] text-on-surface">Intelligence Details</h3>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-1">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="p-md flex flex-col gap-lg">
+<!-- Actor Metadata -->
+<div>
+<span class="font-label-caps text-[10px] text-outline block mb-2">ACTOR METADATA</span>
+<div class="flex items-center gap-3 bg-surface-container rounded-lg p-3 border border-glass-border">
+<div class="w-8 h-8 rounded-full bg-mist-teal/10 border border-mist-teal/30 flex items-center justify-center text-mist-teal">
+<span class="font-label-caps text-xs">FL</span>
+</div>
+<div>
+<div class="font-body-sm text-on-surface font-semibold">Flux Agent</div>
+<div class="font-mono-xs text-[10px] text-mist-teal">ID: FLX-992-ALPHA</div>
+</div>
+</div>
+</div>
+<!-- Payload -->
+<div>
+<span class="font-label-caps text-[10px] text-outline block mb-2">PAYLOAD DATA</span>
+<div class="bg-[#F5F7F6] rounded-lg border border-black/5 p-3 overflow-x-auto"><pre class="font-mono-xs text-[11px] text-[#1f4f44] leading-relaxed"><code>{
+  "event_id": "evt_8832a1",
+  "type": "suggestion",
+  "target": "route_map_v2",
+  "metrics": {
+    "latency_reduction": "14%",
+    "confidence": 0.92
+  },
+  "nodes_affected": [
+    "n_441", "n_442", "n_489"
+  ]
+}</code></pre></div>
+</div>
+<!-- Related Entities -->
+<div>
+<span class="font-label-caps text-[10px] text-outline block mb-2">RELATED ENTITIES</span>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container border border-glass-border hover:border-mist-teal/30 cursor-pointer transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-outline">description</span>
+<span class="font-mono-xs text-xs text-on-surface">route_map_v2.json</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">open_in_new</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container border border-glass-border hover:border-mist-teal/30 cursor-pointer transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-outline">analytics</span>
+<span class="font-mono-xs text-xs text-on-surface">latency_metrics</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">open_in_new</span>
+</div>
+</div>
+</div>
+<button class="w-full bg-surface-container hover:bg-surface-bright text-on-surface font-body-sm py-2 rounded-lg transition-colors border border-glass-border mt-2">
+                Execute Suggestion
+            </button>
+</div>
+</aside>
+</div>
+<!-- Floating Glass Command Input Bar -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 mb-xl w-[90%] md:w-[600px] z-50">
+<div class="bg-white/90 backdrop-blur-[28px] border border-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.1)] rounded-full p-1.5 flex items-center justify-center">
+<div class="w-full bg-white text-[#1E201F] rounded-full px-5 py-2.5 flex items-center focus-within:ring-1 ring-mist-teal transition-all border border-black/5">
+<span class="material-symbols-outlined mr-3 text-[18px] text-mist-teal">terminal</span>
+<input class="bg-transparent border-none focus:ring-0 text-mono-xs font-mono-xs w-full placeholder:text-on-surface-variant/50 outline-none" placeholder="Command Terminal | Type '/' for commands..." type="text"/>
+<button class="ml-2 bg-forest-green/20 text-forest-green border border-forest-green/30 px-4 py-1 rounded-full font-label-caps text-label-caps hover:bg-forest-green hover:text-white transition-colors flex-shrink-0">EXEC</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

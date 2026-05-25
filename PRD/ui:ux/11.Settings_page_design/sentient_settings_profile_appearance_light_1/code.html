@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile &amp; Appearance | Sentient Mission Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Sans:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#0d0f0e",
+                        "on-primary-fixed": "#001f24",
+                        "on-tertiary": "#23342a",
+                        "primary": "#aaccd3",
+                        "surface-variant": "#333534",
+                        "error": "#ffb4ab",
+                        "on-secondary-container": "#8fbfb1",
+                        "surface-container-highest": "#333534",
+                        "surface-tint": "#aaccd3",
+                        "tertiary": "#b8cbbd",
+                        "on-primary-container": "#0a2e33",
+                        "glass-fill": "rgba(255, 255, 255, 0.45)",
+                        "surface-dim": "#f0f2f1",
+                        "forest-green": "#49776B",
+                        "secondary-fixed-dim": "#a0d0c2",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-low": "#f5f7f6",
+                        "on-tertiary-fixed-variant": "#394b40",
+                        "on-primary": "#13353a",
+                        "primary-fixed": "#c6e9ef",
+                        "surface-bright": "#ffffff",
+                        "glass-border": "rgba(116, 149, 155, 0.25)",
+                        "tertiary-fixed-dim": "#b8cbbd",
+                        "on-secondary-fixed-variant": "#1f4f44",
+                        "tertiary-container": "#829589",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#aaccd3",
+                        "on-secondary-fixed": "#00201a",
+                        "background": "#F5F7F6",
+                        "error-red": "#C0504A",
+                        "primary-container": "#75969c",
+                        "surface": "#F5F7F6",
+                        "surface-container-high": "#e8ebea",
+                        "on-background": "#1e201f",
+                        "outline": "#8b9293",
+                        "on-tertiary-fixed": "#0e1f16",
+                        "tertiary-fixed": "#d4e7d9",
+                        "secondary-container": "#1f4f44",
+                        "on-surface-variant": "#414849",
+                        "on-primary-fixed-variant": "#2b4c51",
+                        "outline-variant": "#c1c8c9",
+                        "inverse-primary": "#436469",
+                        "on-tertiary-container": "#1d2d24",
+                        "on-secondary": "#02382e",
+                        "on-surface": "#1e201f",
+                        "deep-forest": "#2C3D33",
+                        "on-error": "#690005",
+                        "inverse-on-surface": "#f5f7f6",
+                        "secondary": "#a0d0c2",
+                        "mist-teal": "#74959B",
+                        "surface-container": "#f0f2f1",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#bbedde",
+                        "amber-alert": "#D4874A"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "1.5rem",
+                        "sidebar-gap": "1rem",
+                        "2xl": "4rem",
+                        "sm": "0.5rem",
+                        "xs": "0.25rem",
+                        "lg": "1.5rem",
+                        "xl": "2rem",
+                        "sidebar-width": "240px",
+                        "md": "1rem",
+                        "container-max": "1280px"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #F5F7F6;
+            color: #1e201f;
+            font-family: 'Geist Sans', sans-serif;
+        }
+        .glass-pane {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(116, 149, 155, 0.18);
+        }
+        .status-pulse {
+            position: relative;
+        }
+        .status-pulse::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 12px; height: 12px;
+            background: #49776B;
+            border-radius: 50%;
+            border: 2px solid #F5F7F6;
+            box-shadow: 0 0 0 0 rgba(73, 119, 107, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(73, 119, 107, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(73, 119, 107, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(73, 119, 107, 0); }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mono-text {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen text-on-background selection:bg-primary/30">
+<!-- Main Navigation (Shared Logic Application) -->
+<div class="fixed top-4 left-4 right-4 z-50 flex justify-center pointer-events-none">
+<header class="glass-pane w-full max-w-container-max h-16 rounded-xl flex items-center justify-between px-6 pointer-events-auto shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 bg-forest-green rounded-lg flex items-center justify-center text-white">
+<svg class="w-5 h-5" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold tracking-tight">Mission Control</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface font-medium border-b-2 border-mist-teal px-1" href="#">Settings</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-medium px-1" href="#">Intelligence</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-medium px-1" href="#">Operations</a>
+</nav>
+<div class="h-6 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 rounded-lg flex items-center justify-center bg-surface-container-high hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-cover bg-center border-2 border-mist-teal" data-alt="A professional close-up portrait of a tech executive named Alex Rivers, set against a warm, sunlit office background in San Francisco. The lighting is soft and natural, emphasizing a bright light-mode aesthetic with high-key white and off-white tones. Alex is smiling confidently, wearing a minimalist black turtleneck, conveying leadership and innovation within a high-tech mission control environment." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDoWmXy7eLTqowKGOoU045e13AXBQbwlNrskk_S9xJjrxTUtCN1WTfX70Ov8IcSM80rxUQLh3k6r8PmzreWX5shfr1gclt7h2cwXZsHvIL25x8DX2SfighKlKvNEHbBtNbrxKGrIzIPrYES6U7Q8Eqvto05X6VCdJFV9RxOxknrfUx_ZWTOifGyoNRjLTXZ9ADQpn9ov3qyYwsjltml1LZ_z6LIFSIXFrPwkmHN65kpRd0dRJ5EOM8sYGMyi14xSlas4NNaoETsb9o')"></div>
+</div>
+</div>
+</header>
+</div>
+<!-- Layout Container -->
+<main class="flex pt-28 px-4 pb-8 max-w-container-max mx-auto gap-sidebar-gap h-screen">
+<!-- Workspace Sidebar -->
+<aside class="w-sidebar-width flex flex-col gap-4">
+<div class="glass-pane p-4 rounded-xl flex flex-col gap-2">
+<p class="text-label-caps text-on-surface-variant mb-2">User Settings</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-mist-teal/10 text-forest-green font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span>Profile</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span>Account</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span>Notifications</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span>Security</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="palette">palette</span>
+<span>Appearance</span>
+</a>
+</div>
+<div class="glass-pane p-4 rounded-xl flex flex-col gap-4 mt-auto">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-medium">Node Status</span>
+<span class="mono-text text-mono-xs text-forest-green bg-forest-green/10 px-2 py-0.5 rounded-full uppercase">Operational</span>
+</div>
+<div class="h-1 w-full bg-outline-variant rounded-full overflow-hidden">
+<div class="h-full bg-forest-green w-3/4 rounded-full"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant mono-text leading-tight uppercase tracking-widest">Sentient AI v.4.8.2 Active</p>
+</div>
+</aside>
+<!-- Main Content Panel -->
+<section class="flex-1 glass-pane rounded-2xl overflow-y-auto p-8 flex flex-col gap-10">
+<!-- Hero Profile Section -->
+<div class="flex flex-col md:flex-row items-center md:items-end gap-8 pb-10 border-b border-outline-variant/30">
+<div class="status-pulse">
+<div class="w-32 h-32 rounded-full bg-cover bg-center border-4 border-white shadow-xl" data-alt="A high-resolution professional avatar of a CEO in an AI company. The lighting is vibrant and warm, highlighting the minimalist and sophisticated office environment behind them. The aesthetic is clean, light-mode, and technologically advanced, with a palette dominated by ivory, soft teal, and forest green accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2SfSYsrWR880qcdO4Zh8DFgZz_GfYg7_6PBWEDQjh4SF-JuAF6TwnsjtjJoSqWF2MxqhrpifsjrUW9GbDV2pfKNWzVh375TKOx7FENaPUyXydlvY_8I-sV9ZTlw3rkWoKpwSW9cJifd4eie6H1se0AqcLoaQtyLE472BRMfeXA2xJjW2LZBrKcUJkxE4_hKZcFDX6GUbspQh-CFt6Oqo1DBTS9tjqnVjpZV3q4LkabB8M4c459GdMvK3BhTtz5578Em49c6-UmOg')"></div>
+</div>
+<div class="flex-1 flex flex-col items-center md:items-start text-center md:text-left gap-1">
+<h2 class="text-headline-2xl text-on-surface">Alex Rivers</h2>
+<p class="text-body-lg text-on-surface-variant">Founder &amp; CEO</p>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-mist-teal text-sm" data-icon="location_on">location_on</span>
+<span class="text-body-sm text-on-surface-variant font-medium">San Francisco, CA</span>
+</div>
+</div>
+<button class="bg-forest-green text-white px-6 py-2.5 rounded-lg font-bold shadow-lg shadow-forest-green/20 hover:scale-[1.02] active:scale-95 transition-all">
+                    Edit Profile
+                </button>
+</div>
+<!-- Appearance Customization Section -->
+<div class="flex flex-col gap-6">
+<div>
+<h3 class="text-headline-xl text-on-surface">Appearance</h3>
+<p class="text-body-md text-on-surface-variant">Tailor your workspace environment to match your cognitive flow.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Light Mode Selection (Active) -->
+<div class="relative cursor-pointer group" onclick="document.documentElement.className='light'">
+<div class="absolute -top-3 -right-3 z-10 w-8 h-8 bg-mist-teal text-white rounded-full flex items-center justify-center border-4 border-surface shadow-lg">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<div class="bg-surface-container-high rounded-xl border-2 border-mist-teal p-1 overflow-hidden transition-all group-hover:shadow-xl">
+<div class="bg-background h-40 w-full rounded-lg p-4 flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-mist-teal/20"></div>
+<div class="h-2 w-20 bg-mist-teal/30 rounded"></div>
+</div>
+<div class="h-4 w-full bg-surface-container-highest rounded"></div>
+<div class="h-4 w-3/4 bg-surface-container-highest rounded"></div>
+<div class="mt-auto h-8 w-16 bg-forest-green rounded-md self-end"></div>
+</div>
+</div>
+<p class="mt-3 text-center text-body-md font-bold text-on-surface">Mission Light</p>
+</div>
+<!-- Dark Mode Selection -->
+<div class="relative cursor-pointer group" onclick="document.documentElement.className='dark'">
+<div class="bg-surface-container-high rounded-xl border-2 border-transparent p-1 overflow-hidden transition-all group-hover:border-outline hover:shadow-xl">
+<div class="bg-[#121413] h-40 w-full rounded-lg p-4 flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-mist-teal/10 border border-mist-teal/20"></div>
+<div class="h-2 w-20 bg-surface-container-highest rounded"></div>
+</div>
+<div class="h-4 w-full bg-surface-container-low rounded opacity-20"></div>
+<div class="h-4 w-3/4 bg-surface-container-low rounded opacity-20"></div>
+<div class="mt-auto h-8 w-16 bg-mist-teal rounded-md self-end opacity-60"></div>
+</div>
+</div>
+<p class="mt-3 text-center text-body-md font-medium text-on-surface-variant">Obsidian Void</p>
+</div>
+</div>
+</div>
+<!-- Detailed Settings List -->
+<div class="flex flex-col gap-4 pt-4">
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border border-outline-variant/20">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-mist-teal/10 flex items-center justify-center text-mist-teal">
+<span class="material-symbols-outlined" data-icon="contrast">contrast</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Auto-switching</p>
+<p class="text-body-sm text-on-surface-variant">Sync with your system's light/dark settings.</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-forest-green"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border border-outline-variant/20">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-mist-teal/10 flex items-center justify-center text-mist-teal">
+<span class="material-symbols-outlined" data-icon="blur_on">blur_on</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Interface Density</p>
+<p class="text-body-sm text-on-surface-variant">Choose between 'Spacious' or 'Mission Critical' data density.</p>
+</div>
+</div>
+<select class="bg-surface-container border-none rounded-lg text-body-sm font-medium px-4 py-2 focus:ring-2 focus:ring-mist-teal transition-all">
+<option>Spacious</option>
+<option>Standard</option>
+<option>Compressed</option>
+</select>
+</div>
+</div>
+</section>
+</main>
+<script>
+        // Micro-interaction for sidebar links
+        const navLinks = document.querySelectorAll('aside a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                navLinks.forEach(l => {
+                    l.classList.remove('bg-mist-teal/10', 'text-forest-green', 'font-semibold');
+                    l.classList.add('text-on-surface-variant');
+                });
+                link.classList.add('bg-mist-teal/10', 'text-forest-green', 'font-semibold');
+                link.classList.remove('text-on-surface-variant');
+            });
+        });
+
+        // Ambient lighting effect - Subtle cursor glow
+        const glow = document.createElement('div');
+        glow.className = 'fixed pointer-events-none w-[600px] h-[600px] bg-mist-teal/5 rounded-full blur-[120px] -z-10 transition-opacity duration-1000 opacity-0';
+        document.body.appendChild(glow);
+
+        document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX - 300 + 'px';
+            glow.style.top = e.clientY - 300 + 'px';
+            glow.style.opacity = '1';
+        });
+    </script>
+</body></html>

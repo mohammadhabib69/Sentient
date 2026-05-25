@@ -1,0 +1,378 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Registration - Sentient</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8b9293",
+                        "tertiary-fixed-dim": "#b8cbbd",
+                        "inverse-on-surface": "#2f3130",
+                        "on-surface": "#e2e3e0",
+                        "amber-alert": "#D4874A",
+                        "secondary-container": "#1f4f44",
+                        "mist-teal": "#74959B",
+                        "on-primary-fixed": "#001f24",
+                        "on-tertiary-fixed": "#0e1f16",
+                        "tertiary-container": "#829589",
+                        "on-secondary": "#02382e",
+                        "on-background": "#e2e3e0",
+                        "primary-fixed-dim": "#aaccd3",
+                        "tertiary": "#b8cbbd",
+                        "on-primary": "#13353a",
+                        "on-tertiary": "#23342a",
+                        "inverse-primary": "#436469",
+                        "surface-container-lowest": "#0d0f0e",
+                        "primary-fixed": "#c6e9ef",
+                        "surface-container-highest": "#333534",
+                        "primary-container": "#75969c",
+                        "secondary-fixed": "#bbedde",
+                        "on-secondary-fixed-variant": "#1f4f44",
+                        "error-container": "#93000a",
+                        "primary": "#aaccd3",
+                        "tertiary-fixed": "#d4e7d9",
+                        "surface-dim": "#121413",
+                        "surface-container-high": "#282a29",
+                        "on-secondary-fixed": "#00201a",
+                        "background": "#121413",
+                        "on-secondary-container": "#8fbfb1",
+                        "error-red": "#C0504A",
+                        "secondary-fixed-dim": "#a0d0c2",
+                        "inverse-surface": "#e2e3e0",
+                        "glass-border": "rgba(116, 149, 155, 0.18)",
+                        "on-primary-fixed-variant": "#2b4c51",
+                        "deep-forest": "#2C3D33",
+                        "secondary": "#a0d0c2",
+                        "forest-green": "#49776B",
+                        "surface-bright": "#383a38",
+                        "surface": "#121413",
+                        "surface-container-low": "#1a1c1b",
+                        "on-tertiary-fixed-variant": "#394b40",
+                        "on-tertiary-container": "#1d2d24",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#414849",
+                        "on-error": "#690005",
+                        "on-primary-container": "#0a2e33",
+                        "surface-variant": "#333534",
+                        "surface-tint": "#aaccd3",
+                        "glass-fill": "rgba(44, 61, 51, 0.45)",
+                        "surface-container": "#1e201f",
+                        "on-surface-variant": "#c1c8c9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "2rem",
+                        "sidebar-gap": "1rem",
+                        "container-max": "1280px",
+                        "sm": "0.5rem",
+                        "gutter": "1.5rem",
+                        "xs": "0.25rem",
+                        "md": "1rem",
+                        "lg": "1.5rem",
+                        "sidebar-width": "240px",
+                        "2xl": "4rem"
+                    },
+                    "fontFamily": {
+                        "metric-lg": ["JetBrains Mono"],
+                        "headline-2xl": ["Geist Sans"],
+                        "body-sm": ["Geist Sans"],
+                        "body-lg": ["Geist Sans"],
+                        "headline-xl": ["Geist Sans"],
+                        "mono-xs": ["JetBrains Mono"],
+                        "hero-900": ["Geist Sans"],
+                        "label-caps": ["Geist Sans"],
+                        "body-md": ["Geist Sans"]
+                    },
+                    "fontSize": {
+                        "metric-lg": ["18px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "headline-2xl": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-xl": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "mono-xs": ["11px", {"lineHeight": "1", "fontWeight": "400"}],
+                        "hero-900": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "900"}],
+                        "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-md": ["15px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #1E201F;
+            overflow-x: hidden;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glass-panel {
+            background: rgba(44, 61, 51, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(116, 149, 155, 0.18);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.50);
+        }
+
+        .input-field {
+            background-color: #1A1C1B;
+            border: 1px solid #2E3330;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #74959B;
+            box-shadow: 0 0 0 2px rgba(116, 149, 155, 0.2), inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background-color: #49776B;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #3d6359;
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(116, 149, 155, 0.18);
+            transition: all 0.2s ease;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(116, 149, 155, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        .strength-segment {
+            height: 4px;
+            flex: 1;
+            background-color: #2E3330;
+            border-radius: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .strength-segment.active-weak { background-color: #C0504A; }
+        .strength-segment.active-medium { background-color: #D4874A; }
+        .strength-segment.active-strong { background-color: #49776B; }
+    </style>
+<script data-extension-id="idgadaccgipmpannjkmfddolnnhmeklj" src="chrome-extension://idgadaccgipmpannjkmfddolnnhmeklj/js/tb_remapper.js"></script></head>
+<body class="min-h-screen flex items-center justify-center p-4">
+<!-- Ambient Particle Background -->
+<canvas id="particle-canvas"></canvas>
+<!-- Registration Container -->
+<main class="w-full max-w-[480px] glass-panel rounded-xl p-8 relative z-10">
+<!-- Header -->
+<div class="text-center mb-8">
+<h1 class="font-headline-2xl text-headline-2xl text-on-surface mb-2">Create your account</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Start your free 14-day trial</p>
+</div>
+<!-- OAuth Buttons -->
+<div class="mb-6">
+<button class="w-full btn-ghost rounded-[10px] py-3 px-4 flex items-center justify-center gap-3 font-body-md text-body-md text-on-surface group">
+<svg class="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+                Continue with Google
+            </button>
+</div>
+<!-- Divider -->
+<div class="flex items-center gap-4 mb-6">
+<div class="h-px flex-1 bg-glass-border"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">or register with email</span>
+<div class="h-px flex-1 bg-glass-border"></div>
+</div>
+<!-- Form -->
+<form class="space-y-5" onsubmit="event.preventDefault();">
+<!-- Full Name -->
+<div>
+<label class="block font-body-sm text-body-sm text-on-surface-variant mb-1.5" for="fullName">Full Name</label>
+<input class="w-full input-field rounded-[10px] py-2.5 px-4 font-body-md text-body-md text-on-surface placeholder:text-outline" id="fullName" placeholder="Jane Doe" required="" type="text">
+</div>
+<!-- Work Email -->
+<div>
+<label class="block font-body-sm text-body-sm text-on-surface-variant mb-1.5" for="email">Work Email</label>
+<input class="w-full input-field rounded-[10px] py-2.5 px-4 font-body-md text-body-md text-on-surface placeholder:text-outline" id="email" placeholder="jane@company.com" required="" type="email">
+</div>
+<!-- Password -->
+<div>
+<label class="block font-body-sm text-body-sm text-on-surface-variant mb-1.5" for="password">Password</label>
+<div class="relative">
+<input class="w-full input-field rounded-[10px] py-2.5 px-4 pr-10 font-body-md text-body-md text-on-surface placeholder:text-outline" id="password" oninput="checkPasswordStrength(this.value)" placeholder="••••••••" required="" type="password">
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-mist-teal transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility_off</span>
+</button>
+</div>
+<!-- Password Strength Indicator -->
+<div class="mt-2 flex gap-1.5 w-full">
+<div class="strength-segment" id="str-1"></div>
+<div class="strength-segment" id="str-2"></div>
+<div class="strength-segment" id="str-3"></div>
+<div class="strength-segment" id="str-4"></div>
+</div>
+<div class="mt-1 flex justify-between">
+<span class="font-mono-xs text-mono-xs text-outline-variant" id="pwd-msg">Use at least 8 characters</span>
+</div>
+</div>
+<!-- Terms Checkbox -->
+<div class="flex items-start gap-3 mt-4">
+<div class="flex items-center h-5">
+<input class="w-4 h-4 rounded border-[#2E3330] bg-[#1A1C1B] text-mist-teal focus:ring-mist-teal focus:ring-offset-background cursor-pointer" id="terms" required="" type="checkbox">
+</div>
+<label class="font-body-sm text-body-sm text-on-surface-variant cursor-pointer" for="terms">
+                    I agree to the <a class="text-mist-teal hover:text-primary transition-colors" href="#">Terms of Service</a> and <a class="text-mist-teal hover:text-primary transition-colors" href="#">Privacy Policy</a>.
+                </label>
+</div>
+<!-- Submit Button -->
+<button class="w-full btn-primary rounded-[10px] py-3 font-body-md text-body-md font-semibold mt-6" type="submit">
+                Create Account
+            </button>
+</form>
+<!-- Footer Link -->
+<div class="mt-8 text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Already have an account? 
+                <a class="text-mist-teal hover:text-primary transition-colors font-medium ml-1" href="#">Sign in →</a>
+</p>
+</div>
+</main>
+<script>
+        // Password Strength Logic
+        function checkPasswordStrength(val) {
+            const seg1 = document.getElementById('str-1');
+            const seg2 = document.getElementById('str-2');
+            const seg3 = document.getElementById('str-3');
+            const seg4 = document.getElementById('str-4');
+            const msg = document.getElementById('pwd-msg');
+
+            // Reset
+            seg1.className = 'strength-segment';
+            seg2.className = 'strength-segment';
+            seg3.className = 'strength-segment';
+            seg4.className = 'strength-segment';
+            
+            if (!val) {
+                msg.textContent = "Use at least 8 characters";
+                msg.className = "font-mono-xs text-mono-xs text-outline-variant";
+                return;
+            }
+
+            let strength = 0;
+            if (val.length >= 8) strength++;
+            if (val.match(/[A-Z]/)) strength++;
+            if (val.match(/[0-9]/)) strength++;
+            if (val.match(/[^A-Za-z0-9]/)) strength++;
+
+            if (strength === 1) {
+                seg1.classList.add('active-weak');
+                msg.textContent = "Weak";
+                msg.className = "font-mono-xs text-mono-xs text-error-red";
+            } else if (strength === 2) {
+                seg1.classList.add('active-medium');
+                seg2.classList.add('active-medium');
+                msg.textContent = "Fair";
+                msg.className = "font-mono-xs text-mono-xs text-amber-alert";
+            } else if (strength === 3) {
+                seg1.classList.add('active-strong');
+                seg2.classList.add('active-strong');
+                seg3.classList.add('active-strong');
+                msg.textContent = "Good";
+                msg.className = "font-mono-xs text-mono-xs text-mist-teal";
+            } else if (strength >= 4) {
+                seg1.classList.add('active-strong');
+                seg2.classList.add('active-strong');
+                seg3.classList.add('active-strong');
+                seg4.classList.add('active-strong');
+                msg.textContent = "Strong";
+                msg.className = "font-mono-xs text-mono-xs text-forest-green";
+            }
+        }
+
+        // Particle Canvas Logic
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(116, 149, 155, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+    </script>
+</body></html>

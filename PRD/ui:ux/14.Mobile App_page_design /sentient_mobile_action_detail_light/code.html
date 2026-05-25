@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SENTIENT - Approval Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary": "#02382e",
+                        "primary-fixed-dim": "#aaccd3",
+                        "error-container": "#93000a",
+                        "tertiary-container": "#829589",
+                        "on-tertiary-fixed-variant": "#394b40",
+                        "primary-container": "#75969c",
+                        "on-secondary-fixed": "#00201a",
+                        "glass-fill": "rgba(44, 61, 51, 0.45)",
+                        "surface-container": "#1e201f",
+                        "on-primary-container": "#0a2e33",
+                        "on-tertiary-fixed": "#0e1f16",
+                        "on-background": "#e2e3e0",
+                        "surface-container-low": "#1a1c1b",
+                        "glass-border": "rgba(116, 149, 155, 0.18)",
+                        "on-tertiary": "#23342a",
+                        "on-secondary-fixed-variant": "#1f4f44",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#2b4c51",
+                        "amber-alert": "#D4874A",
+                        "surface-variant": "#333534",
+                        "on-primary": "#13353a",
+                        "secondary-fixed-dim": "#a0d0c2",
+                        "primary": "#aaccd3",
+                        "surface-container-high": "#282a29",
+                        "deep-forest": "#2C3D33",
+                        "surface-container-highest": "#333534",
+                        "primary-fixed": "#c6e9ef",
+                        "surface-tint": "#aaccd3",
+                        "secondary-fixed": "#bbedde",
+                        "on-surface-variant": "#c1c8c9",
+                        "inverse-surface": "#e2e3e0",
+                        "surface-bright": "#383a38",
+                        "inverse-on-surface": "#2f3130",
+                        "outline": "#8b9293",
+                        "on-tertiary-container": "#1d2d24",
+                        "secondary-container": "#1f4f44",
+                        "error": "#ffb4ab",
+                        "secondary": "#a0d0c2",
+                        "surface": "#121413",
+                        "mist-teal": "#74959B",
+                        "on-surface": "#e2e3e0",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#436469",
+                        "background": "#121413",
+                        "tertiary": "#b8cbbd",
+                        "surface-container-lowest": "#0d0f0e",
+                        "tertiary-fixed-dim": "#b8cbbd",
+                        "on-secondary-container": "#8fbfb1",
+                        "error-red": "#C0504A",
+                        "surface-dim": "#121413",
+                        "outline-variant": "#414849",
+                        "tertiary-fixed": "#d4e7d9",
+                        "forest-green": "#49776B",
+                        "on-primary-fixed": "#001f24"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "container-max": "1280px",
+                        "sidebar-width": "240px",
+                        "sidebar-gap": "1rem",
+                        "xl": "2rem",
+                        "sm": "0.5rem",
+                        "md": "1rem",
+                        "lg": "1.5rem",
+                        "xs": "0.25rem",
+                        "2xl": "4rem",
+                        "gutter": "1.5rem"
+                    },
+                    fontFamily: {
+                        "body-sm": ["Geist Sans"],
+                        "headline-2xl": ["Geist Sans"],
+                        "body-lg": ["Geist Sans"],
+                        "hero-900": ["Geist Sans"],
+                        "metric-lg": ["JetBrains Mono"],
+                        "body-md": ["Geist Sans"],
+                        "mono-xs": ["JetBrains Mono"],
+                        "headline-xl": ["Geist Sans"],
+                        "label-caps": ["Geist Sans"]
+                    },
+                    fontSize: {
+                        "body-sm": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "headline-2xl": ["32px", { lineHeight: "1.2", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "hero-900": ["72px", { lineHeight: "1.1", letterSpacing: "-0.04em", fontWeight: "900" }],
+                        "metric-lg": ["18px", { lineHeight: "1", fontWeight: "500" }],
+                        "body-md": ["15px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "mono-xs": ["11px", { lineHeight: "1", fontWeight: "400" }],
+                        "headline-xl": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "label-caps": ["11px", { lineHeight: "1", letterSpacing: "0.1em", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Status Pulse Animation */
+        @keyframes status-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(160, 208, 194, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(160, 208, 194, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(160, 208, 194, 0); }
+        }
+        .animate-status-pulse {
+            animation: status-pulse 2s infinite;
+        }
+        /* Custom Scrollbar for Payload */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(116, 149, 155, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(116, 149, 155, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col relative overflow-hidden" style="background-color: #F5F7F6;">
+<!-- Atmospheric Depth Layer 0 -->
+<div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+<div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-primary-container/5 blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary-container/5 blur-[100px]"></div>
+</div>
+<!-- TopAppBar (Modified for Task-Focus: Back Action) -->
+<header class="backdrop-blur-md font-headline-xl text-headline-xl docked full-width top-0 z-50 border-b border-glass-border shadow-sm flex justify-between items-center w-full px-md h-16 sticky bg-white/80">
+<!-- Back Button replacing standard Menu -->
+<button aria-label="Go Back" class="text-primary hover:opacity-80 transition-opacity active:scale-95 duration-200 flex items-center justify-center p-2 rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined" data-icon="arrow_back" data-weight="fill" style="font-variation-settings: 'FILL' 1;">arrow_back</span>
+</button>
+<!-- Headline -->
+<div class="flex-1 flex justify-center items-center">
+<span class="font-headline-xl text-headline-xl font-bold tracking-tighter text-mist-teal text-deep-forest">APPROVAL #284</span>
+</div>
+<!-- Trailing Icon (Kept for consistency but deactivated visually) -->
+<div class="text-on-surface-variant flex items-center justify-center p-2">
+<span class="material-symbols-outlined opacity-50" data-icon="more_vert">more_vert</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto z-10 p-md md:p-xl flex flex-col items-center pb-32">
+<div class="w-full max-w-[800px] flex flex-col gap-lg">
+<!-- Agent Card (The Requester) -->
+<div class="relative rounded-xl border border-glass-border overflow-hidden border-t-[3px] border-t-secondary">
+<div class="p-md flex items-start gap-md">
+<!-- Avatar with Pulse -->
+<div class="relative">
+<div class="w-12 h-12 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center font-label-caps text-label-caps text-secondary animate-status-pulse">
+                            OP
+                        </div>
+<div class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary border-2 border-surface-container"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">Optimus Prime Node</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Infrastructure Orchestrator</p>
+</div>
+<span class="bg-surface-variant text-on-surface-variant px-2 py-1 rounded font-mono-xs text-mono-xs">ID: AGT-992</span>
+</div>
+<div class="mt-sm font-body-md text-body-md text-on-background">
+                            Agent is requesting manual authorization to execute <span class="font-mono-xs text-mono-xs text-primary bg-primary/10 px-1 rounded">reassign_task</span> protocol due to load threshold breaches on primary cluster.
+                        </div>
+</div>
+</div>
+</div>
+<!-- Impact Summary Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Severity Box -->
+<div class="rounded-xl border border-glass-border p-md flex flex-col justify-between">
+<div class="flex items-center gap-sm text-amber-alert mb-sm">
+<span class="material-symbols-outlined" data-icon="warning" data-weight="fill" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-caps text-label-caps">Risk Assessment</span>
+</div>
+<div class="font-headline-2xl text-headline-2xl text-amber-alert">MODERATE</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Cross-region data transfer required. Expected latency increase: 45ms.</p>
+</div>
+<!-- Metrics Box -->
+<div class="rounded-xl border border-glass-border p-md flex flex-col justify-between">
+<div class="flex items-center gap-sm text-secondary mb-sm">
+<span class="material-symbols-outlined" data-icon="swap_horiz">swap_horiz</span>
+<span class="font-label-caps text-label-caps">Impact Scope</span>
+</div>
+<div class="font-metric-lg text-metric-lg text-on-surface">4 Pipelines</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Moving from Node-Alpha (US-East) to Node-Beta (EU-West).</p>
+</div>
+</div>
+<!-- Payload Block -->
+<div class="bg-[#151716] rounded-xl border border-[#2E3330] shadow-inner overflow-hidden flex flex-col">
+<div class="bg-surface-container-high px-md py-sm border-b border-[#2E3330] flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[16px]" data-icon="data_object">data_object</span>
+<span class="font-label-caps text-label-caps text-outline">EXECUTION_PAYLOAD.JSON</span>
+</div>
+<button class="text-primary hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+<div class="p-md overflow-x-auto">
+<pre class="font-mono-xs text-mono-xs text-secondary-fixed-dim leading-relaxed">{
+  "action": "reassign_task",
+  "target_nodes": ["node-beta-01", "node-beta-02"],
+  "source_node": "node-alpha-primary",
+  "pipelines": [
+    "auth-service-stream",
+    "payment-gateway-v2",
+    "user-analytics-batch",
+    "notification-worker"
+  ],
+  "parameters": {
+    "force_drain": true,
+    "timeout_ms": 30000,
+    "fallback_strategy": "abort_and_rollback"
+  },
+  "authorization": {
+    "requester_id": "AGT-992",
+    "timestamp": "2023-10-27T08:45:12Z",
+    "signature": "sha256:8f4c2...a91b"
+  }
+}
+</pre>
+</div>
+</div>
+<div class="h-8"></div> <!-- Spacer -->
+</div>
+</main>
+<!-- Persistent Action Bar (Fixed Bottom) -->
+<div class="fixed bottom-0 w-full z-50 backdrop-blur-xl border-t border-glass-border shadow-[0_-8px_32px_rgba(0,0,0,0.3)] p-md flex gap-md justify-center items-center bg-white/90">
+<div class="w-full max-w-[800px] flex gap-md">
+<!-- Reject Button -->
+<button class="flex-1 bg-transparent border border-outline-variant hover:bg-error-container/20 hover:border-error hover:text-error transition-all duration-200 rounded-lg py-3 font-label-caps text-label-caps tracking-wider flex items-center justify-center gap-2 active:scale-[0.98] text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]" data-icon="close">close</span>
+                REJECT
+            </button>
+<!-- Approve Button -->
+<button class="flex-[2] bg-forest-green hover:bg-[#5a8c7e] text-white transition-all duration-200 rounded-lg py-3 font-label-caps text-label-caps tracking-wider flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(73,119,107,0.4)] active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+                AUTHORIZE EXECUTION
+            </button>
+</div>
+</div>
+</body></html>

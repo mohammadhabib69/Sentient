@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile - Sentient</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "mist-teal": "#74959B",
+                "tertiary-container": "#829589",
+                "on-tertiary-fixed": "#0e1f16",
+                "on-error-container": "#ffdad6",
+                "inverse-on-surface": "#2f3130",
+                "surface-container-lowest": "#0d0f0e",
+                "on-primary-fixed-variant": "#2b4c51",
+                "on-tertiary": "#23342a",
+                "secondary-fixed-dim": "#a0d0c2",
+                "error": "#ffb4ab",
+                "inverse-surface": "#e2e3e0",
+                "surface": "#121413",
+                "on-surface": "#e2e3e0",
+                "glass-fill": "rgba(44, 61, 51, 0.45)",
+                "on-tertiary-fixed-variant": "#394b40",
+                "on-error": "#690005",
+                "on-secondary": "#02382e",
+                "surface-dim": "#121413",
+                "glass-border": "rgba(116, 149, 155, 0.18)",
+                "surface-container-high": "#282a29",
+                "tertiary": "#b8cbbd",
+                "secondary": "#a0d0c2",
+                "outline": "#8b9293",
+                "on-secondary-fixed": "#00201a",
+                "background": "#121413",
+                "on-background": "#e2e3e0",
+                "on-tertiary-container": "#1d2d24",
+                "surface-container-highest": "#333534",
+                "primary": "#aaccd3",
+                "error-container": "#93000a",
+                "forest-green": "#49776B",
+                "amber-alert": "#D4874A",
+                "primary-container": "#75969c",
+                "error-red": "#C0504A",
+                "surface-tint": "#aaccd3",
+                "on-secondary-fixed-variant": "#1f4f44",
+                "secondary-container": "#1f4f44",
+                "surface-container": "#1e201f",
+                "on-primary-container": "#0a2e33",
+                "on-primary-fixed": "#001f24",
+                "on-secondary-container": "#8fbfb1",
+                "inverse-primary": "#436469",
+                "surface-variant": "#333534",
+                "on-primary": "#13353a",
+                "outline-variant": "#414849",
+                "secondary-fixed": "#bbedde",
+                "tertiary-fixed": "#d4e7d9",
+                "surface-bright": "#383a38",
+                "primary-fixed-dim": "#aaccd3",
+                "surface-container-low": "#1a1c1b",
+                "primary-fixed": "#c6e9ef",
+                "deep-forest": "#2C3D33",
+                "tertiary-fixed-dim": "#b8cbbd",
+                "on-surface-variant": "#c1c8c9"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "lg": "1.5rem",
+                "xl": "2rem",
+                "sidebar-width": "240px",
+                "md": "1rem",
+                "sm": "0.5rem",
+                "gutter": "1.5rem",
+                "xs": "0.25rem",
+                "sidebar-gap": "1rem",
+                "container-max": "1280px",
+                "2xl": "4rem"
+        },
+        "fontFamily": {
+                "label-caps": [
+                        "Geist Sans"
+                ],
+                "headline-xl": [
+                        "Geist Sans"
+                ],
+                "metric-lg": [
+                        "JetBrains Mono"
+                ],
+                "headline-2xl": [
+                        "Geist Sans"
+                ],
+                "hero-900": [
+                        "Geist Sans"
+                ],
+                "body-sm": [
+                        "Geist Sans"
+                ],
+                "mono-xs": [
+                        "JetBrains Mono"
+                ],
+                "body-md": [
+                        "Geist Sans"
+                ],
+                "body-lg": [
+                        "Geist Sans"
+                ]
+        },
+        "fontSize": {
+                "label-caps": [
+                        "11px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.1em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-xl": [
+                        "24px",
+                        {
+                                "lineHeight": "1.3",
+                                "fontWeight": "600"
+                        }
+                ],
+                "metric-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-2xl": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "700"
+                        }
+                ],
+                "hero-900": [
+                        "72px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.04em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "mono-xs": [
+                        "11px",
+                        {
+                                "lineHeight": "1",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "15px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body {
+            background-color: #F5F7F6;
+            color: #121413;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-panel {
+            background: #FFFFFF;
+            border: 1px solid rgba(116, 149, 155, 0.1);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+        }
+        .status-pulse {
+            box-shadow: 0 0 0 0 rgba(73, 119, 107, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(73, 119, 107, 0.4); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(73, 119, 107, 0); } 
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(73, 119, 107, 0); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden relative text-[#E8EDE9]" style="background-color: #F5F7F6; min-height: max(884px, 100dvh);">
+<!-- Ambient Background Elements -->
+<div class="fixed inset-0 z-0 pointer-events-none opacity-20">
+<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-mist-teal blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-secondary-container blur-[100px]"></div>
+</div>
+<!-- TopAppBar -->
+<header class="fixed w-full docked full-width top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-mist-teal/10 flex justify-between items-center px-md h-16"><button class="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-200"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span></button><div class="font-headline-xl text-headline-xl font-bold tracking-tighter text-forest-green">SENTIENT</div><button class="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-200"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications_active</span></button></header>
+<!-- Main Content Canvas -->
+<main class="flex-grow z-10 pt-24 pb-32 px-md md:px-lg max-w-container-max mx-auto w-full">
+<!-- Profile Header -->
+<section class="flex flex-col items-center justify-center mb-xl space-y-4">
+<div class="relative">
+<img alt="Profile Avatar" class="w-32 h-32 rounded-full object-cover border-2 border-mist-teal status-pulse" data-alt="A high-quality, professional headshot of a confident man with a neat beard, centered in the frame. The portrait is set against a subtle, dark atmospheric background consistent with a high-tech mission control interface. The lighting is sophisticated, with a soft, cool glow highlighting his features, perfectly matching the deep blacks and mist teal accents of the overarching digital aesthetic. The mood is authoritative and observant." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9lZiCPPM0i6EuHV_B7cGzMxK3XQ7POll5wv7ykTIChcjpcKuljI7-qWEJENGDx9tUUhvP6rL-Ybc30EBod11yPm_ayEz9wwSOWPs5rM0_hOTl9nxqSCoZwsG3RJ3hqEo2ztnlbkmzvQwRcm4BsRGxAwIFak0966b4DI4pW0E8t_QVYXVPEMDL5vyWA3Nsiwv16-kVkaof8Ez0qKRirQmsfdBsdlpXllSDCNyYtdNzjVbm-sQq3a2AXNubObYYnEYkimBrtQtwINA"/>
+<div class="absolute bottom-1 right-1 w-6 h-6 bg-mist-teal rounded-full border-2 border-[#1E201F] flex items-center justify-center">
+<span class="material-symbols-outlined text-[#1E201F] text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="text-center space-y-2">
+<h1 class="font-headline-2xl text-headline-2xl text-on-surface">Mohammad Habib</h1>
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/50 border border-mist-teal/20">
+<span class="font-mono-xs text-mono-xs text-mist-teal tracking-widest uppercase">SUPER ADMIN</span>
+</div>
+</div>
+</section>
+<!-- Settings List -->
+<section class="space-y-4 max-w-2xl mx-auto">
+<!-- Settings Item: Notifications -->
+<button class="w-full glass-panel rounded-xl p-4 flex items-center justify-between hover:bg-mist-teal/5 transition-colors group">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 rounded-lg bg-mist-teal/10 flex items-center justify-center group-hover:bg-mist-teal/20 transition-colors">
+<span class="material-symbols-outlined text-forest-green" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Notification Settings</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-forest-green transition-colors">chevron_right</span>
+</button>
+<!-- Settings Item: Biometric Auth -->
+<button class="w-full glass-panel rounded-xl p-4 flex items-center justify-between hover:bg-mist-teal/5 transition-colors group">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 rounded-lg bg-mist-teal/10 flex items-center justify-center group-hover:bg-mist-teal/20 transition-colors">
+<span class="material-symbols-outlined text-forest-green" style="font-variation-settings: 'FILL' 0;">fingerprint</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Biometric Auth</span>
+</div>
+<div class="flex items-center space-x-3">
+<span class="font-body-sm text-body-sm text-forest-green font-medium">Enabled</span>
+<span class="material-symbols-outlined text-outline group-hover:text-forest-green transition-colors">chevron_right</span>
+</div>
+</button>
+<!-- Settings Item: Theme -->
+<button class="w-full glass-panel rounded-xl p-4 flex items-center justify-between hover:bg-mist-teal/5 transition-colors group border-l-4 border-l-forest-green">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 rounded-lg bg-mist-teal/10 flex items-center justify-center group-hover:bg-mist-teal/20 transition-colors">
+<span class="material-symbols-outlined text-forest-green" style="font-variation-settings: 'FILL' 0;">palette</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Theme</span>
+</div>
+<div class="flex items-center space-x-3">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Light</span>
+<span class="material-symbols-outlined text-outline group-hover:text-forest-green transition-colors">chevron_right</span>
+</div>
+</button>
+<!-- Settings Item: Language -->
+<button class="w-full glass-panel rounded-xl p-4 flex items-center justify-between hover:bg-mist-teal/5 transition-colors group">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 rounded-lg bg-mist-teal/10 flex items-center justify-center group-hover:bg-mist-teal/20 transition-colors">
+<span class="material-symbols-outlined text-forest-green" style="font-variation-settings: 'FILL' 0;">language</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Language</span>
+</div>
+<div class="flex items-center space-x-3">
+<span class="font-body-sm text-body-sm text-on-surface-variant">English (US)</span>
+<span class="material-symbols-outlined text-outline group-hover:text-forest-green transition-colors">chevron_right</span>
+</div>
+</button>
+</section>
+<!-- Sign Out Action -->
+<section class="mt-12 flex justify-center">
+<button class="flex items-center space-x-2 px-6 py-3 rounded-lg hover:bg-error-container/20 transition-colors group">
+<span class="material-symbols-outlined text-error-red group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 0;">logout</span>
+<span class="font-body-md text-body-md text-error-red font-semibold">Sign Out</span>
+</button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 backdrop-blur-xl border-t border-mist-teal/10 shadow-[0_-4px_24px_rgba(0,0,0,0.05)] flex justify-around items-center px-4 py-3 md:hidden"><button class="flex flex-col items-center justify-center text-outline hover:bg-mist-teal/5 transition-colors active:scale-90 duration-150 p-2 rounded-lg"><span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">dashboard_customize</span><span class="font-label-caps text-label-caps">Dashboard</span></button><button class="flex flex-col items-center justify-center text-outline hover:bg-mist-teal/5 transition-colors active:scale-90 duration-150 p-2 rounded-lg"><span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">verified_user</span><span class="font-label-caps text-label-caps">Approvals</span></button><button class="flex flex-col items-center justify-center text-outline hover:bg-mist-teal/5 transition-colors active:scale-90 duration-150 p-2 rounded-lg"><span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">notifications_paused</span><span class="font-label-caps text-label-caps">Alerts</span></button><button class="flex flex-col items-center justify-center bg-mist-teal/20 text-forest-green rounded-lg px-4 py-1.5 hover:bg-mist-teal/30 transition-colors active:scale-90 duration-150"><span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">account_circle</span><span class="font-label-caps text-label-caps">Profile</span></button></nav>
+</body></html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Team Management | Sentient Mission Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Sans:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;family=Be+Vietnam+Pro:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#00201a",
+                        "on-tertiary-fixed": "#0e1f16",
+                        "primary": "#2a6257",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#eef2f0",
+                        "mist-teal": "#4a7a82",
+                        "amber-alert": "#b35a00",
+                        "on-tertiary-fixed-variant": "#394b40",
+                        "outline": "#717d79",
+                        "on-surface-variant": "#4a5551",
+                        "secondary-fixed-dim": "#a0d0c2",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#aaccd3",
+                        "tertiary-fixed": "#d4e7d9",
+                        "tertiary": "#41624d",
+                        "on-surface": "#1a1f1c",
+                        "tertiary-container": "#c3e8d1",
+                        "surface-bright": "#f5f7f6",
+                        "surface-tint": "#2a6257",
+                        "inverse-on-surface": "#f1f1f1",
+                        "surface-container-low": "#f8faf9",
+                        "error-red": "#ba1a1a",
+                        "secondary": "#4a635e",
+                        "on-primary-fixed-variant": "#2b4c51",
+                        "primary-container": "#b0eae0",
+                        "tertiary-fixed-dim": "#b8cbbd",
+                        "on-primary": "#ffffff",
+                        "deep-forest": "#2C3D33",
+                        "inverse-primary": "#aaccd3",
+                        "surface-container": "#ffffff",
+                        "forest-green": "#2c5448",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#c6e9ef",
+                        "on-secondary-fixed-variant": "#1f4f44",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#05201b",
+                        "glass-fill": "rgba(255, 255, 255, 0.7)",
+                        "on-primary-fixed": "#001f24",
+                        "on-error-container": "#410002",
+                        "inverse-surface": "#2f3130",
+                        "secondary-container": "#cce8e2",
+                        "outline-variant": "#c4ccc8",
+                        "surface": "#F5F7F6",
+                        "glass-border": "rgba(0, 0, 0, 0.08)",
+                        "on-tertiary-container": "#002111",
+                        "on-primary-container": "#00201a",
+                        "background": "#F5F7F6",
+                        "surface-dim": "#d9dbda",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#bbedde",
+                        "surface-variant": "#dbe4e0",
+                        "on-background": "#1a1f1c",
+                        "surface-container-highest": "#e5e9e7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "sans": ["Geist Sans", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #F5F7F6;
+            color: #1a1f1c;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .status-pulse {
+            position: relative;
+        }
+        .status-pulse::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4a635e;
+            right: -2px;
+            bottom: -2px;
+            box-shadow: 0 0 8px #4a635e;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-sans">
+<!-- Root Layout Container -->
+<div class="relative flex min-h-screen w-full flex-col bg-surface overflow-x-hidden">
+<!-- Background Atmospheric Effect -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.05] overflow-hidden">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-mist-teal rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-forest-green rounded-full blur-[150px]"></div>
+</div>
+<div class="layout-container flex h-full grow flex-col relative z-10">
+<!-- Header (Shared Structure) -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-outline-variant px-6 lg:px-10 py-3 glass-panel">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-on-surface">
+<div class="size-8 text-mist-teal">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-on-surface text-lg font-bold leading-tight tracking-tight uppercase font-mono">Sentient_MC</h2>
+</div>
+<div class="hidden md:flex items-center bg-surface-container-low rounded-full px-4 py-1 border border-outline-variant/30">
+<span class="material-symbols-outlined text-outline text-sm" style="font-size: 18px;">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface-variant placeholder:text-outline w-64" placeholder="Search parameters..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 20px;">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 20px;">settings</span>
+</button>
+<div class="h-10 w-10 rounded-full border border-mist-teal p-0.5 shadow-sm">
+<img class="rounded-full h-full w-full object-cover" data-alt="Detailed professional portrait of a senior system architect in a modern, dark-themed command center. Soft atmospheric lighting highlights thoughtful features, with a background of blurred holographic data displays in teal and deep forest tones. The aesthetic is clean, high-tech, and authoritative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm1mh3KV1-fzacGJWMRV88yFnfJGaqEFPpW0SmLozW5hX3JuBPFVHH1Gj2Ktt5eLi8CFt7q6VgjT8T4Z-2Fk5SZZUbtZiUdv9ZsJPCc6Pm-gVOAWEXXBdrs3dcbrGXORGcSza-gbWEbDFU5yWuFczzAdwhEfu5FQmjEa5_1ASkX1UVipi9SXU3OwkI0ljGHExlz7lBP4dt4VTFxecfRXeH69SV5TN9hLiBgpmcJadXiUDZ00Nx2J2oWSjwUSt0Kt801lINPLqRWgY"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 gap-6 p-6">
+<!-- Sidebar (Shared Destinations) -->
+<aside class="hidden lg:flex flex-col w-sidebar-width gap-6">
+<div class="glass-panel p-4 rounded-xl flex flex-col gap-2 shadow-sm">
+<div class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-lg cursor-pointer transition-all">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 bg-mist-teal/10 text-primary rounded-lg border-l-4 border-mist-teal transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-sm font-bold">Team Members</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-lg cursor-pointer transition-all">
+<span class="material-symbols-outlined">folder</span>
+<span class="text-sm font-medium">Projects</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-lg cursor-pointer transition-all">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-sm font-medium">Analytics</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-lg cursor-pointer transition-all">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</div>
+</div>
+<div class="mt-auto glass-panel p-4 rounded-xl shadow-sm">
+<div class="flex items-center gap-3">
+<div class="size-2 rounded-full bg-secondary shadow-[0_0_8px_#4a635e]"></div>
+<span class="text-xs font-mono uppercase tracking-widest text-secondary font-bold">System Online</span>
+</div>
+<div class="mt-2 text-[10px] text-outline font-mono">Latency: 24ms | Load: 12%</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col gap-6">
+<!-- Page Title and CTA -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex flex-col">
+<h1 class="text-on-surface text-3xl font-bold tracking-tight">Team Members</h1>
+<p class="text-on-surface-variant text-sm mt-1">Manage core personnel and access permissions for Sentient assets.</p>
+</div>
+<button class="bg-forest-green hover:bg-forest-green/90 text-white px-6 py-2.5 rounded-lg flex items-center gap-2 font-bold transition-all shadow-md shadow-forest-green/20">
+<span class="material-symbols-outlined" style="font-size: 20px;">person_add</span>
+                            Invite Member
+                        </button>
+</div>
+<!-- Filter Tabs -->
+<div class="border-b border-outline-variant flex gap-8">
+<button class="border-b-2 border-mist-teal text-on-surface pb-3 px-1 text-sm font-bold">All Members</button>
+<button class="text-outline hover:text-on-surface pb-3 px-1 text-sm font-medium transition-colors">Pending Invites</button>
+<button class="text-outline hover:text-on-surface pb-3 px-1 text-sm font-medium transition-colors">Roles &amp; Permissions</button>
+</div>
+<!-- Members Table Container -->
+<div class="glass-panel rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline">Personnel</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline">Designation</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline">Status</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline text-right">Last Sync</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline text-center">Protocol</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/60">
+<!-- Row 1: Super Admin -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full status-pulse overflow-hidden bg-mist-teal/10 flex items-center justify-center border border-mist-teal/30">
+<span class="text-mist-teal font-bold font-mono">MH</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">Mohammad Habib</span>
+<span class="text-xs text-on-surface-variant font-mono">m.habib@sentient.mc</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-xs font-bold uppercase tracking-tighter">Super Admin</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 text-secondary font-medium text-sm">
+<div class="size-1.5 rounded-full bg-secondary"></div>
+<span>Active</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right font-mono text-xs text-on-surface-variant">
+                                            2 mins ago
+                                        </td>
+<td class="px-6 py-5 text-center">
+<button class="text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">edit</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Org Admin -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full status-pulse overflow-hidden bg-mist-teal/10 flex items-center justify-center border border-mist-teal/30">
+<span class="text-mist-teal font-bold font-mono">SK</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">Sarah Kim</span>
+<span class="text-xs text-on-surface-variant font-mono">s.kim@sentient.mc</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface border border-outline-variant rounded-full text-xs font-bold uppercase tracking-tighter">Org Admin</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 text-secondary font-medium text-sm">
+<div class="size-1.5 rounded-full bg-secondary"></div>
+<span>Active</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right font-mono text-xs text-on-surface-variant">
+                                            1 hour ago
+                                        </td>
+<td class="px-6 py-5 text-center">
+<button class="text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">edit</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Manager -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full status-pulse overflow-hidden bg-mist-teal/10 flex items-center justify-center border border-mist-teal/30">
+<span class="text-mist-teal font-bold font-mono">JD</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">James Doe</span>
+<span class="text-xs text-on-surface-variant font-mono">j.doe@sentient.mc</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface border border-outline-variant rounded-full text-xs font-bold uppercase tracking-tighter">Manager</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 text-secondary font-medium text-sm">
+<div class="size-1.5 rounded-full bg-secondary"></div>
+<span>Active</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right font-mono text-xs text-on-surface-variant">
+                                            Yesterday
+                                        </td>
+<td class="px-6 py-5 text-center">
+<button class="text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">edit</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Pending Invite -->
+<tr class="hover:bg-surface-container-high transition-colors group opacity-70">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full overflow-hidden bg-surface-container flex items-center justify-center border border-dashed border-outline">
+<span class="material-symbols-outlined text-outline" style="font-size: 18px;">hourglass_empty</span>
+</div>
+<div class="flex flex-col">
+<span class="text-outline font-semibold italic">Pending Invitation</span>
+<span class="text-xs text-outline/80 font-mono">contacting_server...</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-lowest text-outline border border-outline/40 rounded-full text-xs font-bold uppercase tracking-tighter">Member</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 text-amber-alert font-medium text-sm">
+<span class="material-symbols-outlined" style="font-size: 16px;">pending</span>
+<span>Invited</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right font-mono text-xs text-outline/80">
+                                            N/A
+                                        </td>
+<td class="px-6 py-5 text-center">
+<button class="text-primary hover:text-primary-container text-xs font-bold uppercase tracking-widest transition-colors">
+                                                Resend
+                                            </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Footer Analytics Sub-panel -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="glass-panel p-5 rounded-xl border-l-4 border-mist-teal shadow-sm">
+<div class="text-xs font-mono uppercase text-outline mb-1">Total Operators</div>
+<div class="text-2xl font-bold font-mono">03 <span class="text-outline text-sm">/ 10</span></div>
+</div>
+<div class="glass-panel p-5 rounded-xl border-l-4 border-secondary shadow-sm">
+<div class="text-xs font-mono uppercase text-outline mb-1">Active Now</div>
+<div class="text-2xl font-bold font-mono">02</div>
+</div>
+<div class="glass-panel p-5 rounded-xl border-l-4 border-amber-alert shadow-sm">
+<div class="text-xs font-mono uppercase text-outline mb-1">Pending Syncs</div>
+<div class="text-2xl font-bold font-mono">01</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+<script>
+        // Micro-interaction: Table row hover highlight effect
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.style.boxShadow = 'inset 4px 0 0 #4a7a82';
+            });
+            row.addEventListener('mouseleave', () => {
+                row.style.boxShadow = 'none';
+            });
+        });
+
+        // Atmospheric particle simulation (very subtle)
+        const createParticle = () => {
+            const particle = document.createElement('div');
+            particle.className = 'fixed rounded-full bg-mist-teal pointer-events-none opacity-[0.03] z-0';
+            const size = Math.random() * 4 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            document.body.appendChild(particle);
+
+            const duration = Math.random() * 30000 + 10000;
+            const anim = particle.animate([
+                { transform: 'translateY(0) scale(1)', opacity: 0 },
+                { transform: `translateY(-${Math.random() * 200}px) scale(1.5)`, opacity: 0.1 },
+                { transform: `translateY(-${Math.random() * 400}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: duration,
+                easing: 'linear'
+            });
+
+            anim.onfinish = () => particle.remove();
+        };
+
+        setInterval(createParticle, 2000);
+    </script>
+</body></html>

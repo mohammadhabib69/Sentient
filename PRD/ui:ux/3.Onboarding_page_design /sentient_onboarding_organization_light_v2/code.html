@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentient - Create Organization</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#333534",
+                      "inverse-primary": "#436469",
+                      "glass-border": "rgba(116, 149, 155, 0.18)",
+                      "on-secondary": "#02382e",
+                      "deep-forest": "#2C3D33",
+                      "tertiary-fixed-dim": "#b8cbbd",
+                      "primary-fixed": "#c6e9ef",
+                      "on-primary-fixed": "#001f24",
+                      "on-background": "#e2e3e0",
+                      "error-red": "#C0504A",
+                      "on-error-container": "#ffdad6",
+                      "inverse-surface": "#e2e3e0",
+                      "surface-container-low": "#1a1c1b",
+                      "on-primary": "#13353a",
+                      "surface-container": "#1e201f",
+                      "primary-container": "#75969c",
+                      "on-secondary-container": "#8fbfb1",
+                      "forest-green": "#49776B",
+                      "background": "#121413",
+                      "secondary-fixed": "#bbedde",
+                      "outline": "#8b9293",
+                      "inverse-on-surface": "#2f3130",
+                      "surface-tint": "#aaccd3",
+                      "on-tertiary-container": "#1d2d24",
+                      "on-surface": "#e2e3e0",
+                      "on-surface-variant": "#c1c8c9",
+                      "surface": "#121413",
+                      "tertiary": "#b8cbbd",
+                      "error-container": "#93000a",
+                      "on-tertiary": "#23342a",
+                      "surface-container-high": "#282a29",
+                      "on-tertiary-fixed-variant": "#394b40",
+                      "tertiary-container": "#829589",
+                      "surface-bright": "#383a38",
+                      "on-primary-container": "#0a2e33",
+                      "surface-dim": "#121413",
+                      "mist-teal": "#74959B",
+                      "surface-variant": "#333534",
+                      "on-error": "#690005",
+                      "glass-fill": "rgba(44, 61, 51, 0.45)",
+                      "secondary-fixed-dim": "#a0d0c2",
+                      "on-secondary-fixed-variant": "#1f4f44",
+                      "outline-variant": "#414849",
+                      "primary-fixed-dim": "#aaccd3",
+                      "on-secondary-fixed": "#00201a",
+                      "secondary-container": "#1f4f44",
+                      "secondary": "#a0d0c2",
+                      "surface-container-lowest": "#0d0f0e",
+                      "tertiary-fixed": "#d4e7d9",
+                      "on-tertiary-fixed": "#0e1f16",
+                      "error": "#ffb4ab",
+                      "amber-alert": "#D4874A",
+                      "primary": "#aaccd3",
+                      "on-primary-fixed-variant": "#2b4c51"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "240px",
+                      "xs": "0.25rem",
+                      "md": "1rem",
+                      "lg": "1.5rem",
+                      "sidebar-gap": "1rem",
+                      "xl": "2rem",
+                      "sm": "0.5rem",
+                      "2xl": "4rem",
+                      "gutter": "1.5rem",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "label-caps": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ],
+                      "hero-900": [
+                              "Geist"
+                      ],
+                      "body-sm": [
+                              "Geist"
+                      ],
+                      "mono-xs": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-xl": [
+                              "Geist"
+                      ],
+                      "headline-2xl": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "metric-lg": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "hero-900": [
+                              "72px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "900"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "mono-xs": [
+                              "11px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-2xl": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "15px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "metric-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #F5F7F6;
+            background-image: radial-gradient(circle at 50% -20%, rgba(116, 149, 155, 0.1) 0%, transparent 70%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid #DDE6E0;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.05);
+        }
+        .form-input-glow:focus {
+            box-shadow: 0 0 0 2px rgba(61, 107, 95, 0.2);
+        }
+        /* Custom select styling for standard html select */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231E201F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+    </style>
+</head>
+<body class="text-[#1E201F] font-body-md flex items-center justify-center p-md">
+<!-- Ambient Background Particles (Simulated) -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<div class="absolute top-[20%] left-[10%] w-64 h-64 bg-primary/20 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-[20%] right-[10%] w-96 h-96 bg-[#3D6B5F]/10 rounded-full blur-[120px]"></div>
+</div>
+<main class="w-full max-w-[640px] z-10 relative">
+<!-- Onboarding Progress -->
+<div class="mb-xl">
+<div class="flex justify-between items-end mb-sm">
+<div>
+<h1 class="font-headline-2xl text-headline-2xl text-[#1E201F] mb-xs">Create Organization</h1>
+<p class="font-body-md text-body-md text-[#1E201F]/70">Step 1 of 5: Initial Setup</p>
+</div>
+<div class="font-mono-xs text-mono-xs text-[#3D6B5F]">20% COMPLETED</div>
+</div>
+<!-- Progress Bar -->
+<div class="h-1 w-full bg-[#DDE6E0] rounded-full overflow-hidden">
+<div class="h-full bg-[#3D6B5F] rounded-full relative w-1/5">
+<div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+</div>
+</div>
+</div>
+<!-- Main Form Card -->
+<div class="glass-panel rounded-xl p-xl">
+<form action="#" class="space-y-lg" method="POST">
+<!-- Organization Name -->
+<div>
+<label class="block font-label-caps text-label-caps text-[#1E201F]/70 mb-sm" for="org-name">Organization Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#1E201F]/50" style="font-variation-settings: 'FILL' 0;">business</span>
+<input class="w-full bg-white border border-[#DDE6E0] rounded-lg py-3 pl-10 pr-4 text-[#1E201F] placeholder:text-[#1E201F]/40 focus:border-[#3D6B5F] focus:ring-0 form-input-glow transition-all duration-200" id="org-name" name="org-name" placeholder="e.g. Acme Corp" type="text"/>
+</div>
+</div>
+<!-- Industry & Team Size Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Industry -->
+<div>
+<label class="block font-label-caps text-label-caps text-[#1E201F]/70 mb-sm" for="industry">Industry</label>
+<select class="w-full bg-white border border-[#DDE6E0] rounded-lg py-3 pl-4 pr-10 text-[#1E201F] focus:border-[#3D6B5F] focus:ring-0 form-input-glow transition-all duration-200" id="industry" name="industry">
+<option disabled="" selected="" value="">Select Industry</option>
+<option value="technology">Technology</option>
+<option value="finance">Finance</option>
+<option value="healthcare">Healthcare</option>
+<option value="retail">Retail</option>
+<option value="manufacturing">Manufacturing</option>
+<option value="other">Other</option>
+</select>
+</div>
+<!-- Team Size -->
+<div>
+<label class="block font-label-caps text-label-caps text-[#1E201F]/70 mb-sm" for="team-size">Team Size</label>
+<select class="w-full bg-white border border-[#DDE6E0] rounded-lg py-3 pl-4 pr-10 text-[#1E201F] focus:border-[#3D6B5F] focus:ring-0 form-input-glow transition-all duration-200" id="team-size" name="team-size">
+<option disabled="" selected="" value="">Select Size</option>
+<option value="1-10">1 - 10</option>
+<option value="11-50">11 - 50</option>
+<option value="51-200">51 - 200</option>
+<option value="201-500">201 - 500</option>
+<option value="500+">500+</option>
+</select>
+</div>
+</div>
+<!-- Data Reference Link (Simulated component specific request) -->
+<div class="flex items-start gap-3 p-md bg-[#F5F7F6]/50 border border-[#DDE6E0] rounded-lg mt-md">
+<span class="material-symbols-outlined text-[#3D6B5F] mt-0.5" style="font-variation-settings: 'FILL' 1;">info</span>
+<div>
+<p class="font-body-sm text-body-sm text-[#1E201F]">By continuing, you agree to our terms of service and establish the foundational intelligence environment for your team.</p>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="pt-md mt-xl border-t border-[#DDE6E0] flex justify-end">
+<button class="bg-[#3D6B5F] hover:bg-[#3D6B5F]/90 text-white font-body-md text-body-md py-3 px-6 rounded-[10px] flex items-center gap-2 transition-all duration-200 active:scale-95 shadow-[0_4px_14px_rgba(61,107,95,0.2)]" type="submit">
+                        Continue
+                        <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 0;">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</main>
+</body></html>

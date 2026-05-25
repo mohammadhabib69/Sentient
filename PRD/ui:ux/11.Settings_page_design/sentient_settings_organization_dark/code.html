@@ -1,0 +1,352 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Organization Settings - Sentient AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#b8cbbd",
+                        "on-primary": "#13353a",
+                        "on-tertiary": "#23342a",
+                        "inverse-primary": "#436469",
+                        "surface-container-highest": "#333534",
+                        "surface-container-lowest": "#0d0f0e",
+                        "primary-fixed": "#c6e9ef",
+                        "primary-container": "#75969c",
+                        "on-secondary-fixed-variant": "#1f4f44",
+                        "secondary-fixed": "#bbedde",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#d4e7d9",
+                        "primary": "#aaccd3",
+                        "outline": "#8b9293",
+                        "tertiary-fixed-dim": "#b8cbbd",
+                        "inverse-on-surface": "#2f3130",
+                        "amber-alert": "#D4874A",
+                        "on-surface": "#e2e3e0",
+                        "secondary-container": "#1f4f44",
+                        "mist-teal": "#74959B",
+                        "tertiary-container": "#829589",
+                        "on-primary-fixed": "#001f24",
+                        "on-tertiary-fixed": "#0e1f16",
+                        "on-background": "#e2e3e0",
+                        "on-secondary": "#02382e",
+                        "primary-fixed-dim": "#aaccd3",
+                        "surface-container-low": "#1a1c1b",
+                        "on-tertiary-fixed-variant": "#394b40",
+                        "on-tertiary-container": "#1d2d24",
+                        "surface": "#121413",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "on-primary-container": "#0a2e33",
+                        "outline-variant": "#414849",
+                        "surface-tint": "#aaccd3",
+                        "glass-fill": "rgba(44, 61, 51, 0.45)",
+                        "surface-variant": "#333534",
+                        "surface-container": "#1e201f",
+                        "on-surface-variant": "#c1c8c9",
+                        "surface-dim": "#121413",
+                        "on-secondary-fixed": "#00201a",
+                        "surface-container-high": "#282a29",
+                        "background": "#121413",
+                        "on-secondary-container": "#8fbfb1",
+                        "error-red": "#C0504A",
+                        "secondary-fixed-dim": "#a0d0c2",
+                        "inverse-surface": "#e2e3e0",
+                        "glass-border": "rgba(116, 149, 155, 0.18)",
+                        "secondary": "#a0d0c2",
+                        "on-primary-fixed-variant": "#2b4c51",
+                        "deep-forest": "#2C3D33",
+                        "forest-green": "#49776B",
+                        "surface-bright": "#383a38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "2rem",
+                        "sidebar-gap": "1rem",
+                        "container-max": "1280px",
+                        "sm": "0.5rem",
+                        "gutter": "1.5rem",
+                        "xs": "0.25rem",
+                        "md": "1rem",
+                        "lg": "1.5rem",
+                        "sidebar-width": "240px",
+                        "2xl": "4rem"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Geist Sans"],
+                        "body-md": ["Geist Sans"],
+                        "mono-xs": ["JetBrains Mono"],
+                        "headline-xl": ["Geist Sans"],
+                        "hero-900": ["Geist Sans"],
+                        "metric-lg": ["JetBrains Mono"],
+                        "body-sm": ["Geist Sans"],
+                        "body-lg": ["Geist Sans"],
+                        "headline-2xl": ["Geist Sans"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["11px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "body-md": ["15px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "mono-xs": ["11px", { "lineHeight": "1", "fontWeight": "400" }],
+                        "headline-xl": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "hero-900": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                        "metric-lg": ["18px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-2xl": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(44, 61, 51, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(116, 149, 155, 0.18);
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(160, 208, 194, 0.7); }
+            50% { opacity: .7; box-shadow: 0 0 0 4px rgba(160, 208, 194, 0); }
+        }
+        body {
+            background-color: #121413; /* background */
+            background-image: radial-gradient(circle at 50% 0%, rgba(116, 149, 155, 0.05) 0%, transparent 70%);
+        }
+    </style>
+</head>
+<body class="text-on-background min-h-screen font-sans antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-glass-fill backdrop-blur-xl border-b border-glass-border shadow-2xl flex items-center justify-between px-gutter h-16 hidden md:flex">
+<div class="flex items-center gap-md">
+<div class="font-headline-xl text-headline-xl font-black text-primary tracking-tight">Sentient AI</div>
+</div>
+<div class="flex-1 max-w-md mx-auto flex items-center justify-end px-lg">
+<div class="relative w-full max-w-sm">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant text-on-surface text-body-sm rounded-full pl-10 pr-4 py-1.5 focus:outline-none focus:border-mist-teal focus:ring-2 focus:ring-mist-teal/20 transition-all placeholder:text-on-surface-variant" placeholder="Search operations..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-2 text-on-surface-variant hover:bg-glass-border transition-colors rounded-full scale-95 duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-glass-border transition-colors rounded-full scale-95 duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="p-2 text-primary font-bold hover:bg-glass-border transition-colors rounded-full scale-95 duration-100 flex items-center justify-center relative after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-primary after:rounded-full">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="ml-2 w-8 h-8 rounded-full bg-primary-container border border-glass-border overflow-hidden cursor-pointer hover:ring-2 ring-primary transition-all">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A close-up headshot of a professional individual in a high-tech corporate environment. The lighting is dramatic and moody, with cool teal and dark green tones reflecting the surrounding sleek digital interfaces. The person has a neutral, focused expression. The background is softly blurred out, emphasizing the high-end, mission-control aesthetic of the overarching UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlI1heQCg6vLDHxBZuO2i_Cfg8-dehwY9XhwYNiOufH-j7u4jQsikytE9ic1R3AxcrgoG0bQOQUFNNgy_id3Q0AGwYz28bVHmik1ib1R32RYZGE2cRtE1Qrn8ZG_UQpyrS_zgkY8LLcfjNJsCtt2ZGYrMNewomxaa5aVNDNWI-k2zDf0RBZkkLV5SXL-T4AXP4sRDoSZA8BSG6wFil8zvR32owKoRNBYR9WFp7GDi7UXPCJsnODyE60y9n2zDOjjSBRnWpT1tXkfI">
+</div>
+</div>
+</header>
+<!-- TopAppBar Mobile -->
+<header class="fixed top-0 w-full z-50 bg-glass-fill backdrop-blur-xl shadow-2xl flex items-center justify-between px-md h-16 md:hidden">
+<div class="font-headline-xl text-headline-xl font-black text-primary tracking-tight">Sentient AI</div>
+<div class="ml-2 w-8 h-8 rounded-full bg-primary-container border border-glass-border overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A close-up headshot of a professional individual in a high-tech corporate environment. The lighting is dramatic and moody, with cool teal and dark green tones reflecting the surrounding sleek digital interfaces. The person has a neutral, focused expression. The background is softly blurred out, emphasizing the high-end, mission-control aesthetic of the overarching UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD54jGJHSQF46nUK9Jn-zyGRhmF5UM4LqMsp_3t3EH5L9WoL-BuYN27SfBg5ZUdL6PVtr5v9uNx3mkQ4LB7wh1psYxexyujNGAh71rcLBqon66Ez1u5ROIQouwZ8sJ1pLrIFgSwpXRIbDVkaccnwsUwz97E3tJra6djbFZOpOlY-8ZI42BjSN9dpNDXtGdnXnYuvY31cw1ybsQ8l7DXU-Rg4cdbM0oJsi7fO_MOZs1LjaoFVzUddUopcwrGThYzfDcZzbMbPSAd4hw">
+</div>
+</header>
+<div class="flex pt-16 md:pt-20 px-sidebar-gap pb-sidebar-gap min-h-screen max-w-container-max mx-auto relative">
+<!-- SideNavBar Desktop -->
+<nav class="hidden md:flex fixed left-sidebar-gap top-[5rem] bottom-sidebar-gap w-sidebar-width rounded-xl bg-glass-fill backdrop-blur-2xl border border-glass-border shadow-2xl flex-col p-md gap-sidebar-gap z-40 overflow-y-auto">
+<div class="flex items-center gap-3 mb-4 px-2">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-glass-border flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-mist-teal text-2xl">account_tree</span>
+</div>
+<div>
+<h2 class="font-body-md text-body-md font-semibold text-on-surface">Mission Control</h2>
+<p class="font-mono-xs text-mono-xs text-on-surface-variant opacity-80">Operational Intelligence</p>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 bg-secondary-container text-on-secondary-container rounded-lg font-bold translate-x-1 duration-200 group" href="#">
+<span class="material-symbols-outlined text-xl" data-weight="fill">business</span>
+<span class="font-label-caps text-label-caps">Organization</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">group</span>
+<span class="font-label-caps text-label-caps">Team Members</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">payments</span>
+<span class="font-label-caps text-label-caps">Billing &amp; Plan</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">extension</span>
+<span class="font-label-caps text-label-caps">Integrations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">security</span>
+<span class="font-label-caps text-label-caps">Security</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-2 pt-4 border-t border-glass-border/50">
+<button class="w-full py-2 px-4 bg-forest-green hover:bg-primary-container text-white hover:text-on-primary-container font-label-caps text-label-caps rounded-lg transition-colors flex items-center justify-center gap-2 mb-2 shadow-lg">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                    Upgrade Plan
+                </button>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">comment</span>
+<span class="font-label-caps text-label-caps">Feedback</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-error hover:bg-surface-container-highest transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-lg group-hover:text-error transition-colors">logout</span>
+<span class="font-label-caps text-label-caps">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[calc(240px+1rem)] w-full flex flex-col lg:flex-row gap-lg md:pt-4">
+<!-- Left Sub-nav (Settings Categories) -->
+<aside class="w-full lg:w-64 flex-shrink-0 flex flex-col gap-2">
+<div class="mb-4">
+<h1 class="font-headline-2xl text-headline-2xl text-on-surface mb-1">Settings</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Manage your organization preferences.</p>
+</div>
+<div class="glass-panel rounded-xl p-2 flex flex-col gap-1 sticky top-24">
+<a class="px-4 py-2.5 rounded-lg bg-surface-container text-on-surface border-l-2 border-primary font-body-sm text-body-sm font-medium flex items-center justify-between" href="#">
+                        Organization Info
+                        <span class="material-symbols-outlined text-sm text-primary">chevron_right</span>
+</a>
+<a class="px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-sm text-body-sm flex items-center justify-between group" href="#">
+                        Roles &amp; Permissions
+                        <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</a>
+<a class="px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-sm text-body-sm flex items-center justify-between group" href="#">
+                        Audit Logs
+                        <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</a>
+<a class="px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-sm text-body-sm flex items-center justify-between group" href="#">
+                        API Keys
+                        <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</a>
+</div>
+</aside>
+<!-- Right Content Panels -->
+<div class="flex-1 flex flex-col gap-lg max-w-3xl pb-24 md:pb-8">
+<!-- Section 1: Organization Info -->
+<section class="glass-panel rounded-xl overflow-hidden relative">
+<div class="h-1 w-full bg-primary/40 absolute top-0 left-0"></div>
+<div class="p-6 md:p-8">
+<div class="flex flex-col md:flex-row gap-6 items-start">
+<div class="flex-shrink-0 relative">
+<div class="w-24 h-24 rounded-xl bg-surface-container-high border border-glass-border flex items-center justify-center shadow-lg relative z-10 overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="font-headline-2xl text-headline-2xl font-bold text-mist-teal">SC</span>
+</div>
+<div class="absolute -inset-1 bg-mist-teal/20 rounded-xl blur-md -z-10 status-pulse"></div>
+<button class="mt-3 w-full py-1.5 px-2 bg-surface-container-low hover:bg-surface-container border border-outline-variant hover:border-mist-teal/50 rounded-lg text-on-surface-variant font-label-caps text-label-caps transition-all text-center">
+                                    Change Logo
+                                </button>
+</div>
+<div class="flex-1 w-full space-y-5">
+<div>
+<h3 class="font-headline-xl text-headline-xl text-on-surface mb-4">Organization Profile</h3>
+<div class="space-y-4">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1.5">Organization Name</label>
+<input class="w-full bg-[#1A1C1B] border border-[#2E3330] rounded-lg px-4 py-2.5 text-on-surface font-body-sm text-body-sm focus:outline-none focus:border-mist-teal focus:ring-1 focus:ring-mist-teal/30 shadow-inner transition-all" type="text" value="Sentient Corp">
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1.5">Industry</label>
+<div class="relative">
+<select class="w-full bg-[#1A1C1B] border border-[#2E3330] rounded-lg px-4 py-2.5 text-on-surface font-body-sm text-body-sm focus:outline-none focus:border-mist-teal focus:ring-1 focus:ring-mist-teal/30 shadow-inner appearance-none transition-all">
+<option selected="" value="tech">Technology</option>
+<option value="finance">Finance</option>
+<option value="healthcare">Healthcare</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1.5">Workspace URL</label>
+<div class="flex">
+<span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-[#2E3330] bg-surface-container-high text-on-surface-variant font-mono-xs text-mono-xs">
+                                                        https://
+                                                    </span>
+<input class="flex-1 bg-[#1A1C1B] border border-[#2E3330] rounded-r-lg px-4 py-2.5 text-on-surface font-mono-xs text-mono-xs focus:outline-none focus:border-mist-teal focus:ring-1 focus:ring-mist-teal/30 shadow-inner transition-all" type="text" value="sentient-corp.ai">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-glass-border flex justify-end">
+<button class="px-6 py-2 bg-forest-green hover:bg-opacity-90 text-white font-body-sm text-body-sm font-medium rounded-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                                        Save Changes
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Danger Zone -->
+<section class="bg-[#1A1C1B] border border-error-red/30 rounded-xl overflow-hidden relative mt-8">
+<div class="p-6 md:p-8">
+<h3 class="font-headline-xl text-headline-xl text-error-red mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-2xl">warning</span>
+                            Danger Zone
+                        </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 max-w-xl">
+                            Permanently delete this organization and all of its data. This action is irreversible and will immediately sever all connected AI agents and data streams.
+                        </p>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest border border-error-red/10 rounded-lg">
+<div>
+<h4 class="font-body-md text-body-md font-medium text-on-surface">Delete Organization</h4>
+<p class="font-mono-xs text-mono-xs text-on-surface-variant mt-1">ID: org_8f92a1b3</p>
+</div>
+<button class="px-4 py-2 bg-transparent border border-error-red text-error-red hover:bg-error-red hover:text-white font-body-sm text-body-sm font-medium rounded-lg transition-all shadow-sm">
+                                Delete Organization
+                            </button>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- BottomNavBar Mobile -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-glass-fill backdrop-blur-xl border-t border-glass-border shadow-[0_-8px_32px_rgba(0,0,0,0.3)] pb-safe">
+<div class="flex justify-around items-center h-16 px-2">
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl mb-1">dashboard</span>
+<span class="font-label-caps text-[9px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-primary font-bold transition-colors relative" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-weight="fill">business</span>
+<span class="font-label-caps text-[9px]">Org</span>
+<div class="absolute top-1 right-1/4 w-1.5 h-1.5 bg-primary rounded-full"></div>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl mb-1">group</span>
+<span class="font-label-caps text-[9px]">Team</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl mb-1">person</span>
+<span class="font-label-caps text-[9px]">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

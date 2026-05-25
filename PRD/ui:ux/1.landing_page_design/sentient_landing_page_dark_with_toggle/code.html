@@ -1,0 +1,444 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Sentient | High-Tech Mission Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#0a2e33",
+                      "mist-teal": "#74959B",
+                      "glass-border": "rgba(116, 149, 155, 0.18)",
+                      "deep-forest": "#2C3D33",
+                      "on-secondary-fixed-variant": "#1f4f44",
+                      "primary": "#aaccd3",
+                      "outline-variant": "#414849",
+                      "error-red": "#C0504A",
+                      "surface-bright": "#383a38",
+                      "on-tertiary-fixed": "#0e1f16",
+                      "on-tertiary-fixed-variant": "#394b40",
+                      "tertiary-fixed-dim": "#b8cbbd",
+                      "on-tertiary-container": "#1d2d24",
+                      "glass-fill": "rgba(44, 61, 51, 0.45)",
+                      "on-secondary": "#02382e",
+                      "surface-container": "#1e201f",
+                      "surface-variant": "#333534",
+                      "primary-container": "#75969c",
+                      "surface-dim": "#121413",
+                      "on-secondary-container": "#8fbfb1",
+                      "forest-green": "#49776B",
+                      "tertiary": "#b8cbbd",
+                      "surface-container-low": "#1a1c1b",
+                      "primary-fixed-dim": "#aaccd3",
+                      "on-primary-fixed": "#001f24",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-lowest": "#0d0f0e",
+                      "on-primary-fixed-variant": "#2b4c51",
+                      "primary-fixed": "#c6e9ef",
+                      "on-surface": "#e2e3e0",
+                      "surface-container-high": "#282a29",
+                      "surface-container-highest": "#333534",
+                      "inverse-on-surface": "#2f3130",
+                      "surface-tint": "#aaccd3",
+                      "secondary-container": "#1f4f44",
+                      "inverse-primary": "#436469",
+                      "tertiary-fixed": "#d4e7d9",
+                      "on-primary": "#13353a",
+                      "surface": "#121413",
+                      "secondary-fixed": "#bbedde",
+                      "secondary": "#a0d0c2",
+                      "background": "#121413",
+                      "on-background": "#e2e3e0",
+                      "outline": "#8b9293",
+                      "inverse-surface": "#e2e3e0",
+                      "error": "#ffb4ab",
+                      "amber-alert": "#D4874A",
+                      "on-tertiary": "#23342a",
+                      "on-secondary-fixed": "#00201a",
+                      "on-surface-variant": "#c1c8c9",
+                      "on-error": "#690005",
+                      "secondary-fixed-dim": "#a0d0c2",
+                      "error-container": "#93000a",
+                      "tertiary-container": "#829589"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "0.5rem",
+                      "container-max": "1280px",
+                      "xl": "2rem",
+                      "sidebar-width": "240px",
+                      "gutter": "1.5rem",
+                      "lg": "1.5rem",
+                      "2xl": "4rem",
+                      "sidebar-gap": "1rem",
+                      "xs": "0.25rem",
+                      "md": "1rem"
+              },
+              "fontFamily": {
+                      "body-sm": ["Geist Sans"],
+                      "label-caps": ["Geist Sans"],
+                      "body-lg": ["Geist Sans"],
+                      "headline-2xl": ["Geist Sans"],
+                      "mono-xs": ["JetBrains Mono"],
+                      "headline-xl": ["Geist Sans"],
+                      "hero-900": ["Geist Sans"],
+                      "metric-lg": ["JetBrains Mono"],
+                      "body-md": ["Geist Sans"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                      "label-caps": ["11px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                      "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                      "headline-2xl": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                      "mono-xs": ["11px", { "lineHeight": "1", "fontWeight": "400" }],
+                      "headline-xl": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                      "hero-900": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                      "metric-lg": ["18px", { "lineHeight": "1", "fontWeight": "500" }],
+                      "body-md": ["15px", { "lineHeight": "1.5", "fontWeight": "400" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #121413;
+            color: #e2e3e0;
+            overflow-x: hidden;
+        }
+        
+        .shimmer-text {
+            background: linear-gradient(90deg, #e2e3e0 0%, #aaccd3 50%, #e2e3e0 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .perspective-container {
+            perspective: 2000px;
+        }
+
+        .dashboard-tilt {
+            transform: rotateX(8deg) rotateY(-12deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .dashboard-tilt:hover {
+            transform: rotateX(0deg) rotateY(0deg);
+        }
+
+        .glass-panel {
+            background: rgba(44, 61, 51, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(116, 149, 155, 0.18);
+        }
+        
+        .status-pulse {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor; }
+            50% { opacity: .4; box-shadow: 0 0 2px currentColor; }
+        }
+
+        .stream-scroll {
+            animation: scroll-up 20s linear infinite;
+        }
+
+        @keyframes scroll-up {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface-container/75 backdrop-blur-xl border-b border-glass-border shadow-2xl">
+<div class="flex justify-between items-center px-gutter py-md max-w-container-max mx-auto">
+<!-- Brand Logo -->
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-mist-teal flex items-center justify-center text-surface-container">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">schema</span>
+</div>
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface tracking-tight">Sentient</span>
+</div>
+<!-- Navigation Links -->
+<div class="hidden md:flex gap-lg">
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Intelligence</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Agents</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Reality Stream</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Pricing</a>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-4">
+<button aria-label="Toggle Dark Mode" class="text-on-surface-variant hover:text-primary transition-colors duration-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px] dark:hidden">light_mode</span>
+<span class="material-symbols-outlined text-[20px] hidden dark:block">dark_mode</span>
+</button><a class="text-mist-teal hover:text-primary transition-colors duration-300 hidden sm:block" href="#">Login</a>
+<button class="bg-forest-green text-on-surface px-4 py-2 rounded-lg hover:bg-opacity-90 scale-95 active:scale-90 transition-transform font-bold">
+                    Deploy Agent
+                </button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden">
+<canvas class="particle-canvas" id="particleCanvas"></canvas>
+<div class="max-w-container-max mx-auto px-gutter grid lg:grid-cols-2 gap-2xl items-center relative z-10 w-full">
+<div class="max-w-2xl">
+<h1 class="font-hero-900 text-hero-900 text-on-surface mb-6">
+                    Your Business,<br>Running on <span class="shimmer-text">Intelligence</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8">
+                    Deploy autonomous agents that analyze, act, and adapt in real-time. High-tech mission control for the AI-native enterprise.
+                </p>
+<div class="flex gap-4">
+<button class="bg-forest-green text-on-surface px-6 py-3 rounded-lg hover:bg-opacity-90 transition-all font-bold shadow-[0_0_15px_rgba(73,119,107,0.5)]">
+                        Initialize Core
+                    </button>
+<button class="glass-panel text-on-surface px-6 py-3 rounded-lg hover:bg-surface-variant transition-all">
+                        View Documentation
+                    </button>
+</div>
+</div>
+<div class="perspective-container hidden lg:block">
+<div class="dashboard-tilt w-full aspect-[4/3] rounded-xl glass-panel p-4 relative shadow-[0_24px_64px_rgba(0,0,0,0.50)]">
+<!-- Mini Dashboard UI inside -->
+<div class="flex justify-between items-center border-b border-glass-border pb-2 mb-4">
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-error-red"></div>
+<div class="w-3 h-3 rounded-full bg-amber-alert"></div>
+<div class="w-3 h-3 rounded-full bg-forest-green"></div>
+</div>
+<span class="font-mono-xs text-mono-xs text-mist-teal">SYS_STAT: OPTIMAL</span>
+</div>
+<div class="grid grid-cols-2 gap-4 h-[calc(100%-2rem)]">
+<div class="bg-surface-container-low rounded border border-glass-border p-3 flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Active Agents</span>
+<span class="font-metric-lg text-metric-lg text-primary">12 / 12</span>
+</div>
+<div class="bg-surface-container-low rounded border border-glass-border p-3 flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Throughput</span>
+<span class="font-metric-lg text-metric-lg text-secondary">8.4k req/s</span>
+</div>
+<div class="col-span-2 bg-surface-container-low rounded border border-glass-border p-3 flex-grow relative overflow-hidden">
+<span class="font-label-caps text-label-caps text-on-surface-variant block mb-2">Neural Activity</span>
+<div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-primary/20 to-transparent"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Agent Showcase -->
+<section class="py-24 relative z-10">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="mb-12">
+<h2 class="font-headline-2xl text-headline-2xl text-on-surface mb-2">Active Intelligence Roster</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Specialized agents operating autonomously across functional domains.</p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-lg">
+<!-- Agent: Aria -->
+<div class="glass-panel rounded-xl p-6 border-t-2 border-t-mist-teal hover:bg-surface-variant/50 transition-colors">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-full bg-mist-teal/20 flex items-center justify-center text-mist-teal relative">
+<span class="font-bold">AR</span>
+<div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-mist-teal status-pulse"></div>
+</div>
+<div>
+<h3 class="font-headline-xl text-headline-xl text-on-surface">Aria</h3>
+<span class="font-label-caps text-label-caps text-mist-teal">Operations</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Optimizing resource allocation and workflow throughput globally.</p>
+<div class="bg-surface-container-low p-2 rounded font-mono-xs text-mono-xs text-mist-teal/80 border border-glass-border">
+                        &gt; Rebalancing load balancer config... done.
+                    </div>
+</div>
+<!-- Agent: Nova -->
+<div class="glass-panel rounded-xl p-6 border-t-2 border-t-amber-alert hover:bg-surface-variant/50 transition-colors">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-full bg-amber-alert/20 flex items-center justify-center text-amber-alert relative">
+<span class="font-bold">NV</span>
+<div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-amber-alert status-pulse"></div>
+</div>
+<div>
+<h3 class="font-headline-xl text-headline-xl text-on-surface">Nova</h3>
+<span class="font-label-caps text-label-caps text-amber-alert">Finance</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Real-time market analysis and automated portfolio hedging.</p>
+<div class="bg-surface-container-low p-2 rounded font-mono-xs text-mono-xs text-amber-alert/80 border border-glass-border">
+                        &gt; Analyzing Q3 predictive models... confident.
+                    </div>
+</div>
+<!-- Agent: Echo -->
+<div class="glass-panel rounded-xl p-6 border-t-2 border-t-forest-green hover:bg-surface-variant/50 transition-colors">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-full bg-forest-green/20 flex items-center justify-center text-forest-green relative">
+<span class="font-bold">EC</span>
+<div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-forest-green status-pulse"></div>
+</div>
+<div>
+<h3 class="font-headline-xl text-headline-xl text-on-surface">Echo</h3>
+<span class="font-label-caps text-label-caps text-forest-green">Customer</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Sentiment analysis and automated tier-1 support resolution.</p>
+<div class="bg-surface-container-low p-2 rounded font-mono-xs text-mono-xs text-forest-green/80 border border-glass-border">
+                        &gt; Resolving ticket #8942... successful.
+                    </div>
+</div>
+<!-- Agent: Flux -->
+<div class="glass-panel rounded-xl p-6 border-t-2 border-t-primary hover:bg-surface-variant/50 transition-colors">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary relative">
+<span class="font-bold">FX</span>
+<div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary status-pulse"></div>
+</div>
+<div>
+<h3 class="font-headline-xl text-headline-xl text-on-surface">Flux</h3>
+<span class="font-label-caps text-label-caps text-primary">Development</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Continuous integration monitoring and automated bug patching.</p>
+<div class="bg-surface-container-low p-2 rounded font-mono-xs text-mono-xs text-primary/80 border border-glass-border">
+                        &gt; Patching vulnerability in core-v2... deployed.
+                    </div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest w-full py-xl px-gutter border-t border-outline-variant relative z-10 mt-24">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-lg">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-black text-on-surface">Sentient AI</span>
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-glass-border">
+<div class="w-2 h-2 rounded-full bg-forest-green status-pulse"></div>
+<span class="font-mono-xs text-mono-xs text-forest-green">System Status: Operational</span>
+</div>
+</div>
+<div class="flex gap-lg font-body-sm text-body-sm">
+<a class="text-on-surface-variant hover:text-mist-teal transition-all opacity-80 hover:opacity-100" href="#">Documentation</a>
+<a class="text-on-surface-variant hover:text-mist-teal transition-all opacity-80 hover:opacity-100" href="#">API</a>
+<a class="text-on-surface-variant hover:text-mist-teal transition-all opacity-80 hover:opacity-100" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-mist-teal transition-all opacity-80 hover:opacity-100" href="#">Terms</a>
+</div>
+<div class="text-on-surface-variant font-body-sm text-body-sm opacity-50">
+                © 2024 Sentient AI.
+            </div>
+</div>
+</footer>
+<!-- Particle Field Script -->
+<script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 1.5;
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < 0 || this.x > width) this.vx = -this.vx;
+                if (this.y < 0 || this.y > height) this.vy = -this.vy;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(116, 149, 155, 0.15)'; // mist-teal at 15%
+                ctx.fill();
+            }
+        }
+        
+        function init() {
+            resize();
+            particles = [];
+            for (let i = 0; i < 200; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            // Draw connections
+            ctx.beginPath();
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 100) {
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                    }
+                }
+            }
+            ctx.strokeStyle = 'rgba(116, 149, 155, 0.05)';
+            ctx.stroke();
+            
+            requestAnimationFrame(animate);
+        }
+        
+        window.addEventListener('resize', init);
+        init();
+        animate();
+    </script>
+</body></html>
