@@ -26,12 +26,19 @@
     --glass-bg:          rgba(255,255,255,0.65);
     --glass-border:      rgba(77,122,128,0.18);
     --glass-highlight:   rgba(255,255,255,0.80);
-    --amber:             #B8692A;
-    --amber-muted:       rgba(184,105,42,0.10);
-    --red:               #A03D38;
-    --red-muted:         rgba(160,61,56,0.10);
+    --green:             158 29% 33%;     /* HSL triplet for #3D6B5F */
+    --amber:             26 63% 45%;      /* HSL triplet for #B8692A */
+    --red:               3 48% 42%;       /* HSL triplet for #A03D38 */
     --shadow-card:       0 1px 4px rgba(0,0,0,0.08);
     --shadow-float:      0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(77,122,128,0.10);
+
+    /* Marketing Surface container tokens - Light mode */
+    --surface-container:        #E8EDEA;
+    --surface-container-low:    #F0F4F2;
+    --surface-container-lowest: #FFFFFF;
+    --on-surface:               #1E201F;
+    --on-surface-variant:       #4A5E52;
+    --outline-variant:          #DDE6E0;
   }
 
   .dark {
@@ -56,12 +63,19 @@
     --glass-bg:          rgba(44,61,51,0.45);
     --glass-border:      rgba(116,149,155,0.18);
     --glass-highlight:   rgba(255,255,255,0.05);
-    --amber:             #D4874A;
-    --amber-muted:       rgba(212,135,74,0.12);
-    --red:               #C0504A;
-    --red-muted:         rgba(192,80,74,0.12);
+    --green:             158 24% 38%;     /* HSL triplet for #49776B */
+    --amber:             26 62% 56%;      /* HSL triplet for #D4874A */
+    --red:               3 48% 52%;       /* HSL triplet for #C0504A */
     --shadow-card:       0 2px 8px rgba(0,0,0,0.30);
     --shadow-float:      0 8px 32px rgba(0,0,0,0.40), 0 0 0 1px rgba(116,149,155,0.08);
+
+    /* Marketing Surface container tokens - Dark mode */
+    --surface-container:        #1E201F;
+    --surface-container-low:    #1A1C1B;
+    --surface-container-lowest: #0D0F0E;
+    --on-surface:               #E2E3E0;
+    --on-surface-variant:       #C1C8C9;
+    --outline-variant:          #414849;
   }
 }
 
@@ -72,4 +86,49 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Landing page styles */
+.shimmer-text {
+  background: linear-gradient(90deg, currentColor 0%, #aaccd3 50%, currentColor 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.perspective-container {
+  perspective: 2000px;
+}
+
+.dashboard-tilt {
+  transform: rotateX(8deg) rotateY(-12deg);
+  transition: transform 0.5s ease;
+}
+
+.dashboard-tilt:hover {
+  transform: rotateX(0deg) rotateY(0deg);
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+}
+
+.status-pulse {
+  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor; }
+  50% { opacity: .4; box-shadow: 0 0 2px currentColor; }
 }

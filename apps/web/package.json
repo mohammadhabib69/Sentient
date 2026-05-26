@@ -15,16 +15,21 @@
     "@base-ui/react": "^1.5.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@hookform/resolvers": "^5.4.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
     "@sentient/shared": "workspace:*",
     "@tanstack/react-query": "^5.100.14",
     "@tanstack/react-query-devtools": "^5.100.14",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/three": "^0.184.1",
     "@xyflow/react": "^12.10.2",
     "axios": "^1.16.1",
+    "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "cytoscape": "^3.33.4",
+    "cytoscape-dagre": "^3.0.0",
     "date-fns": "^4.3.0",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.16.0",
@@ -56,5 +61,10 @@
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^3.4.19",
     "vitest": "4.1.7"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

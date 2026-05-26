@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { QueryProvider } from "@/providers/query-provider";
 import { AuthProvider } from "@/providers/auth-provider";
+import { MSWProvider } from "@/providers/msw-provider";
 import { Toaster } from "sonner";
 
 const geist = Geist({
@@ -31,12 +32,14 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={cn(geist.variable, jetbrainsMono.variable)}>
       <body className="font-sans antialiased">
         <ThemeProvider>
-          <QueryProvider>
-            <AuthProvider>
-              {children}
-              <Toaster position="bottom-right" richColors theme="system" />
-            </AuthProvider>
-          </QueryProvider>
+          <MSWProvider>
+            <QueryProvider>
+              <AuthProvider>
+                {children}
+                <Toaster position="bottom-right" richColors theme="system" />
+              </AuthProvider>
+            </QueryProvider>
+          </MSWProvider>
         </ThemeProvider>
       </body>
     </html>

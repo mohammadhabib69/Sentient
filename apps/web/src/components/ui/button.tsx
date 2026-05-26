@@ -10,10 +10,10 @@ const buttonVariants = cva(
       variant: {
         // Primary: Forest green bg, white text — main CTA
         default:
-          "bg-[#49776B] text-white hover:bg-[#3D6B5F] active:bg-[#2C3D33]",
+          "bg-forest-green text-white hover:brightness-95 hover:bg-forest-green/90 active:bg-forest-green/80",
         // Secondary: translucent primary bg, primary border
         secondary:
-          "bg-[rgba(116,149,155,0.10)] text-[hsl(var(--primary))] border-[rgba(116,149,155,0.25)] hover:bg-[rgba(116,149,155,0.18)] active:bg-[rgba(116,149,155,0.25)]",
+          "bg-primary/10 text-primary border-primary/25 hover:bg-primary/18 active:bg-primary/25",
         // Outline: border only
         outline:
           "border-[hsl(var(--border))] bg-transparent text-foreground hover:bg-muted active:bg-[var(--surface-3)]",
@@ -22,10 +22,10 @@ const buttonVariants = cva(
           "text-[var(--foreground-2)] hover:bg-muted hover:text-foreground active:bg-[var(--surface-3)]",
         // Danger: red-tinted bg, red border
         danger:
-          "bg-[rgba(192,80,74,0.12)] text-[var(--red)] border-[rgba(192,80,74,0.30)] hover:bg-[rgba(192,80,74,0.20)] active:bg-[rgba(192,80,74,0.28)]",
+          "bg-red/12 text-red border-red/30 hover:bg-red/20 active:bg-red/28",
         // Destructive: alias of danger for shadcn compat
         destructive:
-          "bg-[rgba(192,80,74,0.12)] text-[var(--red)] border-[rgba(192,80,74,0.30)] hover:bg-[rgba(192,80,74,0.20)] active:bg-[rgba(192,80,74,0.28)]",
+          "bg-red/12 text-red border-red/30 hover:bg-red/20 active:bg-red/28",
         // Link: text-only with underline
         link: "text-[hsl(var(--primary))] underline-offset-4 hover:underline",
         // Glass: translucent glass-style button for sidebar/floating panels

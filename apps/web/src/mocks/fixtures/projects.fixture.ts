@@ -1,1 +1,38 @@
-// TODO: Implement
+export const MOCK_PROJECTS = [
+  {
+    id: 'proj_1',
+    workspaceId: 'ws_1',
+    name: 'Q3 Feature Release',
+    description: 'Rolling out the new Sentient agent builder and workflow engine.',
+    status: 'in_progress',
+    health: 'good',
+    dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(),
+  },
+  {
+    id: 'proj_2',
+    workspaceId: 'ws_1',
+    name: 'Infrastructure Migration',
+    description: 'Migrating databases to new managed instances.',
+    status: 'blocked',
+    health: 'at_risk',
+    dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5).toISOString(),
+  },
+  {
+    id: 'proj_3',
+    workspaceId: 'ws_2',
+    name: 'Product Launch Campaign',
+    description: 'GTM strategy, ad creatives, and tracking setup.',
+    status: 'todo',
+    health: 'good',
+    dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 45).toISOString(),
+  },
+  {
+    id: 'proj_4',
+    workspaceId: 'ws_1',
+    name: 'Security Audit',
+    description: 'Annual compliance and pentesting remediation.',
+    status: 'done',
+    health: 'good',
+    dueDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+  },
+]
