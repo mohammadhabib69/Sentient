@@ -5,7 +5,8 @@ const AGENTS = [
     name: "Aria",
     initials: "AR",
     role: "Operations",
-    color: "#74959B",       // mist-teal
+    colorClass: "text-mist-teal",
+    bgClass: "bg-mist-teal/20",
     borderClass: "border-t-mist-teal",
     description:
       "Optimizing resource allocation and workflow throughput globally.",
@@ -15,7 +16,8 @@ const AGENTS = [
     name: "Nova",
     initials: "NV",
     role: "Finance",
-    color: "#D4874A",       // amber-alert
+    colorClass: "text-amber-alert",
+    bgClass: "bg-amber-alert/20",
     borderClass: "border-t-amber-alert",
     description:
       "Real-time market analysis and automated portfolio hedging.",
@@ -25,7 +27,8 @@ const AGENTS = [
     name: "Echo",
     initials: "EC",
     role: "Customer",
-    color: "#49776B",       // forest-green
+    colorClass: "text-forest-green",
+    bgClass: "bg-forest-green/20",
     borderClass: "border-t-forest-green",
     description:
       "Sentiment analysis and automated tier-1 support resolution.",
@@ -35,8 +38,9 @@ const AGENTS = [
     name: "Flux",
     initials: "FX",
     role: "Development",
-    color: "#aaccd3",       // primary blue
-    borderClass: "border-t-[#aaccd3]",
+    colorClass: "text-primary",
+    bgClass: "bg-primary/20",
+    borderClass: "border-t-primary",
     description:
       "Continuous integration monitoring and automated bug patching.",
     terminal: "> Patching vulnerability in core-v2... deployed.",
@@ -67,11 +71,7 @@ export function AgentShowcase() {
               {/* Avatar + status */}
               <div className="relative mb-4 inline-flex">
                 <div
-                  className="flex size-12 items-center justify-center rounded-full text-sm font-bold"
-                  style={{
-                    backgroundColor: `${agent.color}20`,
-                    color: agent.color,
-                  }}
+                  className={`flex size-12 items-center justify-center rounded-full text-sm font-bold ${agent.bgClass} ${agent.colorClass}`}
                 >
                   {agent.initials}
                 </div>
@@ -86,8 +86,7 @@ export function AgentShowcase() {
                 {agent.name}
               </h3>
               <p
-                className="mt-0.5 text-label-caps uppercase"
-                style={{ color: agent.color }}
+                className={`mt-0.5 font-mono text-label-caps uppercase ${agent.colorClass}`}
               >
                 {agent.role}
               </p>

@@ -8,21 +8,13 @@ export const metadata: Metadata = {
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[url('/bg-mesh.jpg')] bg-cover bg-center bg-no-repeat">
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-3xl" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background">
+      {/* Subtle decorative radial glow blobs in the background */}
+      <div className="absolute left-1/3 top-1/3 size-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[hsl(var(--primary))]/8 opacity-40 blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-1/3 right-1/3 size-[500px] translate-x-1/2 translate-y-1/2 rounded-full bg-[hsl(var(--secondary))]/8 opacity-40 blur-[120px] pointer-events-none" />
       
-      {/* Decorative blobs */}
-      <div className="absolute left-1/4 top-1/4 size-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[hsl(var(--primary))]/20 opacity-50 blur-[100px]" />
-      <div className="absolute bottom-1/4 right-1/4 size-[400px] translate-x-1/2 translate-y-1/2 rounded-full bg-[hsl(var(--secondary))]/20 opacity-50 blur-[100px]" />
-      
-      <div className="relative z-10 w-full max-w-[400px] px-4">
-        <div className="mb-8 flex flex-col items-center justify-center">
-          <div className="flex size-12 items-center justify-center rounded-xl bg-[hsl(var(--primary))] shadow-lg">
-            <span className="text-xl font-bold text-white">S</span>
-          </div>
-          <h1 className="mt-4 text-2xl font-semibold tracking-tight text-foreground">Sentient Engine</h1>
-        </div>
-        
+      {/* Centered content container - supports 480px cards */}
+      <div className="relative z-10 w-full max-w-[480px] px-4 sm:px-6 py-12">
         {children}
       </div>
     </div>

@@ -19,6 +19,7 @@ const config: Config = {
         'deep-forest':  '#2C3D33',
         'glass-border': 'var(--glass-border)',
         'glass-fill':   'var(--glass-bg)',
+        'topbar-bg':    'var(--topbar-bg)',
         'amber-alert':  'hsl(var(--amber))',
         'error-red':    'hsl(var(--red))',
         // Semantic standard colors mapped to HSL variables
@@ -34,8 +35,8 @@ const config: Config = {
         'outline-variant':          'var(--outline-variant)',
       },
       spacing: {
-        'gutter':        '2rem',
-        'container-max': '1536px',
+        'gutter':        '1.5rem',
+        'container-max': '1280px',
       },
       fontSize: {
         'hero-900':     ['72px', { lineHeight: '1.1', letterSpacing: '-0.04em', fontWeight: '900' }],
@@ -46,8 +47,8 @@ const config: Config = {
         'headline-2xl': ['32px', { lineHeight: '1.2', fontWeight: '700' }],
       },
       fontFamily: {
-        sans: ['Geist', 'Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Menlo', 'monospace'],
+        sans: ['var(--font-sans)', 'Geist', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'JetBrains Mono', 'Menlo', 'monospace'],
       },
       borderRadius: {
         lg: 'var(--radius)',

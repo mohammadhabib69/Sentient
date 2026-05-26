@@ -5,8 +5,10 @@ import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
+import { Eye, EyeOff } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -16,7 +18,13 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormValues>({
+  const [showPassword, setShowPassword] = React.useState(false)
+  
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors, isSubmitting } 
+  } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   })
 
@@ -30,50 +38,131 @@ export default function LoginPage() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-[var(--glass-border)] bg-[var(--surface-1)] p-8 shadow-2xl backdrop-blur-xl"
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className="w-full rounded-[20px] border border-[var(--border)] dark:border-[rgba(116,149,155,0.18)] bg-[rgba(255,255,255,0.80)] dark:bg-[rgba(44,61,51,0.45)] p-10 shadow-[0_16px_48px_rgba(0,0,0,0.15)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.40)] backdrop-blur-[20px]"
     >
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-foreground">Sign In</h2>
-        <p className="mt-1 text-sm text-[var(--foreground-3)]">Enter your credentials to access your workspace.</p>
+      {/* 1. Logo area */}
+      <div className="flex items-center justify-center gap-2 mb-6">
+        <div className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[hsl(var(--primary))] shadow-sm">
+          <span className="text-[11px] font-bold text-white leading-none">S</span>
+        </div>
+        <span className="text-[18px] font-bold tracking-tight text-foreground font-sans">Sentient</span>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-[var(--foreground-2)]">Email</label>
+      {/* 2 & 3. Header & Sub */}
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">Welcome back</h2>
+        <p className="mt-1.5 text-sm text-[var(--foreground-2)] font-sans">Sign in to your reality engine</p>
+      </div>
+
+      {/* 5. Google OAuth Button */}
+      <button
+        type="button"
+        onClick={() => window.location.href = "/dashboard"}
+        className="flex h-[44px] w-full items-center justify-center gap-2 rounded-[10px] border border-[var(--border)] dark:border-[rgba(116,149,155,0.18)] bg-card text-foreground hover:bg-[var(--surface-3)] text-sm font-medium transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+      >
+        <svg className="size-4" viewBox="0 0 24 24">
+          <path
+            fill="#EA4335"
+            d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.54 14.98 1 12 1 7.35 1 3.37 3.65 1.42 7.5l3.87 3C6.24 7.65 8.89 5.04 12 5.04z"
+          />
+          <path
+            fill="#4285F4"
+            d="M23.49 12.27c0-.81-.07-1.59-.2-2.36H12v4.51h6.43c-.28 1.44-1.09 2.67-2.3 3.48l3.57 2.77c2.09-1.93 3.29-4.77 3.29-8.4z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.29 14.5c-.25-.75-.39-1.56-.39-2.4s.14-1.65.39-2.4L1.42 6.7C.51 8.5 0 10.5 0 12.5s.51 4 1.42 5.8l3.87-3z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.57-2.77c-.99.66-2.23 1.06-4.39 1.06-3.11 0-5.76-2.61-6.71-5.46l-3.87 3C3.37 20.35 7.35 23 12 23z"
+          />
+        </svg>
+        Continue with Google
+      </button>
+
+      {/* 6. Divider row */}
+      <div className="flex items-center my-6">
+        <div className="flex-1 h-px bg-[var(--border)] dark:bg-[rgba(116,149,155,0.18)]" />
+        <span className="px-3 text-[11px] font-mono text-[var(--foreground-3)] uppercase tracking-wider">or</span>
+        <div className="flex-1 h-px bg-[var(--border)] dark:bg-[rgba(116,149,155,0.18)]" />
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        {/* 7. Email input */}
+        <div className="space-y-1.5">
+          <label htmlFor="email" className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]">
+            Email
+          </label>
           <input
             {...register("email")}
+            id="email"
             type="email"
-            placeholder="name@company.com"
-            className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-[hsl(var(--primary))] focus:ring-1 focus:ring-[hsl(var(--primary))]"
+            placeholder="you@company.com"
+            className="w-full bg-[var(--surface-2)]/60 dark:bg-[var(--surface-2)]/40 border border-[var(--border)] dark:border-[rgba(116,149,155,0.18)] focus:border-mist-teal focus:ring-3 focus:ring-mist-teal/15 transition-all text-foreground placeholder-[var(--foreground-3)] rounded-lg px-3.5 py-2.5 text-sm outline-none"
           />
-          {errors.email && <p className="text-xs text-[var(--red)]">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-xs text-[var(--red)] font-sans mt-1">{errors.email.message}</p>
+          )}
         </div>
 
-        <div className="space-y-1">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-[var(--foreground-2)]">Password</label>
-            <Link href="/forgot-password" className="text-xs text-[hsl(var(--primary))] hover:underline">
-              Forgot password?
-            </Link>
+        {/* 8. Password input */}
+        <div className="space-y-1.5">
+          <label htmlFor="password" className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              {...register("password")}
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              className="w-full bg-[var(--surface-2)]/60 dark:bg-[var(--surface-2)]/40 border border-[var(--border)] dark:border-[rgba(116,149,155,0.18)] focus:border-mist-teal focus:ring-3 focus:ring-mist-teal/15 transition-all text-foreground placeholder-[var(--foreground-3)] rounded-lg pl-3.5 pr-10 py-2.5 text-sm outline-none"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--foreground-2)] hover:text-foreground transition-colors"
+            >
+              {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
           </div>
-          <input
-            {...register("password")}
-            type="password"
-            placeholder="••••••••"
-            className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-[hsl(var(--primary))] focus:ring-1 focus:ring-[hsl(var(--primary))]"
-          />
-          {errors.password && <p className="text-xs text-[var(--red)]">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-xs text-[var(--red)] font-sans mt-1">{errors.password.message}</p>
+          )}
         </div>
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
+        {/* 9. Checkbox & Forgot Password Link */}
+        <div className="flex items-center justify-between text-[13px] font-sans">
+          <label className="flex items-center gap-2 text-[var(--foreground-2)] cursor-pointer select-none">
+            <input
+              type="checkbox"
+              className="size-4 rounded border-[var(--border)] text-mist-teal focus:ring-0 cursor-pointer accent-mist-teal"
+            />
+            <span>Remember me</span>
+          </label>
+          <Link href="/forgot-password" className="font-medium text-mist-teal hover:underline">
+            Forgot password?
+          </Link>
+        </div>
+
+        {/* 10. Sign In Button */}
+        <Button 
+          type="submit" 
+          className="w-full h-[44px] rounded-lg bg-forest-green hover:bg-forest-green/90 text-white font-medium text-sm transition-all shadow-md mt-2" 
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "Signing in..." : "Sign In"}
         </Button>
       </form>
 
-      <div className="mt-6 text-center text-sm text-[var(--foreground-3)]">
+      {/* 11. Bottom footer */}
+      <div className="mt-8 text-center text-[13px] text-[var(--foreground-2)] font-sans">
         Don't have an account?{" "}
-        <Link href="/register" className="font-medium text-[hsl(var(--primary))] hover:underline">
-          Sign up
+        <Link href="/register" className="font-semibold text-mist-teal hover:underline">
+          Start free →
         </Link>
       </div>
     </motion.div>

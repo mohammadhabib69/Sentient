@@ -83,13 +83,10 @@ export function Topbar() {
 
   return (
     <header
-      className="sticky top-0 z-40 flex h-14 w-full items-center justify-between px-6"
-      style={{
-        background: "color-mix(in srgb, var(--background) 80%, transparent)",
-        backdropFilter: "blur(20px) saturate(160%)",
-        WebkitBackdropFilter: "blur(20px) saturate(160%)",
-        borderBottom: "1px solid hsl(var(--border))",
-      }}
+      className={cn(
+        "sticky top-0 z-40 flex h-14 w-full items-center justify-between px-6",
+        "bg-topbar-bg backdrop-blur-[20px] backdrop-saturate-[160%] border-b border-glass-border transition-all duration-200"
+      )}
     >
       {/* ── Left: Breadcrumbs ── */}
       <div className="flex flex-1 items-center justify-start">

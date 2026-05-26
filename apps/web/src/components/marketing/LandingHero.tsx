@@ -18,8 +18,8 @@ export function LandingHero() {
       </div>
 
       {/* ── Main content ── */}
-      <div className="mx-auto w-full max-w-container-max px-gutter py-24 lg:py-0">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div className="mx-auto w-full max-w-container-max px-gutter py-32 lg:py-0">
+        <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-24">
           {/* LEFT — Copy */}
           <div className="flex flex-col gap-8">
             <h1 className="text-hero-900 text-foreground">
@@ -47,10 +47,10 @@ export function LandingHero() {
           {/* RIGHT — Dashboard card */}
           <div className="hidden lg:block">
             <div className="perspective-container">
-              <div className="dashboard-tilt glass-panel rounded-xl p-5 shadow-[0_25px_60px_-12px_rgba(0,0,0,0.55)]"
+              <div className="dashboard-tilt glass-panel rounded-xl p-8 shadow-[0_25px_60px_-12px_rgba(0,0,0,0.55)]"
                    style={{ transformStyle: "preserve-3d" }}>
                 {/* Title bar */}
-                <div className="mb-4 flex items-center justify-between">
+                <div className="mb-6 flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <span className="inline-block size-2.5 rounded-full bg-error-red" />
                     <span className="inline-block size-2.5 rounded-full bg-amber-alert" />
@@ -62,10 +62,10 @@ export function LandingHero() {
                 </div>
 
                 {/* Metric row */}
-                <div className="mb-4 grid grid-cols-2 gap-4">
+                <div className="mb-6 grid grid-cols-2 gap-4">
                   {/* Active Agents */}
-                  <div className="rounded-lg border border-outline-variant bg-surface-container-low p-4">
-                    <p className="text-label-caps uppercase tracking-widest text-on-surface-variant">
+                  <div className="rounded-lg border border-outline-variant bg-surface-container-low p-5">
+                    <p className="font-mono text-label-caps uppercase tracking-widest text-on-surface-variant">
                       Active Agents
                     </p>
                     <p className="mt-2 font-mono text-metric-lg text-on-surface">
@@ -73,8 +73,8 @@ export function LandingHero() {
                     </p>
                   </div>
                   {/* Throughput */}
-                  <div className="rounded-lg border border-outline-variant bg-surface-container-low p-4">
-                    <p className="text-label-caps uppercase tracking-widest text-on-surface-variant">
+                  <div className="rounded-lg border border-outline-variant bg-surface-container-low p-5">
+                    <p className="font-mono text-label-caps uppercase tracking-widest text-on-surface-variant">
                       Throughput
                     </p>
                     <p className="mt-2 font-mono text-metric-lg text-on-surface">
@@ -84,13 +84,13 @@ export function LandingHero() {
                 </div>
 
                 {/* Neural Activity */}
-                <div className="rounded-lg border border-outline-variant bg-surface-container-low p-4">
-                  <p className="text-label-caps uppercase tracking-widest text-on-surface-variant">
+                <div className="rounded-lg border border-outline-variant bg-surface-container-low p-5">
+                  <p className="font-mono text-label-caps uppercase tracking-widest text-on-surface-variant">
                     Neural Activity
                   </p>
                   {/* Fake bar graph */}
-                  <div className="mt-3 flex items-end gap-1">
-                    {[40, 65, 35, 80, 55, 70, 90, 45, 75, 60, 85, 50, 95, 38, 72, 58, 88, 42, 68, 78].map(
+                  <div className="mt-4 flex items-end gap-1">
+                    {[60, 95, 50, 120, 80, 105, 135, 65, 110, 90, 125, 75, 140, 55, 108, 88, 130, 62, 100, 115].map(
                       (h, i) => (
                         <div
                           key={i}
@@ -101,7 +101,7 @@ export function LandingHero() {
                     )}
                   </div>
                   {/* Gradient fade */}
-                  <div className="mt-[-32px] h-8 bg-gradient-to-t from-surface-container-low to-transparent" />
+                  <div className="mt-[-40px] h-10 bg-gradient-to-t from-surface-container-low to-transparent" />
                 </div>
               </div>
             </div>

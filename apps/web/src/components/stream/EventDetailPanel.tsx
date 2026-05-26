@@ -71,7 +71,7 @@ export function EventDetailPanel({ event, onClose }: EventDetailPanelProps) {
               {/* Payload Data */}
               <div>
                 <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--foreground-3)]">Payload Data</h4>
-                <div className="rounded-lg border border-[var(--glass-border)] bg-[#1e1e1e] p-4 font-mono text-xs text-[#d4d4d4] overflow-x-auto">
+                <div className="rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] p-4 font-mono text-xs text-foreground overflow-x-auto">
                   <pre>{JSON.stringify(event.payload, null, 2)}</pre>
                 </div>
               </div>
