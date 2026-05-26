@@ -1,24 +1,63 @@
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
+import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
+  "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap transition-colors [&>svg]:pointer-events-none [&>svg]:size-3",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
+        // Default: primary colored
+        default:
+          "rounded-full h-5 px-2 text-xs font-medium bg-[hsl(var(--primary))] text-white",
+        // Secondary: muted style
         secondary:
-          "bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80",
-        destructive:
-          "bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20",
+          "rounded-full h-5 px-2 text-xs font-medium bg-[hsl(var(--secondary))]/15 text-[hsl(var(--secondary))]",
+        // Outline: border only
         outline:
-          "border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground",
+          "rounded-full h-5 px-2 text-xs font-medium border border-[hsl(var(--border))] text-foreground",
+
+        // ── Sentient Status Variants ───────────────────────
+        // Active / Done: green tint
+        active:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[rgba(73,119,107,0.15)] text-[#49776B] dark:text-[#49776B]",
+        // Pending / Warning: amber tint
+        pending:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[rgba(212,135,74,0.15)] text-[var(--amber)]",
+        // Blocked / Error: red tint
+        blocked:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[rgba(192,80,74,0.15)] text-[var(--red)]",
+        // Info: primary/teal tint
+        info:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[rgba(116,149,155,0.15)] text-[hsl(var(--primary))]",
+
+        // ── Status Badge Variants (Section 6.6) ───────────
+        todo:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[var(--surface-2)] text-[var(--foreground-3)]",
+        in_progress:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[hsl(var(--primary))]/12 text-[hsl(var(--primary))]",
+        review:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[var(--amber-muted)] text-[var(--amber)]",
+        done:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[hsl(var(--secondary))]/12 text-[hsl(var(--secondary))]",
+
+        // ── Risk Level Variants ───────────────────────────
+        low:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[rgba(73,119,107,0.15)] text-[hsl(var(--secondary))]",
+        medium:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[var(--amber-muted)] text-[var(--amber)]",
+        high:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[var(--red-muted)] text-[var(--red)]",
+        critical:
+          "rounded-[6px] h-5 px-2 text-[11px] font-medium uppercase tracking-[0.05em] bg-[var(--red)] text-white",
+
+        // Destructive: for shadcn compat
+        destructive:
+          "rounded-full h-5 px-2 text-xs font-medium bg-[var(--red-muted)] text-[var(--red)]",
+        // Ghost
         ghost:
-          "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
-        link: "text-primary underline-offset-4 hover:underline",
+          "rounded-full h-5 px-2 text-xs font-medium hover:bg-muted hover:text-foreground",
       },
     },
     defaultVariants: {
@@ -30,23 +69,15 @@ const badgeVariants = cva(
 function Badge({
   className,
   variant = "default",
-  render,
   ...props
-}: useRender.ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
-  return useRender({
-    defaultTagName: "span",
-    props: mergeProps<"span">(
-      {
-        className: cn(badgeVariants({ variant }), className),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: "badge",
-      variant,
-    },
-  })
+}: React.ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
+  return (
+    <span
+      data-slot="badge"
+      className={cn(badgeVariants({ variant }), className)}
+      {...props}
+    />
+  )
 }
 
 export { Badge, badgeVariants }
