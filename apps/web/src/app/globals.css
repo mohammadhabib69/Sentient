@@ -124,6 +124,34 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Premium glass shimmer sweep animation */
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--glass-highlight),
+    transparent
+  );
+  transform: skewX(-25deg);
+  animation: glass-shimmer 6s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+@keyframes glass-shimmer {
+  0% { left: -150%; }
+  15% { left: 250%; }
+  100% { left: 250%; }
 }
 
 .status-pulse {

@@ -3,63 +3,104 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Users, Plus, X } from "lucide-react"
+import { X, Plus } from "lucide-react"
 
 export default function TeamSetupPage() {
   const router = useRouter()
-  const [emails, setEmails] = React.useState([''])
+  const [inputEmail, setInputEmail] = React.useState("")
+  const [emails, setEmails] = React.useState<string[]>([])
 
-  const addEmail = () => setEmails([...emails, ''])
-  const removeEmail = (index: number) => {
-    if (emails.length > 1) {
-      setEmails(emails.filter((_, i) => i !== index))
+  const handleAddEmail = (e: React.FormEvent) => {
+    e.preventDefault()
+    const trimmed = inputEmail.trim()
+    if (trimmed && !emails.includes(trimmed)) {
+      setEmails([...emails, trimmed])
+      setInputEmail("")
     }
   }
 
+  const handleRemoveEmail = (email: string) => {
+    setEmails(emails.filter(e => e !== email))
+  }
+
+  const handleContinue = () => {
+    // Go to step 3
+    router.push('/onboarding/workspace')
+  }
+
   return (
-    <div className="rounded-2xl border border-[var(--glass-border)] bg-[var(--surface-1)] p-8 shadow-xl">
-      <div className="mb-6 flex size-12 items-center justify-center rounded-xl bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]">
-        <Users className="size-6" />
+    <div className="glass-panel rounded-[20px] p-8 shadow-[var(--shadow-card)] space-y-6">
+      <div className="space-y-1">
+        <span className="text-[11px] font-bold tracking-widest uppercase text-primary">
+          STEP 2 OF 5
+        </span>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          Invite your team
+        </h2>
+        <p className="text-sm text-[var(--foreground-2)]">
+          Agents work better when they know your team
+        </p>
       </div>
-      
-      <h2 className="text-2xl font-bold text-foreground">Invite your team</h2>
-      <p className="mt-2 text-sm text-[var(--foreground-3)]">
-        Sentient works best when your whole team is collaborating with agents.
-      </p>
 
-      <div className="mt-8 space-y-4">
-        {emails.map((email, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <input
-              type="email"
-              placeholder="colleague@company.com"
-              value={email}
-              onChange={(e) => {
-                const newEmails = [...emails]
-                newEmails[i] = e.target.value
-                setEmails(newEmails)
-              }}
-              className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-[hsl(var(--primary))]"
-            />
-            {emails.length > 1 && (
-              <button onClick={() => removeEmail(i)} className="p-2 text-[var(--foreground-3)] hover:text-foreground">
-                <X className="size-4" />
-              </button>
-            )}
+      <div className="space-y-4">
+        {/* Email invite input row */}
+        <form onSubmit={handleAddEmail} className="flex gap-2">
+          <input
+            type="email"
+            placeholder="colleague@company.com"
+            value={inputEmail}
+            onChange={(e) => setInputEmail(e.target.value)}
+            className="flex-1 h-11 rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+          />
+          <button 
+            type="submit"
+            className="h-11 px-5 border border-primary/20 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-lg text-sm transition-all flex items-center gap-1.5"
+          >
+            <Plus className="size-4" /> Add
+          </button>
+        </form>
+
+        {/* Added emails list/chips */}
+        {emails.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-2">
+            {emails.map((email) => (
+              <div 
+                key={email}
+                className="flex items-center gap-1.5 rounded-full border border-[var(--glass-border)] bg-[var(--surface-2)] pl-3 pr-2 py-1 text-xs text-[var(--foreground-2)]"
+              >
+                <span>{email}</span>
+                <button 
+                  onClick={() => handleRemoveEmail(email)}
+                  className="p-0.5 rounded-full hover:bg-[var(--surface-3)] hover:text-foreground transition-colors"
+                >
+                  <X className="size-3" />
+                </button>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
 
-        <button onClick={addEmail} className="flex items-center gap-2 text-sm font-medium text-[hsl(var(--primary))] hover:underline">
-          <Plus className="size-4" /> Add another
-        </button>
+        {/* Skip link */}
+        <div className="pt-2">
+          <button 
+            onClick={handleContinue}
+            className="text-sm font-medium text-[var(--foreground-2)] hover:text-foreground hover:underline transition-colors font-mono"
+          >
+            Skip for now &rarr;
+          </button>
+        </div>
+      </div>
 
-        <div className="flex items-center gap-3 pt-6">
-          <Button onClick={() => router.push('/onboarding/workspace')} className="flex-1 bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]/90">
-            Send Invites
-          </Button>
-          <Button onClick={() => router.push('/onboarding/workspace')} variant="outline" className="flex-1">
-            Skip for now
-          </Button>
+      <div className="pt-4 space-y-4">
+        <Button 
+          onClick={handleContinue}
+          className="w-full h-11 bg-primary hover:brightness-110 text-white font-semibold rounded-lg flex items-center justify-center transition-all"
+        >
+          Continue &rarr;
+        </Button>
+        
+        <div className="text-center text-xs text-[var(--foreground-3)] font-mono">
+          2 of 5
         </div>
       </div>
     </div>

@@ -3,60 +3,98 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Building2 } from "lucide-react"
 
 export default function OrgSetupPage() {
   const router = useRouter()
+  const [orgName, setOrgName] = React.useState("")
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Go to step 2
+    router.push('/onboarding/team')
+  }
 
   return (
-    <div className="rounded-2xl border border-[var(--glass-border)] bg-[var(--surface-1)] p-8 shadow-xl">
-      <div className="mb-6 flex size-12 items-center justify-center rounded-xl bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]">
-        <Building2 className="size-6" />
+    <form 
+      onSubmit={handleSubmit}
+      className="glass-panel rounded-[20px] p-8 shadow-[var(--shadow-card)] space-y-6"
+    >
+      <div className="space-y-1">
+        <span className="text-[11px] font-bold tracking-widest uppercase text-primary">
+          STEP 1 OF 5
+        </span>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          Set up your organization
+        </h2>
+        <p className="text-sm text-[var(--foreground-2)]">
+          This is your company's home on Sentient
+        </p>
       </div>
-      
-      <h2 className="text-2xl font-bold text-foreground">Tell us about your organization</h2>
-      <p className="mt-2 text-sm text-[var(--foreground-3)]">
-        This helps us tailor Sentient's agent configurations for your industry.
-      </p>
 
-      <div className="mt-8 space-y-5">
+      <div className="space-y-4">
+        {/* Org Name */}
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[var(--foreground-2)]">Organization Name</label>
+          <label className="font-mono text-label-caps uppercase tracking-wider text-[var(--foreground-2)]">
+            Organization name
+          </label>
           <input
             type="text"
+            required
             placeholder="Acme Corp"
-            className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-[hsl(var(--primary))]"
+            value={orgName}
+            onChange={(e) => setOrgName(e.target.value)}
+            className="w-full h-11 rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        {/* Grid for Industry & Team Size */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Industry */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-[var(--foreground-2)]">Industry</label>
-            <select className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-[hsl(var(--primary))]">
-              <option>Technology</option>
-              <option>Finance</option>
-              <option>Healthcare</option>
-              <option>Retail</option>
+            <label className="font-mono text-label-caps uppercase tracking-wider text-[var(--foreground-2)]">
+              Industry
+            </label>
+            <select 
+              className="w-full h-11 rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+            >
+              <option value="technology">Technology</option>
+              <option value="finance">Finance</option>
+              <option value="healthcare">Healthcare</option>
+              <option value="ecommerce">E-commerce</option>
+              <option value="other">Other</option>
             </select>
           </div>
           
+          {/* Team Size */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-[var(--foreground-2)]">Team Size</label>
-            <select className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-[hsl(var(--primary))]">
-              <option>1-10</option>
-              <option>11-50</option>
-              <option>51-200</option>
-              <option>201+</option>
+            <label className="font-mono text-label-caps uppercase tracking-wider text-[var(--foreground-2)]">
+              Team size
+            </label>
+            <select 
+              className="w-full h-11 rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+            >
+              <option value="just_me">Just me</option>
+              <option value="2-10">2-10</option>
+              <option value="11-50">11-50</option>
+              <option value="51-200">51-200</option>
+              <option value="200+">200+</option>
             </select>
           </div>
         </div>
+      </div>
 
-        <div className="pt-4">
-          <Button onClick={() => router.push('/onboarding/team')} className="w-full text-white bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/90">
-            Continue to Team Setup
-          </Button>
+      <div className="pt-4 space-y-4">
+        <Button 
+          type="submit"
+          className="w-full h-11 bg-primary hover:brightness-110 text-white font-semibold rounded-lg flex items-center justify-center transition-all"
+        >
+          Continue &rarr;
+        </Button>
+        
+        <div className="text-center text-xs text-[var(--foreground-3)] font-mono">
+          1 of 5
         </div>
       </div>
-    </div>
+    </form>
   )
 }

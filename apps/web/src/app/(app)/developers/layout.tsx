@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Terminal } from "lucide-react"
+import { buttonVariants } from "@/components/ui/button"
 
 const TABS = [
   { href: "/developers", label: "Overview" },
@@ -17,15 +18,26 @@ export default function DevelopersLayout({ children }: { children: React.ReactNo
   const pathname = usePathname()
 
   return (
-    <div className="flex h-[calc(100vh-100px)] flex-col relative overflow-hidden pb-10">
-      <div className="mb-6">
-        <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-foreground">
-          <Terminal className="size-6 text-[hsl(var(--primary))]" />
-          Developer Portal
-        </h1>
-        <p className="mt-1 text-sm text-[var(--foreground-2)]">
-          Build integrations, manage API keys, and configure webhooks.
-        </p>
+    <div className="flex h-[calc(100vh-100px)] flex-col relative overflow-hidden pb-10 bg-gradient-to-br from-[hsl(var(--primary))]/5 to-[hsl(var(--secondary))]/5 backdrop-blur-lg">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-foreground">
+            <Terminal className="size-6 text-[hsl(var(--primary))]" />
+            Developer Portal
+          </h1>
+          <p className="mt-1 text-sm text-[var(--foreground-2)]">
+            Build on Sentient — API, webhooks, and marketplace
+          </p>
+        </div>
+        <Link
+          href="#docs"
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "sm" }),
+            "border border-[var(--glass-border)] bg-transparent text-[var(--foreground-2)] hover:text-foreground shrink-0 self-start sm:self-auto"
+          )}
+        >
+          View API Docs ↗
+        </Link>
       </div>
 
       <div className="mb-8 border-b border-[var(--glass-border)]">

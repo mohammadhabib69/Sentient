@@ -42,6 +42,39 @@ export default function AgentsPage() {
   return (
     <div className="flex h-full flex-col gap-10 pb-20">
       
+      {/* ── Agent Fleet Section ── */}
+      <section>
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground">
+              <Users className="size-5 text-[hsl(var(--primary))]" />
+              Agent Fleet
+            </h2>
+            <p className="text-sm text-[var(--foreground-2)] mt-1">
+              Manage your deployed AI agents and their operational status.
+            </p>
+          </div>
+        </div>
+
+        {loadingAgents ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="h-[220px] animate-pulse rounded-xl bg-[var(--surface-2)]" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+            {localAgents.map((agent) => (
+              <AgentCard
+                key={agent.id}
+                agent={agent}
+                onToggle={handleToggle}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
       {/* ── Pending Approvals Section ── */}
       <section>
         <div className="mb-4 flex items-center justify-between">
@@ -85,39 +118,6 @@ export default function AgentsPage() {
             )}
           </AnimatePresence>
         </div>
-      </section>
-
-      {/* ── Agent Fleet Section ── */}
-      <section>
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground">
-              <Users className="size-5 text-[hsl(var(--primary))]" />
-              Agent Fleet
-            </h2>
-            <p className="text-sm text-[var(--foreground-2)] mt-1">
-              Manage your deployed AI agents and their operational status.
-            </p>
-          </div>
-        </div>
-
-        {loadingAgents ? (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-[220px] animate-pulse rounded-xl bg-[var(--surface-2)]" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
-            {localAgents.map((agent) => (
-              <AgentCard
-                key={agent.id}
-                agent={agent}
-                onToggle={handleToggle}
-              />
-            ))}
-          </div>
-        )}
       </section>
 
     </div>

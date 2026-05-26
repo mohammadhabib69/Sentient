@@ -3,38 +3,78 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Layout } from "lucide-react"
 
 export default function WorkspaceSetupPage() {
   const router = useRouter()
+  const [workspaceName, setWorkspaceName] = React.useState("")
+  const [description, setDescription] = React.useState("")
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Go to step 4
+    router.push('/onboarding/agents')
+  }
 
   return (
-    <div className="rounded-2xl border border-[var(--glass-border)] bg-[var(--surface-1)] p-8 shadow-xl">
-      <div className="mb-6 flex size-12 items-center justify-center rounded-xl bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]">
-        <Layout className="size-6" />
+    <form 
+      onSubmit={handleSubmit}
+      className="glass-panel rounded-[20px] p-8 shadow-[var(--shadow-card)] space-y-6"
+    >
+      <div className="space-y-1">
+        <span className="text-[11px] font-bold tracking-widest uppercase text-primary">
+          STEP 3 OF 5
+        </span>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          Create your first workspace
+        </h2>
+        <p className="text-sm text-[var(--foreground-2)]">
+          Workspaces organize your projects and agents
+        </p>
       </div>
-      
-      <h2 className="text-2xl font-bold text-foreground">Create your first workspace</h2>
-      <p className="mt-2 text-sm text-[var(--foreground-3)]">
-        Workspaces isolate projects, agents, and data for different teams or domains.
-      </p>
 
-      <div className="mt-8 space-y-5">
+      <div className="space-y-4">
+        {/* Workspace Name */}
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[var(--foreground-2)]">Workspace Name</label>
+          <label className="font-mono text-label-caps uppercase tracking-wider text-[var(--foreground-2)]">
+            Workspace name
+          </label>
           <input
             type="text"
-            defaultValue="Engineering"
-            className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-[hsl(var(--secondary))]"
+            required
+            placeholder="e.g. Engineering, Marketing, Operations"
+            value={workspaceName}
+            onChange={(e) => setWorkspaceName(e.target.value)}
+            className="w-full h-11 rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
           />
         </div>
 
-        <div className="pt-4">
-          <Button onClick={() => router.push('/onboarding/agents')} className="w-full bg-[hsl(var(--secondary))] text-white hover:bg-[hsl(var(--secondary))]/90">
-            Create Workspace
-          </Button>
+        {/* Workspace Description */}
+        <div className="space-y-1.5">
+          <label className="font-mono text-label-caps uppercase tracking-wider text-[var(--foreground-2)]">
+            Description <span className="text-[var(--foreground-3)] font-normal text-xs">(optional)</span>
+          </label>
+          <textarea
+            rows={3}
+            placeholder="What does this workspace focus on?"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] p-3 text-sm text-foreground outline-none transition-colors focus:border-primary resize-none"
+          />
         </div>
       </div>
-    </div>
+
+      <div className="pt-4 space-y-4">
+        <Button 
+          type="submit"
+          className="w-full h-11 bg-primary hover:brightness-110 text-white font-semibold rounded-lg flex items-center justify-center transition-all"
+        >
+          Continue &rarr;
+        </Button>
+        
+        <div className="text-center text-xs text-[var(--foreground-3)] font-mono">
+          3 of 5
+        </div>
+      </div>
+    </form>
   )
 }
