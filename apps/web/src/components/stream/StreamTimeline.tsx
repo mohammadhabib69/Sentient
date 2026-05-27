@@ -15,27 +15,32 @@ export function StreamTimeline({ onSelectEvent, selectedEventId }: StreamTimelin
   const { data: initialEvents = [], isLoading } = useStreamEvents()
   const [events, setEvents] = React.useState<StreamEvent[]>([])
 
-  // Load initial events
   React.useEffect(() => {
-    if (initialEvents.length > 0 && events.length === 0) {
+    if (initialEvents.length > 0) {
       setEvents(initialEvents)
     }
   }, [initialEvents])
 
-  // Simulate incoming live events every 5 seconds
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setEvents(prev => {
+      setEvents((prev) => {
         const newEvent: StreamEvent = {
           id: `sim_evt_${Date.now()}`,
-          type: 'agent_status_changed',
-          aggregateId: 'agt_simulate',
-          aggregateType: 'agent',
+          type: "agent_status_changed",
+          aggregateId: "agt_simulate",
+          aggregateType: "agent",
           occurredAt: new Date().toISOString(),
-          actor: { id: 'sys_1', name: 'System', type: 'system' },
-          payload: { status: 'idle', reason: 'Task completed successfully.' }
+          actor: { id: "sys_1", name: "System", type: "system" },
+          payload: { status: "idle", reason: "Task completed successfully." },
+          display: {
+            variant: "suggestion",
+            badge: "UPDATE",
+            description: "Agent status changed — task completed successfully.",
+            resourceLabel: "agt_simulate",
+            actionLabel: "View Details",
+            initials: "SY",
+          },
         }
-        // Keep array bounded to 50 items for perf
         return [newEvent, ...prev].slice(0, 50)
       })
     }, 5000)
@@ -45,16 +50,16 @@ export function StreamTimeline({ onSelectEvent, selectedEventId }: StreamTimelin
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
-        {[1, 2, 3, 4, 5].map(i => (
-          <div key={i} className="h-24 animate-pulse rounded-xl bg-[var(--surface-2)]" />
+      <div className="flex flex-col gap-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="h-28 animate-pulse rounded-xl bg-surface-container" />
         ))}
       </div>
     )
   }
 
   return (
-    <div className="relative space-y-4 pl-4 before:absolute before:bottom-0 before:left-[35px] before:top-4 before:w-[2px] before:bg-gradient-to-b before:from-[var(--glass-border)] before:to-transparent">
+    <div className="relative flex flex-col gap-4">
       <AnimatePresence initial={false}>
         {events.map((event) => (
           <EventCard

@@ -10,30 +10,52 @@ import { ThemeToggle } from "@/components/shared/ThemeToggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 // ─── Breadcrumb Component ─────────────────────────────────────
+const PAGE_CRUMBS: Record<string, { parent?: string; label: string }> = {
+  stream: { parent: "Mission Control", label: "Reality Stream" },
+  graph: { parent: "Mission Control", label: "Business Graph" },
+}
+
 function Breadcrumbs() {
   const pathname = usePathname()
-  
-  // Basic breadcrumb parsing based on pathname
-  const paths = pathname.split('/').filter(Boolean)
-  if (paths.length === 0) paths.push('dashboard')
+  const segment = pathname.split("/").filter(Boolean).pop() ?? "dashboard"
+  const custom = PAGE_CRUMBS[segment]
+
+  if (custom) {
+    return (
+      <div className="flex items-center text-body-sm text-on-surface-variant">
+        {custom.parent && (
+          <>
+            <span className="cursor-pointer transition-colors hover:text-primary">
+              {custom.parent}
+            </span>
+            <span className="mx-1 text-on-surface-variant">›</span>
+          </>
+        )}
+        <span className="font-semibold text-on-surface">{custom.label}</span>
+      </div>
+    )
+  }
+
+  const paths = pathname.split("/").filter(Boolean)
+  if (paths.length === 0) paths.push("dashboard")
 
   return (
     <div className="flex items-center text-sm">
       {paths.map((path, index) => {
         const isLast = index === paths.length - 1
-        const formatted = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, ' ')
-        
+        const formatted = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " ")
+
         return (
           <React.Fragment key={path}>
-            <span className={cn(
-              "font-medium transition-colors",
-              isLast ? "text-foreground" : "text-[var(--foreground-3)]"
-            )}>
+            <span
+              className={cn(
+                "font-medium transition-colors",
+                isLast ? "text-foreground" : "text-[var(--foreground-3)]"
+              )}
+            >
               {formatted}
             </span>
-            {!isLast && (
-              <span className="mx-2 text-[var(--foreground-3)]">/</span>
-            )}
+            {!isLast && <span className="mx-2 text-[var(--foreground-3)]">/</span>}
           </React.Fragment>
         )
       })}
@@ -43,6 +65,7 @@ function Breadcrumbs() {
 
 // ─── Search Pill Component ────────────────────────────────────
 function SearchPill() {
+  const pathname = usePathname()
   const { setSearchOpen } = useUIStore()
 
   // Listen for Cmd+K or Ctrl+K globally to open search
@@ -68,7 +91,11 @@ function SearchPill() {
       )}
     >
       <Search className="size-4 shrink-0 text-[var(--foreground-3)]" />
-      <span className="flex-1 text-left truncate">Search operations, agents, logs...</span>
+      <span className="flex-1 truncate text-left">
+        {pathname.startsWith("/stream") || pathname.startsWith("/graph")
+          ? "Search system..."
+          : "Search operations, agents, logs..."}
+      </span>
       <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded-[4px] border border-[var(--glass-border)] bg-[var(--surface-2)] px-1.5 font-mono text-[10px] font-medium text-[var(--foreground-2)] sm:flex opacity-60 group-hover:opacity-100 transition-opacity">
         <span className="text-[10px]">⌘</span>K
       </kbd>

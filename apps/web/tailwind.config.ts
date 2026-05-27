@@ -37,6 +37,7 @@ const config: Config = {
         'on-surface':               'var(--on-surface, #e2e3e0)',
         'on-surface-variant':       'var(--on-surface-variant, #c1c8c9)',
         'outline-variant':          'var(--outline-variant, #414849)',
+        outline:                    'var(--on-surface-variant, #8b9293)',
       },
       spacing: {
         'gutter':        '1.5rem',

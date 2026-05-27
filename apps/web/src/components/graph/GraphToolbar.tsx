@@ -1,114 +1,48 @@
 "use client"
 
-import * as React from "react"
-import { ZoomIn, ZoomOut, Maximize, Filter, Star, CornerUpRight, Download } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Filter, Maximize2, Minus, Plus } from "lucide-react"
 
 interface GraphToolbarProps {
   onZoomIn: () => void
   onZoomOut: () => void
   onFit: () => void
-  onToggleBottlenecks: () => void
-  onToggleCriticalPath: () => void
-  onExport: () => void
 }
 
-export function GraphToolbar({
-  onZoomIn,
-  onZoomOut,
-  onFit,
-  onToggleBottlenecks,
-  onToggleCriticalPath,
-  onExport,
-}: GraphToolbarProps) {
-  const [bottlenecksActive, setBottlenecksActive] = React.useState(false)
-  const [criticalPathActive, setCriticalPathActive] = React.useState(false)
-
-  const handleToggleBottlenecks = () => {
-    setBottlenecksActive(!bottlenecksActive)
-    onToggleBottlenecks()
-  }
-
-  const handleToggleCriticalPath = () => {
-    setCriticalPathActive(!criticalPathActive)
-    onToggleCriticalPath()
-  }
-
+export function GraphToolbar({ onZoomIn, onZoomOut, onFit }: GraphToolbarProps) {
   return (
-    <div className="absolute top-6 right-6 flex items-center gap-1 rounded-xl border border-[var(--glass-border)] bg-[rgba(44,61,51,0.85)] p-2 shadow-[var(--shadow-float)] backdrop-blur-xl z-30">
-      
-      {/* Zoom controls */}
-      <button 
-        onClick={onZoomIn} 
-        className="rounded-lg p-2 text-[var(--foreground-2)] hover:bg-[var(--surface-3)] hover:text-foreground transition-colors"
+    <div className="absolute right-6 top-6 z-40 flex flex-col gap-2 rounded-xl border border-glass-border bg-surface-container-high/60 p-1.5 shadow-2xl backdrop-blur-xl">
+      <button
+        type="button"
+        onClick={onZoomIn}
         title="Zoom In"
+        className="rounded-lg p-2.5 text-on-surface-variant transition-colors hover:bg-surface-container-highest hover:text-on-surface"
       >
-        <ZoomIn className="size-4" />
+        <Plus className="size-5" />
       </button>
-      <button 
-        onClick={onZoomOut} 
-        className="rounded-lg p-2 text-[var(--foreground-2)] hover:bg-[var(--surface-3)] hover:text-foreground transition-colors"
+      <button
+        type="button"
+        onClick={onZoomOut}
         title="Zoom Out"
+        className="rounded-lg p-2.5 text-on-surface-variant transition-colors hover:bg-surface-container-highest hover:text-on-surface"
       >
-        <ZoomOut className="size-4" />
+        <Minus className="size-5" />
       </button>
-      <button 
-        onClick={onFit} 
-        className="rounded-lg p-2 text-[var(--foreground-2)] hover:bg-[var(--surface-3)] hover:text-foreground transition-colors"
+      <div className="my-0.5 h-px w-full bg-outline-variant/50" />
+      <button
+        type="button"
+        onClick={onFit}
         title="Fit to Screen"
+        className="rounded-lg p-2.5 text-on-surface-variant transition-colors hover:bg-surface-container-highest hover:text-on-surface"
       >
-        <Maximize className="size-4" />
+        <Maximize2 className="size-5" />
       </button>
-
-      <div className="w-px h-4 bg-[var(--glass-border)] mx-1" />
-
-      {/* Toggle filters */}
-      <button 
-        className="rounded-lg p-2 text-[var(--foreground-2)] hover:bg-[var(--surface-3)] hover:text-foreground transition-colors"
-        title="Filter by Type"
+      <button
+        type="button"
+        title="Filter Nodes"
+        className="rounded-lg p-2.5 text-mist-teal transition-colors hover:bg-surface-container-highest hover:text-primary"
       >
-        <Filter className="size-4" />
+        <Filter className="size-5" />
       </button>
-
-      {/* Bottlenecks toggle */}
-      <button 
-        onClick={handleToggleBottlenecks}
-        className={cn(
-          "rounded-lg p-2 transition-colors",
-          bottlenecksActive 
-            ? "bg-[var(--red)]/20 text-[var(--red)] hover:bg-[var(--red)]/30" 
-            : "text-[var(--foreground-2)] hover:bg-[var(--surface-3)] hover:text-foreground"
-        )}
-        title="Highlight Bottlenecks"
-      >
-        <Star className="size-4 fill-current" />
-      </button>
-
-      {/* Critical Path toggle */}
-      <button 
-        onClick={handleToggleCriticalPath}
-        className={cn(
-          "rounded-lg p-2 transition-colors",
-          criticalPathActive 
-            ? "bg-primary/20 text-primary hover:bg-primary/30" 
-            : "text-[var(--foreground-2)] hover:bg-[var(--surface-3)] hover:text-foreground"
-        )}
-        title="Highlight Critical Path"
-      >
-        <CornerUpRight className="size-4" />
-      </button>
-
-      <div className="w-px h-4 bg-[var(--glass-border)] mx-1" />
-
-      {/* Export */}
-      <button 
-        onClick={onExport} 
-        className="rounded-lg p-2 text-[var(--foreground-2)] hover:bg-[var(--surface-3)] hover:text-foreground transition-colors"
-        title="Export Diagram"
-      >
-        <Download className="size-4" />
-      </button>
-
     </div>
   )
 }

@@ -24,7 +24,7 @@ export default function BusinessGraph({ elements, onNodeClick, onCoreRef }: Busi
   const isDark = theme !== 'light'
 
   // Colors based on Sentient PRD Design System
-  const bg = isDark ? '#1A201D' : '#EBF0EC'
+  const bg = isDark ? '#121413' : '#EBF0EC'
   const textColor = isDark ? '#E8EDE9' : '#1E201F'
   const border = isDark ? 'rgba(116,149,155,0.18)' : '#DDE6E0'
   const primaryColor = '#74959B' // Mist Teal
