@@ -1,24 +1,31 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useTheme } from "next-themes"
-import { Moon, Sun } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import * as React from "react";
+import { useTheme } from "next-themes";
+import { Moon, Sun } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
   // Avoid hydration mismatch by waiting until mounted
-  React.useEffect(() => setMounted(true), [])
+  React.useEffect(() => setMounted(true), []);
 
   if (!mounted) {
-    return <Button variant="ghost" size="icon" className="size-9 rounded-full" aria-label="Toggle theme" />
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        className="size-9 rounded-full"
+        aria-label="Toggle theme"
+      />
+    );
   }
 
-  const isDark = theme === "dark"
+  const isDark = theme === "dark";
 
   return (
     <Button
@@ -55,5 +62,5 @@ export function ThemeToggle() {
         )}
       </AnimatePresence>
     </Button>
-  )
+  );
 }

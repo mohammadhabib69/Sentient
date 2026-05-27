@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface LoadingSkeletonProps {
   /** Predefined layout shape */
-  variant?: "card" | "table-row" | "line" | "circle" | "chart"
+  variant?: "card" | "table-row" | "line" | "circle" | "chart";
   /** Number of skeleton items to render */
-  count?: number
-  className?: string
+  count?: number;
+  className?: string;
 }
 
 function Pulse({ className }: { className?: string }) {
-  return <div className={cn("animate-pulse rounded-lg bg-[var(--surface-2)]", className)} />
+  return <div className={cn("animate-pulse rounded-lg bg-[var(--surface-2)]", className)} />;
 }
 
 function SkeletonCard() {
@@ -31,7 +31,7 @@ function SkeletonCard() {
         <Pulse className="h-6 w-20 rounded-full" />
       </div>
     </div>
-  )
+  );
 }
 
 function SkeletonTableRow() {
@@ -42,15 +42,15 @@ function SkeletonTableRow() {
       <Pulse className="h-3 w-20" />
       <Pulse className="h-3 w-16" />
     </div>
-  )
+  );
 }
 
 function SkeletonLine() {
-  return <Pulse className="h-3 w-full" />
+  return <Pulse className="h-3 w-full" />;
 }
 
 function SkeletonCircle() {
-  return <Pulse className="size-10 rounded-full" />
+  return <Pulse className="size-10 rounded-full" />;
 }
 
 function SkeletonChart() {
@@ -59,7 +59,7 @@ function SkeletonChart() {
       <Pulse className="h-4 w-1/3" />
       <Pulse className="h-48 w-full" />
     </div>
-  )
+  );
 }
 
 const VARIANT_MAP: Record<string, React.FC> = {
@@ -68,11 +68,11 @@ const VARIANT_MAP: Record<string, React.FC> = {
   line: SkeletonLine,
   circle: SkeletonCircle,
   chart: SkeletonChart,
-}
+};
 
 export function LoadingSkeleton({ variant = "card", count = 1, className }: LoadingSkeletonProps) {
-  const Component = VARIANT_MAP[variant]
-  if (!Component) return null
+  const Component = VARIANT_MAP[variant];
+  if (!Component) return null;
 
   return (
     <div className={cn("space-y-4", className)}>
@@ -80,5 +80,5 @@ export function LoadingSkeleton({ variant = "card", count = 1, className }: Load
         <Component key={i} />
       ))}
     </div>
-  )
+  );
 }

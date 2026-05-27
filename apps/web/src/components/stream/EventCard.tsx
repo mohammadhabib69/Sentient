@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { motion } from "framer-motion"
+import * as React from "react";
+import { motion } from "framer-motion";
 import {
   ArrowRight,
   Bot,
@@ -11,36 +11,36 @@ import {
   Server,
   Terminal,
   User,
-} from "lucide-react"
-import { StreamEvent, StreamEventVariant } from "@/types/event.types"
-import { cn } from "@/lib/utils"
+} from "lucide-react";
+import { StreamEvent, StreamEventVariant } from "@/types/event.types";
+import { cn } from "@/lib/utils";
 
 interface EventCardProps {
-  event: StreamEvent
-  onClick: (event: StreamEvent) => void
-  isActive: boolean
+  event: StreamEvent;
+  onClick: (event: StreamEvent) => void;
+  isActive: boolean;
 }
 
 function resolveVariant(event: StreamEvent): StreamEventVariant {
-  if (event.display?.variant) return event.display.variant
-  if (event.type === "webhook_failed" || event.type === "error") return "critical"
-  if (event.type.includes("anomaly")) return "anomaly"
-  if (event.actor.type === "agent") return "suggestion"
-  if (event.actor.type === "user") return "approval"
-  return "system"
+  if (event.display?.variant) return event.display.variant;
+  if (event.type === "webhook_failed" || event.type === "error") return "critical";
+  if (event.type.includes("anomaly")) return "anomaly";
+  if (event.actor.type === "agent") return "suggestion";
+  if (event.actor.type === "user") return "approval";
+  return "system";
 }
 
 const variantStyles: Record<
   StreamEventVariant,
   {
-    accent: string
-    avatarBorder: string
-    avatarText: string
-    avatarGlow: string
-    badge: string
-    cardBorder: string
-    cardRing?: string
-    actionHover: string
+    accent: string;
+    avatarBorder: string;
+    avatarText: string;
+    avatarGlow: string;
+    badge: string;
+    cardBorder: string;
+    cardRing?: string;
+    actionHover: string;
   }
 > = {
   suggestion: {
@@ -90,40 +90,36 @@ const variantStyles: Record<
     cardBorder: "border-glass-border",
     actionHover: "group-hover:text-mist-teal",
   },
-}
+};
 
 function AvatarContent({ event, variant }: { event: StreamEvent; variant: StreamEventVariant }) {
-  const initials = event.display?.initials
+  const initials = event.display?.initials;
   if (initials) {
-    return <span className="font-label-caps text-xs">{initials}</span>
+    return <span className="font-label-caps text-xs">{initials}</span>;
   }
-  if (variant === "critical") return <Terminal className="size-[18px]" />
-  if (event.actor.type === "user") return <User className="size-[18px]" />
-  if (event.actor.type === "agent") return <Bot className="size-[18px]" />
-  return <Server className="size-[18px]" />
+  if (variant === "critical") return <Terminal className="size-[18px]" />;
+  if (event.actor.type === "user") return <User className="size-[18px]" />;
+  if (event.actor.type === "agent") return <Bot className="size-[18px]" />;
+  return <Server className="size-[18px]" />;
 }
 
 function ResourceIcon({ variant }: { variant: StreamEventVariant }) {
-  if (variant === "anomaly") return <Network className="size-[14px] text-on-surface-variant" />
-  if (variant === "approval") return <CheckCheck className="size-[14px] text-on-surface-variant" />
-  if (variant === "critical") return <Server className="size-[14px] text-on-surface-variant" />
-  return <FileText className="size-[14px] text-on-surface-variant" />
+  if (variant === "anomaly") return <Network className="size-[14px] text-on-surface-variant" />;
+  if (variant === "approval") return <CheckCheck className="size-[14px] text-on-surface-variant" />;
+  if (variant === "critical") return <Server className="size-[14px] text-on-surface-variant" />;
+  return <FileText className="size-[14px] text-on-surface-variant" />;
 }
 
 export function EventCard({ event, onClick, isActive }: EventCardProps) {
-  const variant = resolveVariant(event)
-  const styles = variantStyles[variant]
-  const badge = event.display?.badge ?? variant.toUpperCase()
-  const description =
-    event.display?.description ?? event.type.replace(/_/g, " ")
+  const variant = resolveVariant(event);
+  const styles = variantStyles[variant];
+  const badge = event.display?.badge ?? variant.toUpperCase();
+  const description = event.display?.description ?? event.type.replace(/_/g, " ");
   const resourceLabel =
-    event.display?.resourceLabel ?? `${event.aggregateType}:${event.aggregateId}`
-  const actionLabel = event.display?.actionLabel ?? "View Details"
+    event.display?.resourceLabel ?? `${event.aggregateType}:${event.aggregateId}`;
+  const actionLabel = event.display?.actionLabel ?? "View Details";
 
-  const timestamp = new Date(event.occurredAt)
-    .toISOString()
-    .slice(11, 23)
-    .replace("Z", " UTC")
+  const timestamp = new Date(event.occurredAt).toISOString().slice(11, 23).replace("Z", " UTC");
 
   return (
     <motion.div
@@ -138,7 +134,7 @@ export function EventCard({ event, onClick, isActive }: EventCardProps) {
           "z-10 mt-2 flex size-10 shrink-0 items-center justify-center rounded-full border bg-surface-container-low",
           styles.avatarBorder,
           styles.avatarText,
-          styles.avatarGlow
+          styles.avatarGlow,
         )}
       >
         <AvatarContent event={event} variant={variant} />
@@ -149,7 +145,7 @@ export function EventCard({ event, onClick, isActive }: EventCardProps) {
           "relative flex-1 overflow-hidden rounded-xl border bg-surface-container/60 p-4 backdrop-blur-[12px] transition-all hover:bg-surface-container hover:shadow-lg",
           styles.cardBorder,
           styles.cardRing,
-          isActive && "border-mist-teal/40 ring-1 ring-mist-teal/30"
+          isActive && "border-mist-teal/40 ring-1 ring-mist-teal/30",
         )}
       >
         <div className={cn("absolute bottom-0 left-0 top-0 w-1", styles.accent)} />
@@ -158,10 +154,7 @@ export function EventCard({ event, onClick, isActive }: EventCardProps) {
           <div className="flex items-center gap-2">
             <span className="text-body-md font-semibold text-on-surface">{event.actor.name}</span>
             <span
-              className={cn(
-                "rounded border px-2 py-0.5 font-label-caps text-[9px]",
-                styles.badge
-              )}
+              className={cn("rounded border px-2 py-0.5 font-label-caps text-[9px]", styles.badge)}
             >
               {badge}
             </span>
@@ -172,7 +165,7 @@ export function EventCard({ event, onClick, isActive }: EventCardProps) {
         <p
           className={cn(
             "mb-4 text-body-sm leading-relaxed",
-            variant === "critical" ? "text-error-red/90" : "text-on-surface-variant"
+            variant === "critical" ? "text-error-red/90" : "text-on-surface-variant",
           )}
         >
           {description}
@@ -186,7 +179,7 @@ export function EventCard({ event, onClick, isActive }: EventCardProps) {
           <div
             className={cn(
               "flex items-center gap-1 text-[13px] text-on-surface-variant transition-colors",
-              styles.actionHover
+              styles.actionHover,
             )}
           >
             {actionLabel}
@@ -195,5 +188,5 @@ export function EventCard({ event, onClick, isActive }: EventCardProps) {
         </div>
       </div>
     </motion.div>
-  )
+  );
 }

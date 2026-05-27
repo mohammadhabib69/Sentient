@@ -1,13 +1,13 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { User, Organization } from '@/types/organization.types'
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { User, Organization } from "@/types/organization.types";
 
 interface AuthState {
-  user: User | null
-  org: Organization | null
-  accessToken: string | null
-  setAuth: (user: User, org: Organization, token: string) => void
-  clearAuth: () => void
+  user: User | null;
+  org: Organization | null;
+  accessToken: string | null;
+  setAuth: (user: User, org: Organization, token: string) => void;
+  clearAuth: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -20,7 +20,7 @@ export const useAuthStore = create<AuthState>()(
       clearAuth: () => set({ user: null, org: null, accessToken: null }),
     }),
     {
-      name: 'sentient-auth',
-    }
-  )
-)
+      name: "sentient-auth",
+    },
+  ),
+);

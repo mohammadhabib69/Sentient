@@ -1,29 +1,42 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { X, User, Bot, FolderKanban, Box, Award, Shield, Users, Layers, Activity } from "lucide-react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  X,
+  User,
+  Bot,
+  FolderKanban,
+  Box,
+  Award,
+  Shield,
+  Users,
+  Layers,
+  Activity,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface NodeDetailPanelProps {
-  nodeData: any | null
-  onClose: () => void
+  nodeData: any | null;
+  onClose: () => void;
 }
 
 export function NodeDetailPanel({ nodeData, onClose }: NodeDetailPanelProps) {
-  const [activeTab, setActiveTab] = React.useState<"details" | "tasks" | "members" | "events">("details")
+  const [activeTab, setActiveTab] = React.useState<"details" | "tasks" | "members" | "events">(
+    "details",
+  );
 
   React.useEffect(() => {
     // Reset tab when active node changes
-    setActiveTab("details")
-  }, [nodeData])
+    setActiveTab("details");
+  }, [nodeData]);
 
-  if (!nodeData) return null
+  if (!nodeData) return null;
 
-  const isProject = nodeData.type === "project"
-  const isUser = nodeData.type === "user"
-  const isAgent = nodeData.type === "agent"
-  const isTask = nodeData.type === "task"
+  const isProject = nodeData.type === "project";
+  const isUser = nodeData.type === "user";
+  const isAgent = nodeData.type === "agent";
+  const isTask = nodeData.type === "task";
 
   return (
     <AnimatePresence>
@@ -38,15 +51,23 @@ export function NodeDetailPanel({ nodeData, onClose }: NodeDetailPanelProps) {
           {/* Panel Header */}
           <div className="flex items-center justify-between border-b border-[var(--glass-border)] p-4">
             <div className="flex items-center gap-2">
-              <span className={cn(
-                "size-2 rounded-full",
-                isProject ? "bg-secondary" : isUser ? "bg-primary" : isTask ? "bg-amber" : "bg-foreground"
-              )} />
+              <span
+                className={cn(
+                  "size-2 rounded-full",
+                  isProject
+                    ? "bg-secondary"
+                    : isUser
+                      ? "bg-primary"
+                      : isTask
+                        ? "bg-amber"
+                        : "bg-foreground",
+                )}
+              />
               <span className="font-mono text-label-caps uppercase text-[var(--foreground-3)] tracking-wider">
                 {nodeData.type} Node
               </span>
             </div>
-            <button 
+            <button
               onClick={onClose}
               className="rounded-lg p-1 text-[var(--foreground-3)] hover:text-foreground hover:bg-[var(--surface-2)] transition-colors"
             >
@@ -80,11 +101,9 @@ export function NodeDetailPanel({ nodeData, onClose }: NodeDetailPanelProps) {
                   <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold tracking-wide bg-primary/10 text-primary uppercase">
                     IN PROGRESS
                   </span>
-                  <span className="text-sm font-bold text-secondary font-mono">
-                    Health: 94%
-                  </span>
+                  <span className="text-sm font-bold text-secondary font-mono">Health: 94%</span>
                 </div>
-                
+
                 {/* Stats row */}
                 <div className="grid grid-cols-3 gap-2 py-2 border-y border-[var(--glass-border)] text-center font-mono text-xs">
                   <div>
@@ -111,9 +130,9 @@ export function NodeDetailPanel({ nodeData, onClose }: NodeDetailPanelProps) {
                   onClick={() => setActiveTab(tab)}
                   className={cn(
                     "flex-1 py-2 text-center border-b-2 capitalize transition-colors",
-                    activeTab === tab 
-                      ? "border-primary text-primary" 
-                      : "border-transparent text-[var(--foreground-2)] hover:text-foreground"
+                    activeTab === tab
+                      ? "border-primary text-primary"
+                      : "border-transparent text-[var(--foreground-2)] hover:text-foreground",
                   )}
                 >
                   {tab}
@@ -131,10 +150,14 @@ export function NodeDetailPanel({ nodeData, onClose }: NodeDetailPanelProps) {
                     Description
                   </h4>
                   <p className="text-[var(--foreground-2)] leading-relaxed">
-                    {isProject && "Refactor the core architecture of Sentient engine to optimize neural agent execution pipelines and reduce gateway routing latency."}
-                    {isUser && "Primary administrator of the Sentient core organization environment. Active session."}
-                    {isAgent && "Deployment agent responsible for automated continuous integration, pull request audits, and pipeline health monitoring."}
-                    {isTask && "Analyze task dependencies and resolve core refactoring thread locks in memory management loops."}
+                    {isProject &&
+                      "Refactor the core architecture of Sentient engine to optimize neural agent execution pipelines and reduce gateway routing latency."}
+                    {isUser &&
+                      "Primary administrator of the Sentient core organization environment. Active session."}
+                    {isAgent &&
+                      "Deployment agent responsible for automated continuous integration, pull request audits, and pipeline health monitoring."}
+                    {isTask &&
+                      "Analyze task dependencies and resolve core refactoring thread locks in memory management loops."}
                   </p>
                 </div>
 
@@ -159,16 +182,25 @@ export function NodeDetailPanel({ nodeData, onClose }: NodeDetailPanelProps) {
                 {[
                   { title: "Refactor core memory pipelines", status: "In Progress" },
                   { title: "JWT rotation keys", status: "Todo" },
-                  { title: "Tailwind config v4 update", status: "Done" }
+                  { title: "Tailwind config v4 update", status: "Done" },
                 ].map((t, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--surface-2)] border border-[var(--glass-border)] text-xs">
-                    <span className="font-medium text-foreground truncate max-w-[180px]">{t.title}</span>
-                    <span className={cn(
-                      "px-2 py-0.5 rounded font-mono text-[10px] uppercase",
-                      t.status === "Done" ? "bg-forest-green/10 text-forest-green" :
-                      t.status === "In Progress" ? "bg-primary/10 text-primary" :
-                      "bg-[var(--surface-3)] text-[var(--foreground-3)]"
-                    )}>
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--surface-2)] border border-[var(--glass-border)] text-xs"
+                  >
+                    <span className="font-medium text-foreground truncate max-w-[180px]">
+                      {t.title}
+                    </span>
+                    <span
+                      className={cn(
+                        "px-2 py-0.5 rounded font-mono text-[10px] uppercase",
+                        t.status === "Done"
+                          ? "bg-forest-green/10 text-forest-green"
+                          : t.status === "In Progress"
+                            ? "bg-primary/10 text-primary"
+                            : "bg-[var(--surface-3)] text-[var(--foreground-3)]",
+                      )}
+                    >
                       {t.status}
                     </span>
                   </div>
@@ -184,15 +216,20 @@ export function NodeDetailPanel({ nodeData, onClose }: NodeDetailPanelProps) {
                 {[
                   { name: "Mohammad Habib", role: "Owner" },
                   { name: "Sarah Connor", role: "Developer" },
-                  { name: "Flux Agent", role: "AI Assistant" }
+                  { name: "Flux Agent", role: "AI Assistant" },
                 ].map((m, idx) => (
                   <div key={idx} className="flex items-center gap-2.5">
                     <div className="size-7 rounded-full bg-[var(--surface-2)] flex items-center justify-center text-xs font-bold text-primary border border-[var(--glass-border)]">
-                      {m.name.split(" ").map(n => n[0]).join("")}
+                      {m.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
                     </div>
                     <div>
                       <p className="text-xs font-bold text-foreground leading-tight">{m.name}</p>
-                      <p className="text-[10px] text-[var(--foreground-3)] font-mono leading-none">{m.role}</p>
+                      <p className="text-[10px] text-[var(--foreground-3)] font-mono leading-none">
+                        {m.role}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -207,19 +244,24 @@ export function NodeDetailPanel({ nodeData, onClose }: NodeDetailPanelProps) {
                 {[
                   { title: "Flux approvedoverride manual #102", time: "15m ago" },
                   { title: "Task reassigned to Sarah Connor", time: "18m ago" },
-                  { title: "Created GitHub issue #284", time: "1h ago" }
+                  { title: "Created GitHub issue #284", time: "1h ago" },
                 ].map((e, idx) => (
-                  <div key={idx} className="flex items-start gap-2 border-l-2 border-primary pl-2.5 py-1 text-xs">
+                  <div
+                    key={idx}
+                    className="flex items-start gap-2 border-l-2 border-primary pl-2.5 py-1 text-xs"
+                  >
                     <div>
                       <p className="text-foreground leading-snug">{e.title}</p>
-                      <p className="text-[10px] text-[var(--foreground-3)] font-mono mt-0.5">{e.time}</p>
+                      <p className="text-[10px] text-[var(--foreground-3)] font-mono mt-0.5">
+                        {e.time}
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
             )}
           </div>
-          
+
           {/* Action Footer */}
           <div className="p-4 border-t border-[var(--glass-border)]">
             <button className="w-full h-10 rounded-lg bg-[var(--surface-2)] hover:bg-[var(--surface-3)] text-xs font-semibold text-foreground transition-all flex items-center justify-center gap-1.5 border border-[var(--glass-border)]">
@@ -229,5 +271,5 @@ export function NodeDetailPanel({ nodeData, onClose }: NodeDetailPanelProps) {
         </div>
       </motion.div>
     </AnimatePresence>
-  )
+  );
 }

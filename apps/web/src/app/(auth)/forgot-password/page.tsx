@@ -1,46 +1,46 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { motion, AnimatePresence } from "framer-motion"
-import { Lock, Mail } from "lucide-react"
+import * as React from "react";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { motion, AnimatePresence } from "framer-motion";
+import { Lock, Mail } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email address"),
-})
+});
 
-type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>
+type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordPage() {
-  const [submittedEmail, setSubmittedEmail] = React.useState("")
-  const [isResending, setIsResending] = React.useState(false)
-  const [resendSuccess, setResendSuccess] = React.useState(false)
+  const [submittedEmail, setSubmittedEmail] = React.useState("");
+  const [isResending, setIsResending] = React.useState(false);
+  const [resendSuccess, setResendSuccess] = React.useState(false);
 
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors, isSubmitting } 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
   } = useForm<ForgotPasswordValues>({
     resolver: zodResolver(forgotPasswordSchema),
-  })
+  });
 
   const onSubmit = async (data: ForgotPasswordValues) => {
-    await new Promise(resolve => setTimeout(resolve, 800))
-    setSubmittedEmail(data.email)
-  }
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setSubmittedEmail(data.email);
+  };
 
   const handleResend = async () => {
-    setIsResending(true)
-    setResendSuccess(false)
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setIsResending(false)
-    setResendSuccess(true)
-  }
+    setIsResending(true);
+    setResendSuccess(false);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setIsResending(false);
+    setResendSuccess(true);
+  };
 
   return (
     <motion.div
@@ -60,8 +60,8 @@ export default function ForgotPasswordPage() {
           >
             {/* 1. Back link */}
             <div className="mb-6 -mt-2">
-              <Link 
-                href="/login" 
+              <Link
+                href="/login"
                 className="text-[13px] text-[var(--foreground-2)] hover:text-foreground transition-colors font-sans"
               >
                 ← Back to login
@@ -77,7 +77,9 @@ export default function ForgotPasswordPage() {
 
             {/* 3 & 4. Heading & Sub */}
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">Reset your password</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+                Reset your password
+              </h2>
               <p className="mt-1.5 text-sm text-[var(--foreground-2)] font-sans px-2">
                 Enter your email and we'll send you a reset link
               </p>
@@ -87,7 +89,10 @@ export default function ForgotPasswordPage() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               {/* 5. Email input */}
               <div className="space-y-1.5">
-                <label htmlFor="email" className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]">
+                <label
+                  htmlFor="email"
+                  className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]"
+                >
                   Email
                 </label>
                 <input
@@ -103,9 +108,9 @@ export default function ForgotPasswordPage() {
               </div>
 
               {/* 6. Send Reset Link button */}
-              <Button 
-                type="submit" 
-                className="w-full h-[44px] rounded-lg bg-forest-green hover:bg-forest-green/90 text-white font-medium text-sm transition-all shadow-md mt-2" 
+              <Button
+                type="submit"
+                className="w-full h-[44px] rounded-lg bg-forest-green hover:bg-forest-green/90 text-white font-medium text-sm transition-all shadow-md mt-2"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Sending..." : "Send Reset Link"}
@@ -137,9 +142,12 @@ export default function ForgotPasswordPage() {
             </div>
 
             {/* Success Header & Sub */}
-            <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">Check your email</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+              Check your email
+            </h2>
             <p className="mt-2.5 text-sm text-[var(--foreground-2)] font-sans px-4 leading-relaxed">
-              We sent a reset link to <strong className="text-foreground font-medium">{submittedEmail}</strong>
+              We sent a reset link to{" "}
+              <strong className="text-foreground font-medium">{submittedEmail}</strong>
             </p>
 
             {/* Actions */}
@@ -166,5 +174,5 @@ export default function ForgotPasswordPage() {
         )}
       </AnimatePresence>
     </motion.div>
-  )
+  );
 }

@@ -1,22 +1,24 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Button } from "@/components/ui/button"
-import { Users, MoreHorizontal, UserPlus } from "lucide-react"
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Users, MoreHorizontal, UserPlus } from "lucide-react";
 
 export default function TeamSettingsPage() {
   const team = [
     { name: "Mohammad Habib", email: "mohammad@acme.com", role: "Owner", status: "Active" },
     { name: "Sarah Connor", email: "sarah@acme.com", role: "Admin", status: "Active" },
     { name: "John Smith", email: "john@acme.com", role: "Member", status: "Pending" },
-  ]
+  ];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-foreground">Team Members</h2>
-          <p className="text-sm text-[var(--foreground-3)]">Manage who has access to this organization.</p>
+          <p className="text-sm text-[var(--foreground-3)]">
+            Manage who has access to this organization.
+          </p>
         </div>
         <Button className="flex items-center gap-2 bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]/90">
           <UserPlus className="size-4" /> Invite Member
@@ -30,7 +32,9 @@ export default function TeamSettingsPage() {
               <th className="px-6 py-3 font-medium text-[var(--foreground-2)]">Name</th>
               <th className="px-6 py-3 font-medium text-[var(--foreground-2)]">Role</th>
               <th className="px-6 py-3 font-medium text-[var(--foreground-2)]">Status</th>
-              <th className="px-6 py-3 font-medium text-[var(--foreground-2)] text-right">Actions</th>
+              <th className="px-6 py-3 font-medium text-[var(--foreground-2)] text-right">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--glass-border)]">
@@ -53,11 +57,13 @@ export default function TeamSettingsPage() {
                   </select>
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`inline-flex rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${
-                    member.status === 'Active' 
-                      ? 'bg-[var(--green)]/10 text-[var(--green)]' 
-                      : 'bg-[var(--amber)]/10 text-[var(--amber)]'
-                  }`}>
+                  <span
+                    className={`inline-flex rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${
+                      member.status === "Active"
+                        ? "bg-[var(--green)]/10 text-[var(--green)]"
+                        : "bg-[var(--amber)]/10 text-[var(--amber)]"
+                    }`}
+                  >
                     {member.status}
                   </span>
                 </td>
@@ -72,5 +78,5 @@ export default function TeamSettingsPage() {
         </table>
       </div>
     </div>
-  )
+  );
 }

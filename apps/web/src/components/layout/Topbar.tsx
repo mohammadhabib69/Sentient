@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { usePathname } from "next/navigation"
-import { Search, Activity, Bell } from "lucide-react"
+import * as React from "react";
+import { usePathname } from "next/navigation";
+import { Search, Activity, Bell } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { useUIStore } from "@/store/ui.store"
-import { ThemeToggle } from "@/components/shared/ThemeToggle"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { cn } from "@/lib/utils";
+import { useUIStore } from "@/store/ui.store";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // ─── Breadcrumb Component ─────────────────────────────────────
 const PAGE_CRUMBS: Record<string, { parent?: string; label: string }> = {
   stream: { parent: "Mission Control", label: "Reality Stream" },
   graph: { parent: "Mission Control", label: "Business Graph" },
-}
+};
 
 function Breadcrumbs() {
-  const pathname = usePathname()
-  const segment = pathname.split("/").filter(Boolean).pop() ?? "dashboard"
-  const custom = PAGE_CRUMBS[segment]
+  const pathname = usePathname();
+  const segment = pathname.split("/").filter(Boolean).pop() ?? "dashboard";
+  const custom = PAGE_CRUMBS[segment];
 
   if (custom) {
     return (
@@ -33,52 +33,52 @@ function Breadcrumbs() {
         )}
         <span className="font-semibold text-on-surface">{custom.label}</span>
       </div>
-    )
+    );
   }
 
-  const paths = pathname.split("/").filter(Boolean)
-  if (paths.length === 0) paths.push("dashboard")
+  const paths = pathname.split("/").filter(Boolean);
+  if (paths.length === 0) paths.push("dashboard");
 
   return (
     <div className="flex items-center text-sm">
       {paths.map((path, index) => {
-        const isLast = index === paths.length - 1
-        const formatted = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " ")
+        const isLast = index === paths.length - 1;
+        const formatted = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " ");
 
         return (
           <React.Fragment key={path}>
             <span
               className={cn(
                 "font-medium transition-colors",
-                isLast ? "text-foreground" : "text-[var(--foreground-3)]"
+                isLast ? "text-foreground" : "text-[var(--foreground-3)]",
               )}
             >
               {formatted}
             </span>
             {!isLast && <span className="mx-2 text-[var(--foreground-3)]">/</span>}
           </React.Fragment>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 // ─── Search Pill Component ────────────────────────────────────
 function SearchPill() {
-  const pathname = usePathname()
-  const { setSearchOpen } = useUIStore()
+  const pathname = usePathname();
+  const { setSearchOpen } = useUIStore();
 
   // Listen for Cmd+K or Ctrl+K globally to open search
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setSearchOpen(true)
+        e.preventDefault();
+        setSearchOpen(true);
       }
-    }
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [setSearchOpen])
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, [setSearchOpen]);
 
   return (
     <button
@@ -87,7 +87,7 @@ function SearchPill() {
         "group flex h-9 w-full max-w-[360px] items-center gap-2 rounded-full px-3",
         "bg-[var(--glass-bg)] border border-[var(--glass-border)]",
         "text-sm text-muted-foreground shadow-sm transition-all duration-200",
-        "hover:bg-[var(--glass-bg)] hover:shadow-[var(--shadow-card)] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]/50"
+        "hover:bg-[var(--glass-bg)] hover:shadow-[var(--shadow-card)] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]/50",
       )}
     >
       <Search className="size-4 shrink-0 text-[var(--foreground-3)]" />
@@ -100,19 +100,19 @@ function SearchPill() {
         <span className="text-[10px]">⌘</span>K
       </kbd>
     </button>
-  )
+  );
 }
 
 // ─── Main Topbar Component ────────────────────────────────────
 export function Topbar() {
   // We'll mock a notification count here, normally comes from a store
-  const unreadNotifications = 3
+  const unreadNotifications = 3;
 
   return (
     <header
       className={cn(
         "sticky top-0 z-40 flex h-14 w-full items-center justify-between px-6",
-        "bg-topbar-bg backdrop-blur-[20px] backdrop-saturate-[160%] border-b border-glass-border transition-all duration-200"
+        "bg-topbar-bg backdrop-blur-[20px] backdrop-saturate-[160%] border-b border-glass-border transition-all duration-200",
       )}
     >
       {/* ── Left: Breadcrumbs ── */}
@@ -127,7 +127,7 @@ export function Topbar() {
 
       {/* ── Right: Actions & User ── */}
       <div className="flex flex-1 items-center justify-end gap-1.5 sm:gap-2">
-        <button 
+        <button
           className="flex size-9 items-center justify-center rounded-full text-[var(--foreground-2)] hover:bg-muted hover:text-foreground transition-colors"
           title="Activity"
           aria-label="Activity"
@@ -135,7 +135,7 @@ export function Topbar() {
           <Activity className="size-[1.125rem]" />
         </button>
 
-        <button 
+        <button
           className="relative flex size-9 items-center justify-center rounded-full text-[var(--foreground-2)] hover:bg-muted hover:text-foreground transition-colors"
           title="Notifications"
           aria-label="Notifications"
@@ -160,5 +160,5 @@ export function Topbar() {
         </button>
       </div>
     </header>
-  )
+  );
 }

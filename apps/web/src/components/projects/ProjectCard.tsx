@@ -1,1 +1,3 @@
-export function ProjectCard() { return <div>ProjectCard Component</div>; }
+export function ProjectCard() {
+  return <div>ProjectCard Component</div>;
+}

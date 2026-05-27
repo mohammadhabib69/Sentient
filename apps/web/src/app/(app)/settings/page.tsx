@@ -1,26 +1,29 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Button } from "@/components/ui/button"
-import { Building2 } from "lucide-react"
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Building2 } from "lucide-react";
 
 export default function OrganizationSettingsPage() {
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold text-foreground">Organization Settings</h2>
-        <p className="text-sm text-[var(--foreground-3)]">Manage your company details and global preferences.</p>
+        <p className="text-sm text-[var(--foreground-3)]">
+          Manage your company details and global preferences.
+        </p>
       </div>
 
       <div className="space-y-8 rounded-2xl border border-[var(--glass-border)] bg-[var(--surface-1)] p-6 shadow-sm">
-        
         {/* Profile Picture */}
         <div className="flex items-center gap-6">
           <div className="flex size-20 items-center justify-center rounded-xl bg-[var(--surface-3)] text-[var(--foreground-3)]">
             <Building2 className="size-8" />
           </div>
           <div>
-            <Button variant="outline" size="sm">Upload Logo</Button>
+            <Button variant="outline" size="sm">
+              Upload Logo
+            </Button>
             <p className="mt-2 text-xs text-[var(--foreground-3)]">Recommended size: 256x256px</p>
           </div>
         </div>
@@ -28,14 +31,16 @@ export default function OrganizationSettingsPage() {
         {/* Form Fields */}
         <div className="grid gap-6 md:grid-cols-2">
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-[var(--foreground-2)]">Organization Name</label>
+            <label className="text-sm font-medium text-[var(--foreground-2)]">
+              Organization Name
+            </label>
             <input
               type="text"
               defaultValue="Acme Corp"
               className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 py-2 text-sm text-foreground outline-none focus:border-[hsl(var(--primary))]"
             />
           </div>
-          
+
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-[var(--foreground-2)]">Industry</label>
             <select className="w-full rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 py-2 text-sm text-foreground outline-none focus:border-[hsl(var(--primary))]">
@@ -46,7 +51,9 @@ export default function OrganizationSettingsPage() {
           </div>
 
           <div className="md:col-span-2 space-y-1.5">
-            <label className="text-sm font-medium text-[var(--foreground-2)]">Organization Domain</label>
+            <label className="text-sm font-medium text-[var(--foreground-2)]">
+              Organization Domain
+            </label>
             <div className="flex rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] overflow-hidden focus-within:border-[hsl(var(--primary))]">
               <span className="flex items-center bg-[var(--surface-3)] px-3 text-sm text-[var(--foreground-3)]">
                 https://
@@ -68,8 +75,7 @@ export default function OrganizationSettingsPage() {
             Save Changes
           </Button>
         </div>
-
       </div>
     </div>
-  )
+  );
 }

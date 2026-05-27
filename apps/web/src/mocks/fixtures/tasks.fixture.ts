@@ -1,19 +1,19 @@
-import { Task } from '@/types/task.types'
-import { User } from '@/types/organization.types'
-import { MOCK_USERS } from './users.fixture'
+import { Task } from "@/types/task.types";
+import { User } from "@/types/organization.types";
+import { MOCK_USERS } from "./users.fixture";
 
-const u1 = MOCK_USERS[0] as User
-const u2 = MOCK_USERS[1] as User
-const u3 = MOCK_USERS[2] as User
+const u1 = MOCK_USERS[0] as User;
+const u2 = MOCK_USERS[1] as User;
+const u3 = MOCK_USERS[2] as User;
 
 export const MOCK_TASKS: Task[] = [
   {
-    id: 'task_1',
-    projectId: 'proj_1',
-    title: 'Design API schema for Agent builder',
-    description: 'Need a flexible JSON schema that defines agent behaviors and nodes.',
-    status: 'done',
-    priority: 'high',
+    id: "task_1",
+    projectId: "proj_1",
+    title: "Design API schema for Agent builder",
+    description: "Need a flexible JSON schema that defines agent behaviors and nodes.",
+    status: "done",
+    priority: "high",
     assignee: u1,
     agentAssigned: false,
     dueDate: new Date(Date.now() - 86400000 * 2).toISOString(),
@@ -23,12 +23,12 @@ export const MOCK_TASKS: Task[] = [
     updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
   },
   {
-    id: 'task_2',
-    projectId: 'proj_1',
-    title: 'Generate database migrations (Automated)',
-    description: 'Agent will generate SQL migrations based on Prisma schema changes.',
-    status: 'review',
-    priority: 'critical',
+    id: "task_2",
+    projectId: "proj_1",
+    title: "Generate database migrations (Automated)",
+    description: "Agent will generate SQL migrations based on Prisma schema changes.",
+    status: "review",
+    priority: "critical",
     assignee: null,
     agentAssigned: true,
     dueDate: new Date(Date.now() + 86400000 * 1).toISOString(),
@@ -38,12 +38,12 @@ export const MOCK_TASKS: Task[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: 'task_3',
-    projectId: 'proj_1',
-    title: 'Implement drag-and-drop React Flow canvas',
-    description: 'The core UI for the agent builder.',
-    status: 'in_progress',
-    priority: 'high',
+    id: "task_3",
+    projectId: "proj_1",
+    title: "Implement drag-and-drop React Flow canvas",
+    description: "The core UI for the agent builder.",
+    status: "in_progress",
+    priority: "high",
     assignee: u1,
     agentAssigned: false,
     dueDate: new Date(Date.now() + 86400000 * 5).toISOString(),
@@ -53,12 +53,12 @@ export const MOCK_TASKS: Task[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: 'task_4',
-    projectId: 'proj_1',
-    title: 'Fix Webhook delivery retries',
-    description: 'Retries are currently failing due to exponential backoff overflow.',
-    status: 'todo',
-    priority: 'medium',
+    id: "task_4",
+    projectId: "proj_1",
+    title: "Fix Webhook delivery retries",
+    description: "Retries are currently failing due to exponential backoff overflow.",
+    status: "todo",
+    priority: "medium",
     assignee: u3,
     agentAssigned: false,
     dueDate: new Date(Date.now() + 86400000 * 7).toISOString(),
@@ -68,12 +68,12 @@ export const MOCK_TASKS: Task[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: 'task_5',
-    projectId: 'proj_2',
-    title: 'Perform dry-run database failover',
-    description: 'Verify standby instances take over correctly.',
-    status: 'blocked',
-    priority: 'critical',
+    id: "task_5",
+    projectId: "proj_2",
+    title: "Perform dry-run database failover",
+    description: "Verify standby instances take over correctly.",
+    status: "blocked",
+    priority: "critical",
     assignee: u2,
     agentAssigned: false,
     dueDate: new Date(Date.now() + 86400000 * 2).toISOString(),
@@ -85,11 +85,11 @@ export const MOCK_TASKS: Task[] = [
   // Adding more dummy tasks to reach 25 across status combos...
   ...Array.from({ length: 20 }).map((_, i) => ({
     id: `task_gen_${i}`,
-    projectId: i % 2 === 0 ? 'proj_1' : 'proj_2',
+    projectId: i % 2 === 0 ? "proj_1" : "proj_2",
     title: `Generated Task ${i} - Needs attention`,
-    description: 'Automatically generated mock task for testing board rendering.',
-    status: ['todo', 'in_progress', 'review', 'done', 'blocked'][i % 5] as Task['status'],
-    priority: ['low', 'medium', 'high', 'critical'][i % 4] as Task['priority'],
+    description: "Automatically generated mock task for testing board rendering.",
+    status: ["todo", "in_progress", "review", "done", "blocked"][i % 5] as Task["status"],
+    priority: ["low", "medium", "high", "critical"][i % 4] as Task["priority"],
     assignee: i % 3 === 0 ? u1 : i % 3 === 1 ? u2 : null,
     agentAssigned: i % 4 === 0,
     dueDate: new Date(Date.now() + 86400000 * (i - 10)).toISOString(),
@@ -98,4 +98,4 @@ export const MOCK_TASKS: Task[] = [
     createdAt: new Date(Date.now() - 86400000 * (i + 1)).toISOString(),
     updatedAt: new Date().toISOString(),
   })),
-]
+];

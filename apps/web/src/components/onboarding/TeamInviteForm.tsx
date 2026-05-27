@@ -1,1 +1,3 @@
-export function TeamInviteForm() { return <div>TeamInviteForm Component</div>; }
+export function TeamInviteForm() {
+  return <div>TeamInviteForm Component</div>;
+}

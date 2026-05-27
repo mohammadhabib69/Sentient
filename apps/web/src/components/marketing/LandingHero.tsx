@@ -1,11 +1,10 @@
-"use client"
+"use client";
 
-import dynamic from "next/dynamic"
+import dynamic from "next/dynamic";
 
-const ParticleCanvas = dynamic(
-  () => import("./ParticleField").then((mod) => mod.ParticleCanvas),
-  { ssr: false }
-)
+const ParticleCanvas = dynamic(() => import("./ParticleField").then((mod) => mod.ParticleCanvas), {
+  ssr: false,
+});
 
 export function LandingHero() {
   return (
@@ -25,13 +24,12 @@ export function LandingHero() {
             <h1 className="text-hero-900 text-foreground">
               Your Business,
               <br />
-              Running on{" "}
-              <span className="shimmer-text text-mist-teal">Intelligence</span>
+              Running on <span className="shimmer-text text-mist-teal">Intelligence</span>
             </h1>
 
             <p className="max-w-lg text-body-lg text-on-surface-variant">
-              Deploy autonomous agents that analyze, act, and adapt in
-              real-time. High-tech mission control for the AI-native enterprise.
+              Deploy autonomous agents that analyze, act, and adapt in real-time. High-tech mission
+              control for the AI-native enterprise.
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -47,8 +45,10 @@ export function LandingHero() {
           {/* RIGHT — Dashboard card */}
           <div className="hidden lg:block">
             <div className="perspective-container">
-              <div className="dashboard-tilt glass-panel rounded-xl p-8 shadow-[0_25px_60px_-12px_rgba(0,0,0,0.55)]"
-                   style={{ transformStyle: "preserve-3d" }}>
+              <div
+                className="dashboard-tilt glass-panel rounded-xl p-8 shadow-[0_25px_60px_-12px_rgba(0,0,0,0.55)]"
+                style={{ transformStyle: "preserve-3d" }}
+              >
                 {/* Title bar */}
                 <div className="mb-6 flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
@@ -68,18 +68,14 @@ export function LandingHero() {
                     <p className="font-mono text-label-caps uppercase tracking-widest text-on-surface-variant">
                       Active Agents
                     </p>
-                    <p className="mt-2 font-mono text-metric-lg text-on-surface">
-                      12 / 12
-                    </p>
+                    <p className="mt-2 font-mono text-metric-lg text-on-surface">12 / 12</p>
                   </div>
                   {/* Throughput */}
                   <div className="rounded-lg border border-outline-variant bg-surface-container-low p-5">
                     <p className="font-mono text-label-caps uppercase tracking-widest text-on-surface-variant">
                       Throughput
                     </p>
-                    <p className="mt-2 font-mono text-metric-lg text-on-surface">
-                      8.4k req/s
-                    </p>
+                    <p className="mt-2 font-mono text-metric-lg text-on-surface">8.4k req/s</p>
                   </div>
                 </div>
 
@@ -90,15 +86,16 @@ export function LandingHero() {
                   </p>
                   {/* Fake bar graph */}
                   <div className="mt-4 flex items-end gap-1">
-                    {[60, 95, 50, 120, 80, 105, 135, 65, 110, 90, 125, 75, 140, 55, 108, 88, 130, 62, 100, 115].map(
-                      (h, i) => (
-                        <div
-                          key={i}
-                          className="flex-1 rounded-sm bg-mist-teal/30"
-                          style={{ height: `${h}px` }}
-                        />
-                      )
-                    )}
+                    {[
+                      60, 95, 50, 120, 80, 105, 135, 65, 110, 90, 125, 75, 140, 55, 108, 88, 130,
+                      62, 100, 115,
+                    ].map((h, i) => (
+                      <div
+                        key={i}
+                        className="flex-1 rounded-sm bg-mist-teal/30"
+                        style={{ height: `${h}px` }}
+                      />
+                    ))}
                   </div>
                   {/* Gradient fade */}
                   <div className="mt-[-40px] h-10 bg-gradient-to-t from-surface-container-low to-transparent" />
@@ -109,5 +106,5 @@ export function LandingHero() {
         </div>
       </div>
     </section>
-  )
+  );
 }

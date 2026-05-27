@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function OrgSetupPage() {
-  const router = useRouter()
-  const [orgName, setOrgName] = React.useState("")
+  const router = useRouter();
+  const [orgName, setOrgName] = React.useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // Go to step 2
-    router.push('/onboarding/team')
-  }
+    router.push("/onboarding/team");
+  };
 
   return (
-    <form 
+    <form
       onSubmit={handleSubmit}
       className="glass-panel rounded-[20px] p-8 shadow-[var(--shadow-card)] space-y-6"
     >
@@ -54,9 +54,7 @@ export default function OrgSetupPage() {
             <label className="font-mono text-label-caps uppercase tracking-wider text-[var(--foreground-2)]">
               Industry
             </label>
-            <select 
-              className="w-full h-11 rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
-            >
+            <select className="w-full h-11 rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 text-sm text-foreground outline-none transition-colors focus:border-primary">
               <option value="technology">Technology</option>
               <option value="finance">Finance</option>
               <option value="healthcare">Healthcare</option>
@@ -64,15 +62,13 @@ export default function OrgSetupPage() {
               <option value="other">Other</option>
             </select>
           </div>
-          
+
           {/* Team Size */}
           <div className="space-y-1.5">
             <label className="font-mono text-label-caps uppercase tracking-wider text-[var(--foreground-2)]">
               Team size
             </label>
-            <select 
-              className="w-full h-11 rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
-            >
+            <select className="w-full h-11 rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] px-3 text-sm text-foreground outline-none transition-colors focus:border-primary">
               <option value="just_me">Just me</option>
               <option value="2-10">2-10</option>
               <option value="11-50">11-50</option>
@@ -84,17 +80,15 @@ export default function OrgSetupPage() {
       </div>
 
       <div className="pt-4 space-y-4">
-        <Button 
+        <Button
           type="submit"
           className="w-full h-11 bg-primary hover:brightness-110 text-white font-semibold rounded-lg flex items-center justify-center transition-all"
         >
           Continue &rarr;
         </Button>
-        
-        <div className="text-center text-xs text-[var(--foreground-3)] font-mono">
-          1 of 5
-        </div>
+
+        <div className="text-center text-xs text-[var(--foreground-3)] font-mono">1 of 5</div>
       </div>
     </form>
-  )
+  );
 }

@@ -1,1 +1,3 @@
-export function AgentConfigPanel() { return <div>AgentConfigPanel Component</div>; }
+export function AgentConfigPanel() {
+  return <div>AgentConfigPanel Component</div>;
+}

@@ -54,8 +54,6 @@ services:
     restart: unless-stopped
     environment:
       NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-sentient-neo4j-password}
-      NEO4J_USER: ${NEO4J_USER:-neo4j}
-      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-sentient-neo4j-password}
       NEO4J_server_memory_heap_initial__size: 512m
       NEO4J_server_memory_heap_max__size: 1G
       NEO4J_server_memory_pagecache_size: 512m
@@ -70,7 +68,11 @@ services:
     networks:
       - sentient-network
     healthcheck:
-      test: ["CMD-SHELL", 'cypher-shell -u "$${NEO4J_USER}" -p "$${NEO4J_PASSWORD}" "RETURN 1;"']
+      test:
+        [
+          "CMD-SHELL",
+          'cypher-shell -u "${NEO4J_USER:-neo4j}" -p "${NEO4J_PASSWORD:-sentient-neo4j-password}" "RETURN 1;"',
+        ]
       interval: 15s
       timeout: 10s
       retries: 10

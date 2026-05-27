@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Task } from "@/types/task.types"
-import { X, Calendar, User, Bot, AlertCircle } from "lucide-react"
+import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Task } from "@/types/task.types";
+import { X, Calendar, User, Bot, AlertCircle } from "lucide-react";
 
 interface TaskDetailPanelProps {
-  task: Task | null
-  onClose: () => void
+  task: Task | null;
+  onClose: () => void;
 }
 
 export function TaskDetailPanel({ task, onClose }: TaskDetailPanelProps) {
@@ -24,7 +24,7 @@ export function TaskDetailPanel({ task, onClose }: TaskDetailPanelProps) {
           <div className="flex h-full flex-col">
             <div className="flex items-center justify-between border-b border-[var(--glass-border)] p-4">
               <h3 className="font-mono text-sm text-[var(--foreground-3)]">{task.id}</h3>
-              <button 
+              <button
                 onClick={onClose}
                 className="rounded-lg p-1.5 text-[var(--foreground-3)] transition-colors hover:bg-[var(--surface-2)] hover:text-foreground"
               >
@@ -33,12 +33,11 @@ export function TaskDetailPanel({ task, onClose }: TaskDetailPanelProps) {
             </div>
 
             <div className="flex-1 overflow-y-auto p-5 space-y-6">
-              
               <div>
                 <h2 className="text-xl font-bold text-foreground">{task.title}</h2>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <span className="rounded-full border border-[var(--glass-border)] bg-[var(--surface-2)] px-2.5 py-1 text-xs font-semibold capitalize text-foreground">
-                    {task.status.replace('_', ' ')}
+                    {task.status.replace("_", " ")}
                   </span>
                   <span className="rounded-full border border-[var(--amber)]/30 bg-[var(--amber)]/10 px-2.5 py-1 text-xs font-semibold capitalize text-[var(--amber)]">
                     {task.priority} Priority
@@ -48,8 +47,12 @@ export function TaskDetailPanel({ task, onClose }: TaskDetailPanelProps) {
 
               {task.description && (
                 <div>
-                  <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--foreground-3)]">Description</h4>
-                  <p className="text-sm leading-relaxed text-[var(--foreground-2)]">{task.description}</p>
+                  <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--foreground-3)]">
+                    Description
+                  </h4>
+                  <p className="text-sm leading-relaxed text-[var(--foreground-2)]">
+                    {task.description}
+                  </p>
                 </div>
               )}
 
@@ -61,7 +64,9 @@ export function TaskDetailPanel({ task, onClose }: TaskDetailPanelProps) {
                   {task.assignee ? (
                     <div className="flex items-center gap-2">
                       <div className="size-6 rounded-full bg-[var(--surface-3)]" />
-                      <span className="text-sm font-medium text-foreground">{task.assignee.name}</span>
+                      <span className="text-sm font-medium text-foreground">
+                        {task.assignee.name}
+                      </span>
                     </div>
                   ) : (
                     <span className="text-sm text-[var(--foreground-3)]">Unassigned</span>
@@ -84,12 +89,12 @@ export function TaskDetailPanel({ task, onClose }: TaskDetailPanelProps) {
                     <Calendar className="size-4" /> Due Date
                   </div>
                   <span className="text-sm font-medium text-foreground">
-                    {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No date set'}
+                    {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No date set"}
                   </span>
                 </div>
               </div>
 
-              {task.status === 'blocked' && (
+              {task.status === "blocked" && (
                 <div className="rounded-xl border border-[var(--red)]/30 bg-[var(--red)]/10 p-4">
                   <div className="flex items-center gap-2 text-[var(--red)]">
                     <AlertCircle className="size-5" />
@@ -100,11 +105,10 @@ export function TaskDetailPanel({ task, onClose }: TaskDetailPanelProps) {
                   </p>
                 </div>
               )}
-
             </div>
           </div>
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 }

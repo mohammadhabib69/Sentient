@@ -1,1 +1,3 @@
-export function OnboardingCard() { return <div>OnboardingCard Component</div>; }
+export function OnboardingCard() {
+  return <div>OnboardingCard Component</div>;
+}

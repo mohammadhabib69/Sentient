@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function WorkspaceSetupPage() {
-  const router = useRouter()
-  const [workspaceName, setWorkspaceName] = React.useState("")
-  const [description, setDescription] = React.useState("")
+  const router = useRouter();
+  const [workspaceName, setWorkspaceName] = React.useState("");
+  const [description, setDescription] = React.useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // Go to step 4
-    router.push('/onboarding/agents')
-  }
+    router.push("/onboarding/agents");
+  };
 
   return (
-    <form 
+    <form
       onSubmit={handleSubmit}
       className="glass-panel rounded-[20px] p-8 shadow-[var(--shadow-card)] space-y-6"
     >
@@ -51,7 +51,8 @@ export default function WorkspaceSetupPage() {
         {/* Workspace Description */}
         <div className="space-y-1.5">
           <label className="font-mono text-label-caps uppercase tracking-wider text-[var(--foreground-2)]">
-            Description <span className="text-[var(--foreground-3)] font-normal text-xs">(optional)</span>
+            Description{" "}
+            <span className="text-[var(--foreground-3)] font-normal text-xs">(optional)</span>
           </label>
           <textarea
             rows={3}
@@ -64,17 +65,15 @@ export default function WorkspaceSetupPage() {
       </div>
 
       <div className="pt-4 space-y-4">
-        <Button 
+        <Button
           type="submit"
           className="w-full h-11 bg-primary hover:brightness-110 text-white font-semibold rounded-lg flex items-center justify-center transition-all"
         >
           Continue &rarr;
         </Button>
-        
-        <div className="text-center text-xs text-[var(--foreground-3)] font-mono">
-          3 of 5
-        </div>
+
+        <div className="text-center text-xs text-[var(--foreground-3)] font-mono">3 of 5</div>
       </div>
     </form>
-  )
+  );
 }

@@ -1,1 +1,3 @@
-export function ActivityFeed() { return <div>ActivityFeed Component</div>; }
+export function ActivityFeed() {
+  return <div>ActivityFeed Component</div>;
+}

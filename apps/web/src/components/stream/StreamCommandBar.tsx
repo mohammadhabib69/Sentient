@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Terminal } from "lucide-react"
+import { Terminal } from "lucide-react";
 
 export function StreamCommandBar() {
   return (
@@ -22,5 +22,5 @@ export function StreamCommandBar() {
         </div>
       </div>
     </div>
-  )
+  );
 }

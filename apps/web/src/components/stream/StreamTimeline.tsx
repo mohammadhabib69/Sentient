@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { AnimatePresence } from "framer-motion"
-import { useStreamEvents } from "@/hooks/useStream"
-import { StreamEvent } from "@/types/event.types"
-import { EventCard } from "@/components/stream/EventCard"
+import * as React from "react";
+import { AnimatePresence } from "framer-motion";
+import { useStreamEvents } from "@/hooks/useStream";
+import { StreamEvent } from "@/types/event.types";
+import { EventCard } from "@/components/stream/EventCard";
 
 interface StreamTimelineProps {
-  onSelectEvent: (event: StreamEvent) => void
-  selectedEventId?: string
+  onSelectEvent: (event: StreamEvent) => void;
+  selectedEventId?: string;
 }
 
 export function StreamTimeline({ onSelectEvent, selectedEventId }: StreamTimelineProps) {
-  const { data: initialEvents = [], isLoading } = useStreamEvents()
-  const [events, setEvents] = React.useState<StreamEvent[]>([])
+  const { data: initialEvents = [], isLoading } = useStreamEvents();
+  const [events, setEvents] = React.useState<StreamEvent[]>([]);
 
   React.useEffect(() => {
     if (initialEvents.length > 0) {
-      setEvents(initialEvents)
+      setEvents(initialEvents);
     }
-  }, [initialEvents])
+  }, [initialEvents]);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -40,13 +40,13 @@ export function StreamTimeline({ onSelectEvent, selectedEventId }: StreamTimelin
             actionLabel: "View Details",
             initials: "SY",
           },
-        }
-        return [newEvent, ...prev].slice(0, 50)
-      })
-    }, 5000)
+        };
+        return [newEvent, ...prev].slice(0, 50);
+      });
+    }, 5000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   if (isLoading) {
     return (
@@ -55,7 +55,7 @@ export function StreamTimeline({ onSelectEvent, selectedEventId }: StreamTimelin
           <div key={i} className="h-28 animate-pulse rounded-xl bg-surface-container" />
         ))}
       </div>
-    )
+    );
   }
 
   return (
@@ -71,5 +71,5 @@ export function StreamTimeline({ onSelectEvent, selectedEventId }: StreamTimelin
         ))}
       </AnimatePresence>
     </div>
-  )
+  );
 }

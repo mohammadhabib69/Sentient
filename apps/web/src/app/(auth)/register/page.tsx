@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { motion } from "framer-motion"
-import { Eye, EyeOff } from "lucide-react"
+import * as React from "react";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { motion } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -17,49 +17,49 @@ const registerSchema = z.object({
   agree: z.literal(true, {
     message: "You must agree to the Terms of Service",
   }),
-})
+});
 
-type RegisterFormValues = z.infer<typeof registerSchema>
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [passwordValue, setPasswordValue] = React.useState("")
-  
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors, isSubmitting } 
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [passwordValue, setPasswordValue] = React.useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-  })
+  });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    window.location.href = "/onboarding/org"
-  }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    window.location.href = "/onboarding/org";
+  };
 
   // Calculate password strength (0 to 4 segments)
   const calculateStrength = (pass: string): number => {
-    if (!pass) return 0
-    let score = 0
-    if (pass.length >= 8) score++
-    if (/[A-Z]/.test(pass)) score++
-    if (/[0-9]/.test(pass)) score++
-    if (/[^A-Za-z0-9]/.test(pass)) score++
-    return score
-  }
+    if (!pass) return 0;
+    let score = 0;
+    if (pass.length >= 8) score++;
+    if (/[A-Z]/.test(pass)) score++;
+    if (/[0-9]/.test(pass)) score++;
+    if (/[^A-Za-z0-9]/.test(pass)) score++;
+    return score;
+  };
 
-  const strengthScore = calculateStrength(passwordValue)
+  const strengthScore = calculateStrength(passwordValue);
 
   // Get color for segments
   const getSegmentColor = (index: number) => {
     if (index >= strengthScore) {
-      return "bg-[var(--surface-3)] dark:bg-[var(--surface-2)]" // empty segment
+      return "bg-[var(--surface-3)] dark:bg-[var(--surface-2)]"; // empty segment
     }
-    if (strengthScore === 1) return "bg-red" // red alert
-    if (strengthScore <= 3) return "bg-amber" // amber warning
-    return "bg-green" // strong green
-  }
+    if (strengthScore === 1) return "bg-red"; // red alert
+    if (strengthScore <= 3) return "bg-amber"; // amber warning
+    return "bg-green"; // strong green
+  };
 
   return (
     <motion.div
@@ -73,19 +73,25 @@ export default function RegisterPage() {
         <div className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[hsl(var(--primary))] shadow-sm">
           <span className="text-[11px] font-bold text-white leading-none">S</span>
         </div>
-        <span className="text-[18px] font-bold tracking-tight text-foreground font-sans">Sentient</span>
+        <span className="text-[18px] font-bold tracking-tight text-foreground font-sans">
+          Sentient
+        </span>
       </div>
 
       {/* 2 & 3. Header & Sub */}
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">Create your account</h2>
-        <p className="mt-1.5 text-sm text-[var(--foreground-2)] font-sans">Start your free 14-day trial</p>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+          Create your account
+        </h2>
+        <p className="mt-1.5 text-sm text-[var(--foreground-2)] font-sans">
+          Start your free 14-day trial
+        </p>
       </div>
 
       {/* 4. Google OAuth Button */}
       <button
         type="button"
-        onClick={() => window.location.href = "/onboarding/org"}
+        onClick={() => (window.location.href = "/onboarding/org")}
         className="flex h-[44px] w-full items-center justify-center gap-2 rounded-[10px] border border-[var(--border)] dark:border-[rgba(116,149,155,0.18)] bg-card text-foreground hover:bg-[var(--surface-3)] text-sm font-medium transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
       >
         <svg className="size-4" viewBox="0 0 24 24">
@@ -112,7 +118,9 @@ export default function RegisterPage() {
       {/* 5. Divider */}
       <div className="flex items-center my-6">
         <div className="flex-1 h-px bg-[var(--border)] dark:bg-[rgba(116,149,155,0.18)]" />
-        <span className="px-3 text-[11px] font-mono text-[var(--foreground-3)] uppercase tracking-wider">or</span>
+        <span className="px-3 text-[11px] font-mono text-[var(--foreground-3)] uppercase tracking-wider">
+          or
+        </span>
         <div className="flex-1 h-px bg-[var(--border)] dark:bg-[rgba(116,149,155,0.18)]" />
       </div>
 
@@ -120,7 +128,10 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Full Name */}
         <div className="space-y-1.5">
-          <label htmlFor="name" className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]">
+          <label
+            htmlFor="name"
+            className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]"
+          >
             Full name
           </label>
           <input
@@ -137,7 +148,10 @@ export default function RegisterPage() {
 
         {/* Work Email */}
         <div className="space-y-1.5">
-          <label htmlFor="email" className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]">
+          <label
+            htmlFor="email"
+            className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]"
+          >
             Work email
           </label>
           <input
@@ -154,13 +168,16 @@ export default function RegisterPage() {
 
         {/* Password */}
         <div className="space-y-1.5">
-          <label htmlFor="password" className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]">
+          <label
+            htmlFor="password"
+            className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]"
+          >
             Password
           </label>
           <div className="relative">
             <input
               {...register("password", {
-                onChange: (e) => setPasswordValue(e.target.value)
+                onChange: (e) => setPasswordValue(e.target.value),
               })}
               id="password"
               type={showPassword ? "text" : "password"}
@@ -188,9 +205,15 @@ export default function RegisterPage() {
           {passwordValue && (
             <div className="flex justify-between items-center text-[10px] text-[var(--foreground-2)] font-mono uppercase tracking-wider mt-1">
               <span>Complexity</span>
-              <span className={
-                strengthScore === 1 ? "text-red" : strengthScore <= 3 ? "text-amber" : "text-green"
-              }>
+              <span
+                className={
+                  strengthScore === 1
+                    ? "text-red"
+                    : strengthScore <= 3
+                      ? "text-amber"
+                      : "text-green"
+                }
+              >
                 {strengthScore === 0 && "none"}
                 {strengthScore === 1 && "weak"}
                 {strengthScore === 2 && "fair"}
@@ -199,7 +222,7 @@ export default function RegisterPage() {
               </span>
             </div>
           )}
-          
+
           {errors.password && (
             <p className="text-xs text-[var(--red)] font-sans mt-1">{errors.password.message}</p>
           )}
@@ -230,9 +253,9 @@ export default function RegisterPage() {
         </div>
 
         {/* Submit Button */}
-        <Button 
-          type="submit" 
-          className="w-full h-[44px] rounded-lg bg-forest-green hover:bg-forest-green/90 text-white font-medium text-sm transition-all shadow-md mt-4" 
+        <Button
+          type="submit"
+          className="w-full h-[44px] rounded-lg bg-forest-green hover:bg-forest-green/90 text-white font-medium text-sm transition-all shadow-md mt-4"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Creating account..." : "Create Account"}
@@ -247,5 +270,5 @@ export default function RegisterPage() {
         </Link>
       </div>
     </motion.div>
-  )
+  );
 }

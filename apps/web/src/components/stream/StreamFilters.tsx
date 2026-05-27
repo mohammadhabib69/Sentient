@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 const EVENT_TYPES = [
   { id: "all", label: "All", active: true },
@@ -10,11 +10,11 @@ const EVENT_TYPES = [
   { id: "anomalies", label: "Anomalies", accent: "amber" as const },
   { id: "system", label: "System" },
   { id: "errors", label: "Errors", accent: "error" as const },
-]
+];
 
 export function StreamFilters() {
-  const [activeType, setActiveType] = React.useState("all")
-  const [timeRange, setTimeRange] = React.useState("24h")
+  const [activeType, setActiveType] = React.useState("all");
+  const [timeRange, setTimeRange] = React.useState("24h");
 
   return (
     <aside className="flex h-full w-full flex-col gap-6 overflow-y-auto custom-scrollbar p-4 lg:w-[260px] lg:shrink-0 lg:border-r lg:border-glass-border lg:bg-surface-container/40 lg:backdrop-blur-[28px]">
@@ -46,7 +46,7 @@ export function StreamFilters() {
                     ? "border-amber-alert/30 bg-amber-alert/5 text-amber-alert hover:bg-amber-alert/10"
                     : type.accent === "error"
                       ? "border-error-red/30 bg-error-red/5 text-error-red hover:bg-error-red/10"
-                      : "border-glass-border bg-surface-container text-on-surface-variant hover:bg-surface-container-high"
+                      : "border-glass-border bg-surface-container text-on-surface-variant hover:bg-surface-container-high",
               )}
             >
               {type.label}
@@ -87,7 +87,7 @@ export function StreamFilters() {
                 "rounded-lg border py-1.5 text-center font-mono text-mono-xs transition-colors",
                 timeRange === range
                   ? "border-primary/50 bg-primary/10 text-primary"
-                  : "border-glass-border bg-surface-container text-on-surface-variant hover:bg-surface-container-high"
+                  : "border-glass-border bg-surface-container text-on-surface-variant hover:bg-surface-container-high",
               )}
             >
               {range}
@@ -96,5 +96,5 @@ export function StreamFilters() {
         </div>
       </div>
     </aside>
-  )
+  );
 }

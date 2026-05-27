@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { Filter, Maximize2, Minus, Plus } from "lucide-react"
+import { Filter, Maximize2, Minus, Plus } from "lucide-react";
 
 interface GraphToolbarProps {
-  onZoomIn: () => void
-  onZoomOut: () => void
-  onFit: () => void
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  onFit: () => void;
 }
 
 export function GraphToolbar({ onZoomIn, onZoomOut, onFit }: GraphToolbarProps) {
@@ -44,5 +44,5 @@ export function GraphToolbar({ onZoomIn, onZoomOut, onFit }: GraphToolbarProps) 
         <Filter className="size-5" />
       </button>
     </div>
-  )
+  );
 }

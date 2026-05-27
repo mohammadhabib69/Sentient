@@ -1,1 +1,3 @@
-export function StepIndicator() { return <div>StepIndicator Component</div>; }
+export function StepIndicator() {
+  return <div>StepIndicator Component</div>;
+}

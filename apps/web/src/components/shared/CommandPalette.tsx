@@ -1,35 +1,38 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { Command } from "cmdk"
-import { motion, AnimatePresence } from "framer-motion"
-import { useUIStore } from "@/store/ui.store"
-import { Search, Monitor, User, Settings, FolderKanban, Activity, Blocks } from "lucide-react"
-import { useTheme } from "next-themes"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Command } from "cmdk";
+import { motion, AnimatePresence } from "framer-motion";
+import { useUIStore } from "@/store/ui.store";
+import { Search, Monitor, User, Settings, FolderKanban, Activity, Blocks } from "lucide-react";
+import { useTheme } from "next-themes";
 
 export function CommandPalette() {
-  const router = useRouter()
-  const { setTheme } = useTheme()
-  const { searchOpen, setSearchOpen } = useUIStore()
+  const router = useRouter();
+  const { setTheme } = useTheme();
+  const { searchOpen, setSearchOpen } = useUIStore();
 
   // Toggle the menu when ⌘K is pressed
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setSearchOpen(!searchOpen)
+        e.preventDefault();
+        setSearchOpen(!searchOpen);
       }
-    }
+    };
 
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [searchOpen, setSearchOpen])
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, [searchOpen, setSearchOpen]);
 
-  const runCommand = React.useCallback((command: () => void) => {
-    setSearchOpen(false)
-    command()
-  }, [setSearchOpen])
+  const runCommand = React.useCallback(
+    (command: () => void) => {
+      setSearchOpen(false);
+      command();
+    },
+    [setSearchOpen],
+  );
 
   return (
     <AnimatePresence>
@@ -101,7 +104,10 @@ export function CommandPalette() {
                   </Command.Item>
                 </Command.Group>
 
-                <Command.Group heading="Settings & Preferences" className="mt-4 text-xs text-[var(--foreground-3)]">
+                <Command.Group
+                  heading="Settings & Preferences"
+                  className="mt-4 text-xs text-[var(--foreground-3)]"
+                >
                   <Command.Item
                     onSelect={() => runCommand(() => router.push("/settings/profile"))}
                     className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-[var(--surface-2)] aria-selected:bg-[var(--surface-2)]"
@@ -136,5 +142,5 @@ export function CommandPalette() {
         </div>
       )}
     </AnimatePresence>
-  )
+  );
 }

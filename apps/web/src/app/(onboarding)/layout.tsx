@@ -1,29 +1,29 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { usePathname } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const STEPS = [
-  { path: '/onboarding/org', label: 'Organization' },
-  { path: '/onboarding/team', label: 'Team' },
-  { path: '/onboarding/workspace', label: 'Workspace' },
-  { path: '/onboarding/agents', label: 'Agents' },
-  { path: '/onboarding/done', label: 'Ready' }
-]
+  { path: "/onboarding/org", label: "Organization" },
+  { path: "/onboarding/team", label: "Team" },
+  { path: "/onboarding/workspace", label: "Workspace" },
+  { path: "/onboarding/agents", label: "Agents" },
+  { path: "/onboarding/done", label: "Ready" },
+];
 
 export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const currentIndex = STEPS.findIndex(step => step.path === pathname)
-  const activeIndex = currentIndex === -1 ? 0 : currentIndex
-  
+  const pathname = usePathname();
+  const currentIndex = STEPS.findIndex((step) => step.path === pathname);
+  const activeIndex = currentIndex === -1 ? 0 : currentIndex;
+
   // Progress is calculated out of 100% (20%, 40%, 60%, 80%, 100%)
-  const progress = ((activeIndex + 1) / STEPS.length) * 100
+  const progress = ((activeIndex + 1) / STEPS.length) * 100;
 
   // For step 4 (Agents), the card should be slightly wider (720px)
-  const isAgentsStep = pathname === '/onboarding/agents'
-  const maxW = isAgentsStep ? 'max-w-[720px]' : 'max-w-[640px]'
+  const isAgentsStep = pathname === "/onboarding/agents";
+  const maxW = isAgentsStep ? "max-w-[720px]" : "max-w-[640px]";
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-background">
@@ -32,10 +32,10 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
 
       {/* Top Progress Bar Track */}
       <div className="h-[4px] w-full bg-[#374039] dark:bg-[#374039] light:bg-[#DDE6E0] relative z-20">
-        <motion.div 
+        <motion.div
           className={cn(
             "h-full transition-colors duration-300",
-            pathname === '/onboarding/done' ? "bg-forest-green" : "bg-primary"
+            pathname === "/onboarding/done" ? "bg-forest-green" : "bg-primary",
           )}
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
@@ -47,9 +47,9 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
       <div className="mx-auto mt-8 w-full max-w-xl px-6">
         <div className="flex justify-between items-center relative">
           {STEPS.map((step, idx) => {
-            const isCompleted = idx < activeIndex
-            const isCurrent = idx === activeIndex
-            const isFuture = idx > activeIndex
+            const isCompleted = idx < activeIndex;
+            const isCurrent = idx === activeIndex;
+            const isFuture = idx > activeIndex;
 
             return (
               <div key={step.path} className="flex flex-col items-center flex-1 relative z-10">
@@ -65,16 +65,16 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
                 </div>
 
                 {/* Label */}
-                <span 
+                <span
                   className={cn(
                     "text-[11px] font-semibold tracking-wider uppercase transition-colors duration-200",
-                    isCurrent ? "text-primary" : "text-[var(--foreground-3)]"
+                    isCurrent ? "text-primary" : "text-[var(--foreground-3)]",
                   )}
                 >
                   {step.label}
                 </span>
               </div>
-            )
+            );
           })}
         </div>
       </div>
@@ -96,5 +96,5 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
         </div>
       </div>
     </div>
-  )
+  );
 }

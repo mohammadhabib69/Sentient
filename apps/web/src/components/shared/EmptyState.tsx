@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Inbox } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { Inbox } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface EmptyStateProps {
-  icon?: React.ElementType
-  title: string
-  description?: string
-  actionLabel?: string
-  onAction?: () => void
-  className?: string
+  icon?: React.ElementType;
+  title: string;
+  description?: string;
+  actionLabel?: string;
+  onAction?: () => void;
+  className?: string;
 }
 
 export function EmptyState({
@@ -26,7 +26,7 @@ export function EmptyState({
     <div
       className={cn(
         "flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--glass-border)] bg-[var(--surface-1)] px-8 py-16 text-center",
-        className
+        className,
       )}
     >
       <div className="flex size-14 items-center justify-center rounded-2xl bg-[var(--surface-2)] text-[var(--foreground-3)]">
@@ -46,5 +46,5 @@ export function EmptyState({
         </Button>
       )}
     </div>
-  )
+  );
 }

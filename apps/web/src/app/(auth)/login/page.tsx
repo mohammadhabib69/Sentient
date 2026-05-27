@@ -1,38 +1,38 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { motion } from "framer-motion"
-import { Eye, EyeOff } from "lucide-react"
+import * as React from "react";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { motion } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-})
+});
 
-type LoginFormValues = z.infer<typeof loginSchema>
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = React.useState(false)
-  
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors, isSubmitting } 
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-  })
+  });
 
   const onSubmit = async (data: LoginFormValues) => {
     // Mock login delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    window.location.href = "/dashboard"
-  }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    window.location.href = "/dashboard";
+  };
 
   return (
     <motion.div
@@ -46,19 +46,25 @@ export default function LoginPage() {
         <div className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[hsl(var(--primary))] shadow-sm">
           <span className="text-[11px] font-bold text-white leading-none">S</span>
         </div>
-        <span className="text-[18px] font-bold tracking-tight text-foreground font-sans">Sentient</span>
+        <span className="text-[18px] font-bold tracking-tight text-foreground font-sans">
+          Sentient
+        </span>
       </div>
 
       {/* 2 & 3. Header & Sub */}
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">Welcome back</h2>
-        <p className="mt-1.5 text-sm text-[var(--foreground-2)] font-sans">Sign in to your reality engine</p>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+          Welcome back
+        </h2>
+        <p className="mt-1.5 text-sm text-[var(--foreground-2)] font-sans">
+          Sign in to your reality engine
+        </p>
       </div>
 
       {/* 5. Google OAuth Button */}
       <button
         type="button"
-        onClick={() => window.location.href = "/dashboard"}
+        onClick={() => (window.location.href = "/dashboard")}
         className="flex h-[44px] w-full items-center justify-center gap-2 rounded-[10px] border border-[var(--border)] dark:border-[rgba(116,149,155,0.18)] bg-card text-foreground hover:bg-[var(--surface-3)] text-sm font-medium transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
       >
         <svg className="size-4" viewBox="0 0 24 24">
@@ -85,7 +91,9 @@ export default function LoginPage() {
       {/* 6. Divider row */}
       <div className="flex items-center my-6">
         <div className="flex-1 h-px bg-[var(--border)] dark:bg-[rgba(116,149,155,0.18)]" />
-        <span className="px-3 text-[11px] font-mono text-[var(--foreground-3)] uppercase tracking-wider">or</span>
+        <span className="px-3 text-[11px] font-mono text-[var(--foreground-3)] uppercase tracking-wider">
+          or
+        </span>
         <div className="flex-1 h-px bg-[var(--border)] dark:bg-[rgba(116,149,155,0.18)]" />
       </div>
 
@@ -93,7 +101,10 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* 7. Email input */}
         <div className="space-y-1.5">
-          <label htmlFor="email" className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]">
+          <label
+            htmlFor="email"
+            className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]"
+          >
             Email
           </label>
           <input
@@ -110,7 +121,10 @@ export default function LoginPage() {
 
         {/* 8. Password input */}
         <div className="space-y-1.5">
-          <label htmlFor="password" className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]">
+          <label
+            htmlFor="password"
+            className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--foreground-2)]"
+          >
             Password
           </label>
           <div className="relative">
@@ -149,9 +163,9 @@ export default function LoginPage() {
         </div>
 
         {/* 10. Sign In Button */}
-        <Button 
-          type="submit" 
-          className="w-full h-[44px] rounded-lg bg-forest-green hover:bg-forest-green/90 text-white font-medium text-sm transition-all shadow-md mt-2" 
+        <Button
+          type="submit"
+          className="w-full h-[44px] rounded-lg bg-forest-green hover:bg-forest-green/90 text-white font-medium text-sm transition-all shadow-md mt-2"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Signing in..." : "Sign In"}
@@ -166,5 +180,5 @@ export default function LoginPage() {
         </Link>
       </div>
     </motion.div>
-  )
+  );
 }

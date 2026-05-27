@@ -17,9 +17,10 @@
     "clean": "turbo clean && rimraf node_modules .turbo",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
-    "db:generate": "turbo db:generate --filter=@sentient/database",
-    "db:migrate": "turbo db:migrate --filter=@sentient/database",
-    "db:seed": "turbo db:seed --filter=@sentient/database"
+    "prisma": "pnpm --filter @sentient/api prisma",
+    "db:generate": "turbo db:generate --filter=@sentient/api --filter=@sentient/database",
+    "db:migrate": "turbo db:migrate --filter=@sentient/api --filter=@sentient/database",
+    "db:seed": "turbo db:seed --filter=@sentient/api --filter=@sentient/database"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

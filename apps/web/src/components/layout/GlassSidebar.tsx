@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
   Bot,
@@ -16,39 +16,39 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Rocket,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
-import { useUIStore, hydrateSidebarState } from "@/store/ui.store"
-import { useAgentStore } from "@/store/agent.store"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { buttonVariants } from "@/components/ui/button"
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useUIStore, hydrateSidebarState } from "@/store/ui.store";
+import { useAgentStore } from "@/store/agent.store";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { buttonVariants } from "@/components/ui/button";
 
 // ─── Types ─────────────────────────────────────────────────────
 interface NavItem {
-  label: string
-  href: string
-  icon: React.ElementType
-  shortcut: string
-  badge?: "agents"
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  shortcut: string;
+  badge?: "agents";
 }
 
 // ─── Navigation Config ────────────────────────────────────────
 const NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard",      href: "/dashboard",   icon: LayoutDashboard, shortcut: "⌘1" },
-  { label: "Agents",         href: "/agents",      icon: Bot,             shortcut: "⌘2", badge: "agents" },
-  { label: "Reality Stream", href: "/stream",      icon: Activity,        shortcut: "⌘3" },
-  { label: "Graph",          href: "/graph",       icon: GitFork,         shortcut: "⌘4" },
-  { label: "Projects",       href: "/projects",    icon: FolderKanban,    shortcut: "⌘5" },
-  { label: "Analytics",      href: "/analytics",   icon: BarChart3,       shortcut: "⌘6" },
-  { label: "Developers",     href: "/developers",  icon: Code2,           shortcut: "⌘7" },
-  { label: "Settings",       href: "/settings",    icon: Settings,        shortcut: "⌘8" },
-]
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, shortcut: "⌘1" },
+  { label: "Agents", href: "/agents", icon: Bot, shortcut: "⌘2", badge: "agents" },
+  { label: "Reality Stream", href: "/stream", icon: Activity, shortcut: "⌘3" },
+  { label: "Graph", href: "/graph", icon: GitFork, shortcut: "⌘4" },
+  { label: "Projects", href: "/projects", icon: FolderKanban, shortcut: "⌘5" },
+  { label: "Analytics", href: "/analytics", icon: BarChart3, shortcut: "⌘6" },
+  { label: "Developers", href: "/developers", icon: Code2, shortcut: "⌘7" },
+  { label: "Settings", href: "/settings", icon: Settings, shortcut: "⌘8" },
+];
 
 // ─── Spring Config ────────────────────────────────────────────
-const SPRING = { damping: 30, stiffness: 300, type: "spring" as const }
+const SPRING = { damping: 30, stiffness: 300, type: "spring" as const };
 
-const SIDEBAR_EXPANDED = 240
-const SIDEBAR_COLLAPSED = 72
+const SIDEBAR_EXPANDED = 240;
+const SIDEBAR_COLLAPSED = 72;
 
 // ─── Collapsed Tooltip Sub-Component ──────────────────────────
 function NavTooltip({
@@ -56,9 +56,9 @@ function NavTooltip({
   shortcut,
   visible,
 }: {
-  label: string
-  shortcut: string
-  visible: boolean
+  label: string;
+  shortcut: string;
+  visible: boolean;
 }) {
   return (
     <AnimatePresence>
@@ -84,7 +84,7 @@ function NavTooltip({
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 }
 
 // ─── Single Nav Item ──────────────────────────────────────────
@@ -94,12 +94,12 @@ function SidebarNavItem({
   isCollapsed,
   pendingCount,
 }: {
-  item: NavItem
-  isActive: boolean
-  isCollapsed: boolean
-  pendingCount: number
+  item: NavItem;
+  isActive: boolean;
+  isCollapsed: boolean;
+  pendingCount: number;
 }) {
-  const [hovered, setHovered] = React.useState(false)
+  const [hovered, setHovered] = React.useState(false);
 
   return (
     <div
@@ -117,7 +117,8 @@ function SidebarNavItem({
             "before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-5 before:w-[3px] before:rounded-r-full before:bg-[hsl(var(--primary))]",
           ],
           // Inactive hover
-          !isActive && "text-[var(--foreground-2)] hover:bg-[var(--glass-bg)] hover:text-foreground",
+          !isActive &&
+            "text-[var(--foreground-2)] hover:bg-[var(--glass-bg)] hover:text-foreground",
           // Collapsed: center icon
           isCollapsed && "justify-center px-0",
         )}
@@ -125,7 +126,10 @@ function SidebarNavItem({
       >
         {/* Icon */}
         {/* @ts-ignore */}
-        {(() => { const Icon = item.icon; return <Icon className="size-5 shrink-0" /> })()}
+        {(() => {
+          const Icon = item.icon;
+          return <Icon className="size-5 shrink-0" />;
+        })()}
 
         {/* Label — fades based on collapsed state */}
         <AnimatePresence mode="wait">
@@ -163,39 +167,39 @@ function SidebarNavItem({
       {/* Collapsed tooltip */}
       {isCollapsed && <NavTooltip label={item.label} shortcut={item.shortcut} visible={hovered} />}
     </div>
-  )
+  );
 }
 
 // ─── Main GlassSidebar Component ──────────────────────────────
 export function GlassSidebar() {
-  const pathname = usePathname()
-  const { sidebarCollapsed, toggleSidebar } = useUIStore()
-  const pendingApprovals = useAgentStore((s) => s.pendingApprovals)
-  const pendingCount = pendingApprovals.filter((a) => a.status === "pending").length
+  const pathname = usePathname();
+  const { sidebarCollapsed, toggleSidebar } = useUIStore();
+  const pendingApprovals = useAgentStore((s) => s.pendingApprovals);
+  const pendingCount = pendingApprovals.filter((a) => a.status === "pending").length;
 
   // Hydrate from localStorage on mount
   React.useEffect(() => {
-    hydrateSidebarState()
-  }, [])
+    hydrateSidebarState();
+  }, []);
 
   // Global keyboard shortcuts ⌘1–⌘8
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (!e.metaKey && !e.ctrlKey) return
-      const num = parseInt(e.key)
+      if (!e.metaKey && !e.ctrlKey) return;
+      const num = parseInt(e.key);
       if (num >= 1 && num <= 8) {
-        e.preventDefault()
-        const item = NAV_ITEMS[num - 1]
-        if (item) window.location.href = item.href
+        e.preventDefault();
+        const item = NAV_ITEMS[num - 1];
+        if (item) window.location.href = item.href;
       }
     }
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [])
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // Split nav: main items (0–6) and settings (7)
-  const mainItems = NAV_ITEMS.slice(0, 7)
-  const settingsItem = NAV_ITEMS[7]!
+  const mainItems = NAV_ITEMS.slice(0, 7);
+  const settingsItem = NAV_ITEMS[7]!;
 
   return (
     <motion.aside
@@ -333,12 +337,8 @@ export function GlassSidebar() {
                 transition={{ duration: 0.08, delay: 0.1 }}
                 className="flex flex-col truncate"
               >
-                <span className="truncate text-sm font-medium text-foreground">
-                  Mohammad Habib
-                </span>
-                <span className="truncate text-xs text-[var(--foreground-3)]">
-                  Super Admin
-                </span>
+                <span className="truncate text-sm font-medium text-foreground">Mohammad Habib</span>
+                <span className="truncate text-xs text-[var(--foreground-3)]">Super Admin</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -353,7 +353,7 @@ export function GlassSidebar() {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.1, delay: 0.12 }}
             >
-              <Link 
+              <Link
                 href="/agents/builder"
                 className={cn(buttonVariants({ variant: "glass", size: "sm" }), "w-full gap-2")}
               >
@@ -365,5 +365,5 @@ export function GlassSidebar() {
         </AnimatePresence>
       </div>
     </motion.aside>
-  )
+  );
 }

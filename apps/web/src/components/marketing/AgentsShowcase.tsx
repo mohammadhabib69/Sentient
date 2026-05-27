@@ -1,1 +1,3 @@
-export function AgentsShowcase() { return <div>AgentsShowcase Component</div>; }
+export function AgentsShowcase() {
+  return <div>AgentsShowcase Component</div>;
+}

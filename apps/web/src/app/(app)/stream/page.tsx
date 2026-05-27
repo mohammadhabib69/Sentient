@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Download, Pause } from "lucide-react"
-import { PageTransition } from "@/components/shared/PageTransition"
-import { StreamFilters } from "@/components/stream/StreamFilters"
-import { StreamTimeline } from "@/components/stream/StreamTimeline"
-import { EventDetailPanel } from "@/components/stream/EventDetailPanel"
-import { StreamCommandBar } from "@/components/stream/StreamCommandBar"
-import { StreamEvent } from "@/types/event.types"
-import { useStreamEvents } from "@/hooks/useStream"
+import * as React from "react";
+import { Download, Pause } from "lucide-react";
+import { PageTransition } from "@/components/shared/PageTransition";
+import { StreamFilters } from "@/components/stream/StreamFilters";
+import { StreamTimeline } from "@/components/stream/StreamTimeline";
+import { EventDetailPanel } from "@/components/stream/EventDetailPanel";
+import { StreamCommandBar } from "@/components/stream/StreamCommandBar";
+import { StreamEvent } from "@/types/event.types";
+import { useStreamEvents } from "@/hooks/useStream";
 
 export default function RealityStreamPage() {
-  const { data: events = [] } = useStreamEvents()
-  const [selectedEvent, setSelectedEvent] = React.useState<StreamEvent | null>(null)
+  const { data: events = [] } = useStreamEvents();
+  const [selectedEvent, setSelectedEvent] = React.useState<StreamEvent | null>(null);
 
   React.useEffect(() => {
     if (!selectedEvent && events[0]) {
-      setSelectedEvent(events[0])
+      setSelectedEvent(events[0]);
     }
-  }, [events, selectedEvent])
+  }, [events, selectedEvent]);
 
   return (
     <PageTransition className="-mx-6 -my-6 flex h-[calc(100vh-3.5rem)] flex-col overflow-hidden">
@@ -54,20 +54,14 @@ export default function RealityStreamPage() {
 
           <div className="custom-scrollbar relative min-h-0 flex-1 overflow-y-auto p-6 pb-32">
             <div className="absolute bottom-0 left-[47px] top-4 hidden w-px bg-surface-variant/50 sm:block" />
-            <StreamTimeline
-              onSelectEvent={setSelectedEvent}
-              selectedEventId={selectedEvent?.id}
-            />
+            <StreamTimeline onSelectEvent={setSelectedEvent} selectedEventId={selectedEvent?.id} />
           </div>
         </section>
 
-        <EventDetailPanel
-          event={selectedEvent}
-          onClose={() => setSelectedEvent(null)}
-        />
+        <EventDetailPanel event={selectedEvent} onClose={() => setSelectedEvent(null)} />
       </div>
 
       <StreamCommandBar />
     </PageTransition>
-  )
+  );
 }

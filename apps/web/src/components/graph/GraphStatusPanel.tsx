@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { AlertTriangle, FolderKanban, History } from "lucide-react"
+import { AlertTriangle, FolderKanban, History } from "lucide-react";
 
 export function GraphStatusPanel() {
   return (
@@ -100,5 +100,5 @@ export function GraphStatusPanel() {
         </button>
       </div>
     </div>
-  )
+  );
 }

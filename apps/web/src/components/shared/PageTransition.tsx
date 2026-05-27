@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { motion } from "framer-motion"
+import * as React from "react";
+import { motion } from "framer-motion";
 
 interface PageTransitionProps {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }
 
 export function PageTransition({ children, className }: PageTransitionProps) {
@@ -19,5 +19,5 @@ export function PageTransition({ children, className }: PageTransitionProps) {
     >
       {children}
     </motion.div>
-  )
+  );
 }

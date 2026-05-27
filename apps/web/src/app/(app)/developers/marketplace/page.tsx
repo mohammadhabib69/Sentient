@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Button } from "@/components/ui/button"
-import { Search } from "lucide-react"
-import { toast } from "sonner"
-import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
+import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface Plugin {
-  name: string
-  author: string
-  desc: string
-  price: string
-  installs: string
-  rating: number
-  category: string
-  icon: string
-  gradient: string
+  name: string;
+  author: string;
+  desc: string;
+  price: string;
+  installs: string;
+  rating: number;
+  category: string;
+  icon: string;
+  gradient: string;
 }
 
 const PLUGINS: Plugin[] = [
@@ -86,39 +86,39 @@ const PLUGINS: Plugin[] = [
     icon: "📅",
     gradient: "from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/30",
   },
-]
+];
 
 export default function MarketplacePage() {
-  const [searchQuery, setSearchQuery] = React.useState("")
-  const [activeFilter, setActiveFilter] = React.useState("All")
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [activeFilter, setActiveFilter] = React.useState("All");
   const [installedPlugins, setInstalledPlugins] = React.useState<Record<string, boolean>>({
     "Slack Connect": true, // Slack Connect starts as installed
-  })
+  });
 
   const toggleInstall = (pluginName: string) => {
-    const isCurrentlyInstalled = !!installedPlugins[pluginName]
+    const isCurrentlyInstalled = !!installedPlugins[pluginName];
     setInstalledPlugins((prev) => ({
       ...prev,
       [pluginName]: !isCurrentlyInstalled,
-    }))
-    
+    }));
+
     if (isCurrentlyInstalled) {
-      toast.success(`${pluginName} has been uninstalled.`)
+      toast.success(`${pluginName} has been uninstalled.`);
     } else {
-      toast.success(`${pluginName} installed successfully!`)
+      toast.success(`${pluginName} installed successfully!`);
     }
-  }
+  };
 
   const filteredPlugins = PLUGINS.filter((plugin) => {
-    const matchesCategory = activeFilter === "All" || plugin.category === activeFilter
+    const matchesCategory = activeFilter === "All" || plugin.category === activeFilter;
     const matchesSearch =
       plugin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       plugin.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      plugin.author.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
+      plugin.author.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
-  const categories = ["All", "Agents", "Integrations", "Analytics", "Automation"]
+  const categories = ["All", "Agents", "Integrations", "Analytics", "Automation"];
 
   return (
     <div className="space-y-6 pb-8">
@@ -145,7 +145,7 @@ export default function MarketplacePage() {
       {/* Filter chips */}
       <div className="flex flex-wrap gap-2 border-b border-[var(--glass-border)] pb-4">
         {categories.map((category) => {
-          const isActive = activeFilter === category
+          const isActive = activeFilter === category;
           return (
             <button
               key={category}
@@ -154,12 +154,12 @@ export default function MarketplacePage() {
                 "px-3 py-1.5 text-xs font-medium rounded-full border transition-all duration-150",
                 isActive
                   ? "bg-primary/10 border-primary/30 text-primary shadow-sm"
-                  : "bg-[var(--surface-1)] border-[var(--glass-border)] text-[var(--foreground-2)] hover:text-foreground hover:bg-[var(--surface-2)]"
+                  : "bg-[var(--surface-1)] border-[var(--glass-border)] text-[var(--foreground-2)] hover:text-foreground hover:bg-[var(--surface-2)]",
               )}
             >
               {category}
             </button>
-          )
+          );
         })}
       </div>
 
@@ -180,7 +180,7 @@ export default function MarketplacePage() {
         <motion.div layout className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {filteredPlugins.map((plugin) => {
-              const isInstalled = !!installedPlugins[plugin.name]
+              const isInstalled = !!installedPlugins[plugin.name];
               return (
                 <motion.div
                   layout
@@ -194,10 +194,12 @@ export default function MarketplacePage() {
                   <div>
                     {/* Top Row: Icon & Status badge */}
                     <div className="flex items-start justify-between gap-4">
-                      <div className={cn(
-                        "flex size-12 items-center justify-center rounded-xl border bg-gradient-to-br text-2xl shadow-inner shrink-0",
-                        plugin.gradient
-                      )}>
+                      <div
+                        className={cn(
+                          "flex size-12 items-center justify-center rounded-xl border bg-gradient-to-br text-2xl shadow-inner shrink-0",
+                          plugin.gradient,
+                        )}
+                      >
                         {plugin.icon}
                       </div>
 
@@ -232,7 +234,7 @@ export default function MarketplacePage() {
                                 "text-sm select-none leading-none",
                                 star <= Math.round(plugin.rating)
                                   ? "text-amber-500"
-                                  : "text-[var(--foreground-3)] opacity-35"
+                                  : "text-[var(--foreground-3)] opacity-35",
                               )}
                             >
                               ★
@@ -252,10 +254,14 @@ export default function MarketplacePage() {
                   {/* Price & Action */}
                   <div className="mt-5 pt-4 border-t border-[var(--glass-border)] flex items-center justify-between">
                     <div>
-                      <span className={cn(
-                        "text-sm font-semibold",
-                        plugin.price === "Free" ? "text-emerald-500 dark:text-emerald-400" : "text-foreground"
-                      )}>
+                      <span
+                        className={cn(
+                          "text-sm font-semibold",
+                          plugin.price === "Free"
+                            ? "text-emerald-500 dark:text-emerald-400"
+                            : "text-foreground",
+                        )}
+                      >
                         {plugin.price}
                       </span>
                     </div>
@@ -281,11 +287,11 @@ export default function MarketplacePage() {
                     )}
                   </div>
                 </motion.div>
-              )
+              );
             })}
           </AnimatePresence>
         </motion.div>
       )}
     </div>
-  )
+  );
 }

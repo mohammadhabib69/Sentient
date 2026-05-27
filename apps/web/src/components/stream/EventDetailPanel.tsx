@@ -1,38 +1,33 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { StreamEvent } from "@/types/event.types"
-import {
-  ExternalLink,
-  FileText,
-  LineChart,
-  X,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { StreamEvent } from "@/types/event.types";
+import { ExternalLink, FileText, LineChart, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface EventDetailPanelProps {
-  event: StreamEvent | null
-  onClose: () => void
+  event: StreamEvent | null;
+  onClose: () => void;
 }
 
 const RELATED_ENTITIES = [
   { label: "route_map_v2.json", icon: FileText },
   { label: "latency_metrics", icon: LineChart },
-]
+];
 
 export function EventDetailPanel({ event, onClose }: EventDetailPanelProps) {
-  const initials = event?.display?.initials ?? "FL"
+  const initials = event?.display?.initials ?? "FL";
   const actorName = event?.actor.name.includes("Agent")
     ? event.actor.name
     : event
       ? `${event.actor.name}${event.actor.type === "agent" ? " Agent" : ""}`
-      : "Flux Agent"
+      : "Flux Agent";
   const actorId =
     event?.actor.type === "agent"
       ? `ID: ${event.actor.id.toUpperCase().replace(/_/g, "-")}-ALPHA`
       : event
         ? `ID: ${event.actor.id}`
-        : "ID: FLX-992-ALPHA"
+        : "ID: FLX-992-ALPHA";
 
   const payloadJson = event
     ? JSON.stringify(event.payload, null, 2)
@@ -47,7 +42,7 @@ export function EventDetailPanel({ event, onClose }: EventDetailPanelProps) {
   "nodes_affected": [
     "n_441", "n_442", "n_489"
   ]
-}`
+}`;
 
   return (
     <aside className="hidden h-full w-[320px] shrink-0 flex-col overflow-y-auto custom-scrollbar border-l border-glass-border bg-surface-container-low/90 backdrop-blur-[28px] xl:flex">
@@ -115,7 +110,7 @@ export function EventDetailPanel({ event, onClose }: EventDetailPanelProps) {
           type="button"
           className={cn(
             "mt-2 w-full rounded-lg border border-glass-border bg-surface-container py-2 text-body-sm text-on-surface transition-colors hover:bg-surface-container-high",
-            !event && "opacity-60"
+            !event && "opacity-60",
           )}
         >
           Execute Suggestion
@@ -128,5 +123,5 @@ export function EventDetailPanel({ event, onClose }: EventDetailPanelProps) {
         )}
       </div>
     </aside>
-  )
+  );
 }

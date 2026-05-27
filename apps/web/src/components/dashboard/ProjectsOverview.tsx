@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useProjects } from "@/hooks/useProjects"
-import { cn } from "@/lib/utils"
+import { useProjects } from "@/hooks/useProjects";
+import { cn } from "@/lib/utils";
 
 export function ProjectsOverview() {
-  const { data: projects = [], isLoading } = useProjects()
+  const { data: projects = [], isLoading } = useProjects();
 
   if (isLoading) {
-    return <div className="h-64 animate-pulse rounded-xl bg-[var(--surface-2)]" />
+    return <div className="h-64 animate-pulse rounded-xl bg-[var(--surface-2)]" />;
   }
 
   return (
@@ -31,19 +31,23 @@ export function ProjectsOverview() {
                 <td className="px-5 py-3 font-medium text-foreground">{project.name}</td>
                 <td className="px-5 py-3">
                   <span className="inline-flex items-center rounded-full border border-[var(--glass-border)] bg-[var(--surface-3)] px-2 py-0.5 text-xs text-[var(--foreground-2)] capitalize">
-                    {project.status.replace('_', ' ')}
+                    {project.status.replace("_", " ")}
                   </span>
                 </td>
                 <td className="px-5 py-3">
-                  <span className={cn(
-                    "inline-flex items-center gap-1.5 text-xs font-medium",
-                    project.health === 'good' ? 'text-green' : 'text-amber'
-                  )}>
-                    <span className={cn(
-                      "size-1.5 rounded-full",
-                      project.health === 'good' ? 'bg-green' : 'bg-amber'
-                    )} />
-                    {project.health === 'good' ? 'On Track' : 'At Risk'}
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1.5 text-xs font-medium",
+                      project.health === "good" ? "text-green" : "text-amber",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "size-1.5 rounded-full",
+                        project.health === "good" ? "bg-green" : "bg-amber",
+                      )}
+                    />
+                    {project.health === "good" ? "On Track" : "At Risk"}
                   </span>
                 </td>
                 <td className="px-5 py-3 text-right text-[var(--foreground-2)]">
@@ -55,5 +59,5 @@ export function ProjectsOverview() {
         </table>
       </div>
     </div>
-  )
+  );
 }

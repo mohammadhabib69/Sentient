@@ -89,14 +89,14 @@ sentient/
 
 ## Phase 0 Workflow
 
-1. Initialize the monorepo and package boundaries.
-2. Add Docker Compose for PostgreSQL/TimescaleDB, Redis, Neo4j, and MinIO.
-3. Write the Prisma schema for the Section 5 data model.
-4. Enable pgvector and create the TimescaleDB hypertable for events.
-5. Add first migrations and seed data.
-6. Define Neo4j constraints.
-7. Document `.env.example`.
-8. Add CI/CD workflows and GitHub branch protection.
+- [x] Initialize the monorepo and package boundaries.
+- [x] Add Docker Compose for PostgreSQL/TimescaleDB, Redis, Neo4j, and MinIO.
+- [x] Write the Prisma schema for the Section 5 data model.
+- [x] Enable pgvector and create the TimescaleDB hypertable for events.
+- [x] Add first migrations and seed data.
+- [x] Define Neo4j constraints.
+- [x] Document `.env.example`.
+- [x] Add CI/CD workflows and GitHub branch protection.
 
 ## Documentation
 

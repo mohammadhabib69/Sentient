@@ -4,7 +4,7 @@ const PREVIEW_EVENTS = [
   "Aria rebalanced sprint assignments",
   "Echo resolved 12 customer issues automatically",
   "System checkpoint created for release candidate",
-]
+];
 
 export function StreamPreview() {
   return (
@@ -31,5 +31,5 @@ export function StreamPreview() {
         </div>
       </div>
     </section>
-  )
+  );
 }

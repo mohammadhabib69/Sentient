@@ -1,1 +1,3 @@
-export function MobileNav() { return <div>MobileNav Component</div>; }
+export function MobileNav() {
+  return <div>MobileNav Component</div>;
+}

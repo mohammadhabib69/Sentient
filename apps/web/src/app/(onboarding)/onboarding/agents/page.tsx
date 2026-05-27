@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface AgentConfig {
-  id: string
-  name: string
-  initials: string
-  role: string
-  description: string
-  color: string // theme token color name or hex
-  bgOpacity: string
-  borderClass: string
-  textClass: string
+  id: string;
+  name: string;
+  initials: string;
+  role: string;
+  description: string;
+  color: string; // theme token color name or hex
+  bgOpacity: string;
+  borderClass: string;
+  textClass: string;
 }
 
 const AGENTS: AgentConfig[] = [
@@ -62,21 +62,19 @@ const AGENTS: AgentConfig[] = [
     borderClass: "border-green",
     textClass: "text-green",
   },
-]
+];
 
 export default function AgentsSetupPage() {
-  const router = useRouter()
-  const [activeAgents, setActiveAgents] = React.useState<string[]>(["ops", "dev"])
+  const router = useRouter();
+  const [activeAgents, setActiveAgents] = React.useState<string[]>(["ops", "dev"]);
 
   const toggleAgent = (id: string) => {
-    setActiveAgents((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    )
-  }
+    setActiveAgents((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  };
 
   const handleContinue = () => {
-    router.push('/onboarding/done')
-  }
+    router.push("/onboarding/done");
+  };
 
   return (
     <div className="glass-panel rounded-[20px] p-8 shadow-[var(--shadow-card)] space-y-6">
@@ -95,7 +93,7 @@ export default function AgentsSetupPage() {
       {/* Grid of Agent Selection Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {AGENTS.map((agent) => {
-          const isON = activeAgents.includes(agent.id)
+          const isON = activeAgents.includes(agent.id);
           return (
             <div
               key={agent.id}
@@ -104,7 +102,7 @@ export default function AgentsSetupPage() {
                 "group cursor-pointer rounded-xl border p-4 flex items-center justify-between transition-all duration-200 select-none",
                 isON
                   ? "bg-primary/5 border-primary shadow-sm"
-                  : "bg-[var(--surface-1)] border-[var(--glass-border)] hover:bg-[var(--surface-2)]"
+                  : "bg-[var(--surface-1)] border-[var(--glass-border)] hover:bg-[var(--surface-2)]",
               )}
             >
               <div className="flex items-center gap-3">
@@ -114,7 +112,7 @@ export default function AgentsSetupPage() {
                     className={cn(
                       "flex size-11 items-center justify-center rounded-full text-xs font-bold transition-all duration-200",
                       agent.bgOpacity,
-                      agent.textClass
+                      agent.textClass,
                     )}
                   >
                     {agent.initials}
@@ -143,18 +141,18 @@ export default function AgentsSetupPage() {
               <div
                 className={cn(
                   "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
-                  isON ? "bg-primary" : "bg-[var(--surface-3)]"
+                  isON ? "bg-primary" : "bg-[var(--surface-3)]",
                 )}
               >
                 <span
                   className={cn(
                     "pointer-events-none inline-block size-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out",
-                    isON ? "translate-x-4" : "translate-x-0"
+                    isON ? "translate-x-4" : "translate-x-0",
                   )}
                 />
               </div>
             </div>
-          )
+          );
         })}
       </div>
 
@@ -167,10 +165,8 @@ export default function AgentsSetupPage() {
           Activate Selected Agents &rarr;
         </Button>
 
-        <div className="text-center text-xs text-[var(--foreground-3)] font-mono">
-          4 of 5
-        </div>
+        <div className="text-center text-xs text-[var(--foreground-3)] font-mono">4 of 5</div>
       </div>
     </div>
-  )
+  );
 }

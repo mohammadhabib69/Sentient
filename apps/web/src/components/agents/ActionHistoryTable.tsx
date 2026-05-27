@@ -1,1 +1,3 @@
-export function ActionHistoryTable() { return <div>ActionHistoryTable Component</div>; }
+export function ActionHistoryTable() {
+  return <div>ActionHistoryTable Component</div>;
+}

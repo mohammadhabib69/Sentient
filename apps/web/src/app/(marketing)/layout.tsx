@@ -1,12 +1,12 @@
-import * as React from "react"
-import { ThemeToggle } from "@/components/shared/ThemeToggle"
+import * as React from "react";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 const NAV_LINKS: readonly { label: string; href: string; active?: boolean }[] = [
   { label: "Intelligence", href: "#", active: true },
   { label: "Agents", href: "#agents" },
   { label: "Reality Stream", href: "#stream" },
   { label: "Pricing", href: "#pricing" },
-]
+];
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,9 +19,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             <div className="flex size-8 items-center justify-center rounded-lg bg-mist-teal">
               <span className="text-sm font-bold text-white">S</span>
             </div>
-            <span className="text-lg font-bold tracking-tight text-foreground">
-              Sentient
-            </span>
+            <span className="text-lg font-bold tracking-tight text-foreground">Sentient</span>
           </div>
 
           {/* Center — Nav */}
@@ -65,5 +63,5 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       {/* ── Page content ── */}
       <main>{children}</main>
     </div>
-  )
+  );
 }

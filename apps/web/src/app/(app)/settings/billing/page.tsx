@@ -1,20 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Button } from "@/components/ui/button"
-import { CheckCircle2, Zap } from "lucide-react"
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle2, Zap } from "lucide-react";
 
 export default function BillingSettingsPage() {
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold text-foreground">Billing & Plans</h2>
-        <p className="text-sm text-[var(--foreground-3)]">Manage your subscription and usage limits.</p>
+        <p className="text-sm text-[var(--foreground-3)]">
+          Manage your subscription and usage limits.
+        </p>
       </div>
 
       {/* Current Plan Card */}
       <div className="relative overflow-hidden rounded-2xl border border-[var(--glass-border)] bg-[var(--surface-1)] p-6 shadow-sm">
-        
         {/* Background decorative gradient */}
         <div className="absolute right-0 top-0 size-64 -translate-y-1/2 translate-x-1/3 rounded-full bg-[hsl(var(--primary))]/10 blur-[60px] pointer-events-none" />
 
@@ -27,20 +28,22 @@ export default function BillingSettingsPage() {
               </span>
             </div>
             <p className="mt-2 text-sm text-[var(--foreground-2)]">
-              Next billing cycle on June 1st, 2026. <span className="font-semibold text-foreground">$149.00/mo</span>
+              Next billing cycle on June 1st, 2026.{" "}
+              <span className="font-semibold text-foreground">$149.00/mo</span>
             </p>
           </div>
-          
+
           <div className="flex gap-3">
             <Button variant="outline">View Invoices</Button>
-            <Button className="bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]/90">Upgrade Plan</Button>
+            <Button className="bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]/90">
+              Upgrade Plan
+            </Button>
           </div>
         </div>
 
         <div className="mt-8 border-t border-[var(--glass-border)] pt-6">
           <h4 className="font-semibold text-foreground mb-4">Current Usage</h4>
           <div className="grid gap-6 sm:grid-cols-2">
-            
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-[var(--foreground-2)]">Agent Actions</span>
@@ -60,10 +63,9 @@ export default function BillingSettingsPage() {
                 <div className="h-full w-[36%] bg-[hsl(var(--secondary))]" />
               </div>
             </div>
-
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

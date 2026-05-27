@@ -1,11 +1,18 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend 
-} from "recharts"
-import { MOCK_AGENT_BREAKDOWN } from "@/mocks/fixtures/analytics.fixture"
-import { Bot } from "lucide-react"
+import * as React from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+import { MOCK_AGENT_BREAKDOWN } from "@/mocks/fixtures/analytics.fixture";
+import { Bot } from "lucide-react";
 
 export function AgentBreakdownChart() {
   return (
@@ -19,37 +26,52 @@ export function AgentBreakdownChart() {
       </div>
       <div className="flex-1 p-5">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={MOCK_AGENT_BREAKDOWN} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+          <BarChart
+            data={MOCK_AGENT_BREAKDOWN}
+            margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--glass-border)" />
-            <XAxis 
-              dataKey="agent" 
+            <XAxis
+              dataKey="agent"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: 'var(--foreground-3)' }}
+              tick={{ fontSize: 12, fill: "var(--foreground-3)" }}
               dy={10}
             />
-            <YAxis 
+            <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: 'var(--foreground-3)' }}
-              tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(1)}k` : val}
+              tick={{ fontSize: 12, fill: "var(--foreground-3)" }}
+              tickFormatter={(val) => (val >= 1000 ? `${(val / 1000).toFixed(1)}k` : val)}
             />
             <Tooltip
-              cursor={{ fill: 'var(--surface-2)', opacity: 0.5 }}
-              contentStyle={{ 
-                backgroundColor: 'var(--glass-bg)', 
-                borderColor: 'var(--glass-border)',
-                borderRadius: '12px',
-                backdropFilter: 'blur(20px)'
+              cursor={{ fill: "var(--surface-2)", opacity: 0.5 }}
+              contentStyle={{
+                backgroundColor: "var(--glass-bg)",
+                borderColor: "var(--glass-border)",
+                borderRadius: "12px",
+                backdropFilter: "blur(20px)",
               }}
             />
-            <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }} />
-            <Bar dataKey="operations" name="Operations" stackId="a" fill="hsl(var(--primary))" radius={[0, 0, 4, 4]} />
+            <Legend iconType="circle" wrapperStyle={{ fontSize: "12px", paddingTop: "20px" }} />
+            <Bar
+              dataKey="operations"
+              name="Operations"
+              stackId="a"
+              fill="hsl(var(--primary))"
+              radius={[0, 0, 4, 4]}
+            />
             <Bar dataKey="finance" name="Finance" stackId="a" fill="hsl(var(--green))" />
-            <Bar dataKey="dev" name="Development" stackId="a" fill="hsl(var(--amber))" radius={[4, 4, 0, 0]} />
+            <Bar
+              dataKey="dev"
+              name="Development"
+              stackId="a"
+              fill="hsl(var(--amber))"
+              radius={[4, 4, 0, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
-  )
+  );
 }

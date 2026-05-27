@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 const AGENTS = [
   {
@@ -8,8 +8,7 @@ const AGENTS = [
     colorClass: "text-mist-teal",
     bgClass: "bg-mist-teal/20",
     borderClass: "border-t-mist-teal",
-    description:
-      "Optimizing resource allocation and workflow throughput globally.",
+    description: "Optimizing resource allocation and workflow throughput globally.",
     terminal: "> Rebalancing load balancer config... done.",
   },
   {
@@ -19,8 +18,7 @@ const AGENTS = [
     colorClass: "text-amber-alert",
     bgClass: "bg-amber-alert/20",
     borderClass: "border-t-amber-alert",
-    description:
-      "Real-time market analysis and automated portfolio hedging.",
+    description: "Real-time market analysis and automated portfolio hedging.",
     terminal: "> Analyzing Q3 predictive models... confident.",
   },
   {
@@ -30,8 +28,7 @@ const AGENTS = [
     colorClass: "text-forest-green",
     bgClass: "bg-forest-green/20",
     borderClass: "border-t-forest-green",
-    description:
-      "Sentiment analysis and automated tier-1 support resolution.",
+    description: "Sentiment analysis and automated tier-1 support resolution.",
     terminal: "> Resolving ticket #8942... successful.",
   },
   {
@@ -41,11 +38,10 @@ const AGENTS = [
     colorClass: "text-primary",
     bgClass: "bg-primary/20",
     borderClass: "border-t-primary",
-    description:
-      "Continuous integration monitoring and automated bug patching.",
+    description: "Continuous integration monitoring and automated bug patching.",
     terminal: "> Patching vulnerability in core-v2... deployed.",
   },
-] as const
+] as const;
 
 export function AgentShowcase() {
   return (
@@ -53,9 +49,7 @@ export function AgentShowcase() {
       <div className="mx-auto max-w-container-max px-gutter">
         {/* Header */}
         <div className="mx-auto mb-16 max-w-2xl text-center">
-          <h2 className="text-headline-2xl text-foreground">
-            Active Intelligence Roster
-          </h2>
+          <h2 className="text-headline-2xl text-foreground">Active Intelligence Roster</h2>
           <p className="mt-4 text-body-lg text-on-surface-variant">
             Specialized agents operating autonomously across functional domains.
           </p>
@@ -76,18 +70,12 @@ export function AgentShowcase() {
                   {agent.initials}
                 </div>
                 {/* Pulsing green status dot */}
-                <span
-                  className="status-pulse absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-surface-container bg-forest-green text-forest-green"
-                />
+                <span className="status-pulse absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-surface-container bg-forest-green text-forest-green" />
               </div>
 
               {/* Name & role */}
-              <h3 className="text-base font-bold text-foreground">
-                {agent.name}
-              </h3>
-              <p
-                className={`mt-0.5 font-mono text-label-caps uppercase ${agent.colorClass}`}
-              >
+              <h3 className="text-base font-bold text-foreground">{agent.name}</h3>
+              <p className={`mt-0.5 font-mono text-label-caps uppercase ${agent.colorClass}`}>
                 {agent.role}
               </p>
 
@@ -98,14 +86,12 @@ export function AgentShowcase() {
 
               {/* Terminal preview */}
               <div className="mt-4 rounded-md bg-surface-container-lowest px-3 py-2">
-                <p className="font-mono text-mono-xs text-mist-teal">
-                  {agent.terminal}
-                </p>
+                <p className="font-mono text-mono-xs text-mist-teal">{agent.terminal}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

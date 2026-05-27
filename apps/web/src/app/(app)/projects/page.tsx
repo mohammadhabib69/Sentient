@@ -1,47 +1,47 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { 
-  Plus, 
-  Search, 
-  Trash2, 
-  Calendar, 
-  LayoutGrid, 
-  List as ListIcon, 
-  CheckSquare, 
-  Bot, 
-  X, 
+import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Plus,
+  Search,
+  Trash2,
+  Calendar,
+  LayoutGrid,
+  List as ListIcon,
+  CheckSquare,
+  Bot,
+  X,
   FolderOpen,
   Filter,
-  Users
-} from "lucide-react"
-import { toast } from "sonner"
-import Link from "next/link"
+  Users,
+} from "lucide-react";
+import { toast } from "sonner";
+import Link from "next/link";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { EmptyState } from "@/components/shared/EmptyState"
-import { PageTransition } from "@/components/shared/PageTransition"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { PageTransition } from "@/components/shared/PageTransition";
 
 interface Project {
-  id: string
-  name: string
-  description: string
-  workspace: string
-  status: "IN PROGRESS" | "BLOCKED" | "ACTIVE" | "PAUSED" | string
-  tasksCount: number
-  members: string[]
-  dueDate: string
-  isOverdue?: boolean
+  id: string;
+  name: string;
+  description: string;
+  workspace: string;
+  status: "IN PROGRESS" | "BLOCKED" | "ACTIVE" | "PAUSED" | string;
+  tasksCount: number;
+  members: string[];
+  dueDate: string;
+  isOverdue?: boolean;
   leadAgent: {
-    initials: string
-    name: string
-  } | null
-  health: string
-  progress: number
-  priority: "Low" | "Medium" | "High" | "Critical"
+    initials: string;
+    name: string;
+  } | null;
+  health: string;
+  progress: number;
+  priority: "Low" | "Medium" | "High" | "Critical";
 }
 
 const DEFAULT_PROJECTS: Project[] = [
@@ -58,7 +58,7 @@ const DEFAULT_PROJECTS: Project[] = [
     leadAgent: { initials: "FL", name: "Flux" },
     health: "94%",
     progress: 60,
-    priority: "High"
+    priority: "High",
   },
   {
     id: "proj-2",
@@ -73,7 +73,7 @@ const DEFAULT_PROJECTS: Project[] = [
     leadAgent: { initials: "NV", name: "Nova" },
     health: "62%",
     progress: 40,
-    priority: "Critical"
+    priority: "Critical",
   },
   {
     id: "proj-3",
@@ -88,7 +88,7 @@ const DEFAULT_PROJECTS: Project[] = [
     leadAgent: { initials: "EC", name: "Echo" },
     health: "88%",
     progress: 70,
-    priority: "Medium"
+    priority: "Medium",
   },
   {
     id: "proj-4",
@@ -103,139 +103,159 @@ const DEFAULT_PROJECTS: Project[] = [
     leadAgent: null,
     health: "—",
     progress: 0,
-    priority: "Low"
-  }
-]
+    priority: "Low",
+  },
+];
 
 const getWorkspaceIcon = (workspace: string) => {
   switch (workspace.toLowerCase()) {
     case "engineering":
-      return "⚙"
+      return "⚙";
     case "marketing":
-      return "📣"
+      return "📣";
     case "design":
-      return "🎨"
+      return "🎨";
     case "operations":
-      return "💼"
+      return "💼";
     case "finance":
-      return "💵"
+      return "💵";
     default:
-      return "📁"
+      return "📁";
   }
-}
+};
 
 const getHealthColor = (health: string) => {
-  if (health === "—") return "text-[var(--foreground-3)]"
-  const val = parseInt(health)
-  if (isNaN(val)) return "text-[var(--foreground-3)]"
-  if (val >= 85) return "text-green"
-  if (val >= 60) return "text-amber"
-  return "text-red"
-}
+  if (health === "—") return "text-[var(--foreground-3)]";
+  const val = parseInt(health);
+  if (isNaN(val)) return "text-[var(--foreground-3)]";
+  if (val >= 85) return "text-green";
+  if (val >= 60) return "text-amber";
+  return "text-red";
+};
 
 const getProgressBg = (project: Project) => {
-  if (project.status === "BLOCKED") return "bg-red"
-  if (project.status === "PAUSED") return "bg-muted"
-  if (project.workspace === "Engineering") return "bg-forest-green"
-  if (project.workspace === "Marketing") return "bg-primary"
-  return "bg-primary"
-}
+  if (project.status === "BLOCKED") return "bg-red";
+  if (project.status === "PAUSED") return "bg-muted";
+  if (project.workspace === "Engineering") return "bg-forest-green";
+  if (project.workspace === "Marketing") return "bg-primary";
+  return "bg-primary";
+};
 
 const renderStatusBadge = (status: string) => {
-  let classes = "bg-[var(--surface-2)] text-[var(--foreground-3)]"
-  if (status === "IN PROGRESS") classes = "bg-primary/12 text-primary"
-  if (status === "BLOCKED") classes = "bg-red/12 text-red"
-  if (status === "ACTIVE") classes = "bg-green/12 text-green"
-  if (status === "PAUSED") classes = "bg-[var(--surface-2)] text-[var(--foreground-3)]"
+  let classes = "bg-[var(--surface-2)] text-[var(--foreground-3)]";
+  if (status === "IN PROGRESS") classes = "bg-primary/12 text-primary";
+  if (status === "BLOCKED") classes = "bg-red/12 text-red";
+  if (status === "ACTIVE") classes = "bg-green/12 text-green";
+  if (status === "PAUSED") classes = "bg-[var(--surface-2)] text-[var(--foreground-3)]";
 
   return (
-    <span className={cn("px-2 py-0.5 rounded-[6px] text-[10px] font-bold uppercase tracking-wider", classes)}>
+    <span
+      className={cn(
+        "px-2 py-0.5 rounded-[6px] text-[10px] font-bold uppercase tracking-wider",
+        classes,
+      )}
+    >
       {status}
     </span>
-  )
-}
+  );
+};
 
 const formatDueDate = (dateStr: string) => {
-  if (!dateStr) return ""
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-  const parts = dateStr.split("-")
+  if (!dateStr) return "";
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const parts = dateStr.split("-");
   if (parts.length === 3) {
-    const monthIndex = parseInt(parts[1] || "", 10) - 1
-    const day = parseInt(parts[2] || "", 10)
+    const monthIndex = parseInt(parts[1] || "", 10) - 1;
+    const day = parseInt(parts[2] || "", 10);
     if (monthIndex >= 0 && monthIndex < 12 && !isNaN(day)) {
-      const month = months[monthIndex]
+      const month = months[monthIndex];
       if (month) {
-        return `${month} ${day}`
+        return `${month} ${day}`;
       }
     }
   }
-  const date = new Date(dateStr)
-  if (isNaN(date.getTime())) return dateStr
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
-}
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+};
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = React.useState<Project[]>(DEFAULT_PROJECTS)
-  const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid")
-  const [showModal, setShowModal] = React.useState(false)
+  const [projects, setProjects] = React.useState<Project[]>(DEFAULT_PROJECTS);
+  const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid");
+  const [showModal, setShowModal] = React.useState(false);
 
   // Filters State
-  const [searchQuery, setSearchQuery] = React.useState("")
-  const [workspaceFilter, setWorkspaceFilter] = React.useState("ALL")
-  const [statusFilter, setStatusFilter] = React.useState("ALL")
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [workspaceFilter, setWorkspaceFilter] = React.useState("ALL");
+  const [statusFilter, setStatusFilter] = React.useState("ALL");
 
   // Modal Form State
-  const [name, setName] = React.useState("")
-  const [workspace, setWorkspace] = React.useState("Engineering")
-  const [description, setDescription] = React.useState("")
-  const [priority, setPriority] = React.useState("Medium")
-  const [dueDate, setDueDate] = React.useState("")
-  const [leadAgent, setLeadAgent] = React.useState("None")
+  const [name, setName] = React.useState("");
+  const [workspace, setWorkspace] = React.useState("Engineering");
+  const [description, setDescription] = React.useState("");
+  const [priority, setPriority] = React.useState("Medium");
+  const [dueDate, setDueDate] = React.useState("");
+  const [leadAgent, setLeadAgent] = React.useState("None");
 
   const handleDeleteProject = (id: string, name: string) => {
-    setProjects(prev => prev.filter(p => p.id !== id))
-    toast.error(`Project "${name}" was deleted.`)
-  }
+    setProjects((prev) => prev.filter((p) => p.id !== id));
+    toast.error(`Project "${name}" was deleted.`);
+  };
 
   const handleCreateProject = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!name.trim()) return
+    e.preventDefault();
+    if (!name.trim()) return;
 
-    let formattedDate = "Dec 31"
-    let isOverdue = false
+    let formattedDate = "Dec 31";
+    let isOverdue = false;
     if (dueDate) {
-      formattedDate = formatDueDate(dueDate)
-      const today = new Date("2026-05-26") // system base reference
-      const selectedDate = new Date(dueDate)
+      formattedDate = formatDueDate(dueDate);
+      const today = new Date("2026-05-26"); // system base reference
+      const selectedDate = new Date(dueDate);
       if (selectedDate < today) {
-        isOverdue = true
+        isOverdue = true;
       }
     }
 
-    let lead = null
-    if (leadAgent === "Aria") lead = { initials: "AR", name: "Aria" }
-    else if (leadAgent === "Nova") lead = { initials: "NV", name: "Nova" }
-    else if (leadAgent === "Echo") lead = { initials: "EC", name: "Echo" }
-    else if (leadAgent === "Flux") lead = { initials: "FL", name: "Flux" }
+    let lead = null;
+    if (leadAgent === "Aria") lead = { initials: "AR", name: "Aria" };
+    else if (leadAgent === "Nova") lead = { initials: "NV", name: "Nova" };
+    else if (leadAgent === "Echo") lead = { initials: "EC", name: "Echo" };
+    else if (leadAgent === "Flux") lead = { initials: "FL", name: "Flux" };
 
-    const tasks = Math.floor(Math.random() * 8) + 2 // Mock realistic task count
-    const membersCount = lead ? Math.floor(Math.random() * 3) + 2 : Math.floor(Math.random() * 2) + 1
-    
-    const initialsPool = ["AH", "MS", "KB", "JD", "TL", "AM", "KS", "PR", "DK", "NL"]
-    const projectMembers: string[] = []
+    const tasks = Math.floor(Math.random() * 8) + 2; // Mock realistic task count
+    const membersCount = lead
+      ? Math.floor(Math.random() * 3) + 2
+      : Math.floor(Math.random() * 2) + 1;
+
+    const initialsPool = ["AH", "MS", "KB", "JD", "TL", "AM", "KS", "PR", "DK", "NL"];
+    const projectMembers: string[] = [];
     if (lead) {
-      projectMembers.push(lead.initials)
+      projectMembers.push(lead.initials);
     }
     while (projectMembers.length < membersCount) {
-      const randomInitial = initialsPool[Math.floor(Math.random() * initialsPool.length)] || ""
+      const randomInitial = initialsPool[Math.floor(Math.random() * initialsPool.length)] || "";
       if (randomInitial && !projectMembers.includes(randomInitial)) {
-        projectMembers.push(randomInitial)
+        projectMembers.push(randomInitial);
       }
     }
 
-    const randomProgress = Math.floor(Math.random() * 8) * 10 + 10 // 10% to 80%
-    const randomHealthNum = Math.floor(Math.random() * 35) + 65 // 65% to 100%
-    const healthStr = `${randomHealthNum}%`
+    const randomProgress = Math.floor(Math.random() * 8) * 10 + 10; // 10% to 80%
+    const randomHealthNum = Math.floor(Math.random() * 35) + 65; // 65% to 100%
+    const healthStr = `${randomHealthNum}%`;
 
     const newProj: Project = {
       id: `proj-${Date.now()}`,
@@ -250,49 +270,51 @@ export default function ProjectsPage() {
       leadAgent: lead,
       health: healthStr,
       progress: randomProgress,
-      priority: priority as any
-    }
+      priority: priority as any,
+    };
 
-    setProjects(prev => [...prev, newProj])
-    
+    setProjects((prev) => [...prev, newProj]);
+
     // Reset Form
-    setName("")
-    setDescription("")
-    setWorkspace("Engineering")
-    setPriority("Medium")
-    setDueDate("")
-    setLeadAgent("None")
-    
-    setShowModal(false)
-    toast.success(`Project "${newProj.name}" created successfully in ${newProj.workspace}`)
-  }
+    setName("");
+    setDescription("");
+    setWorkspace("Engineering");
+    setPriority("Medium");
+    setDueDate("");
+    setLeadAgent("None");
+
+    setShowModal(false);
+    toast.success(`Project "${newProj.name}" created successfully in ${newProj.workspace}`);
+  };
 
   // Filter projects
-  const filteredProjects = projects.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesWorkspace = workspaceFilter === "ALL" || p.workspace.toLowerCase() === workspaceFilter.toLowerCase()
-    const matchesStatus = statusFilter === "ALL" || p.status.toUpperCase() === statusFilter.toUpperCase()
-    return matchesSearch && matchesWorkspace && matchesStatus
-  })
+  const filteredProjects = projects.filter((p) => {
+    const matchesSearch =
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesWorkspace =
+      workspaceFilter === "ALL" || p.workspace.toLowerCase() === workspaceFilter.toLowerCase();
+    const matchesStatus =
+      statusFilter === "ALL" || p.status.toUpperCase() === statusFilter.toUpperCase();
+    return matchesSearch && matchesWorkspace && matchesStatus;
+  });
 
   // Group by Workspace dynamically
   const groupedProjects = filteredProjects.reduce<Record<string, Project[]>>((acc, proj) => {
-    const list = acc[proj.workspace] || []
-    list.push(proj)
-    acc[proj.workspace] = list
-    return acc
-  }, {})
+    const list = acc[proj.workspace] || [];
+    list.push(proj);
+    acc[proj.workspace] = list;
+    return acc;
+  }, {});
 
   // Header dynamic stats
-  const activeProjectsCount = projects.filter(p => p.status !== "PAUSED").length
-  const workspacesSet = new Set(projects.map(p => p.workspace))
-  const workspacesCount = workspacesSet.size
-  const statsSubtitle = `${workspacesCount} workspace${workspacesCount !== 1 ? 's' : ''} · ${activeProjectsCount} active project${activeProjectsCount !== 1 ? 's' : ''}`
+  const activeProjectsCount = projects.filter((p) => p.status !== "PAUSED").length;
+  const workspacesSet = new Set(projects.map((p) => p.workspace));
+  const workspacesCount = workspacesSet.size;
+  const statsSubtitle = `${workspacesCount} workspace${workspacesCount !== 1 ? "s" : ""} · ${activeProjectsCount} active project${activeProjectsCount !== 1 ? "s" : ""}`;
 
   return (
     <PageTransition className="space-y-6">
-      
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
@@ -308,7 +330,7 @@ export default function ProjectsPage() {
                 "p-1.5 rounded-md transition-all",
                 viewMode === "grid"
                   ? "bg-[var(--surface-1)] text-foreground shadow-sm"
-                  : "text-[var(--foreground-3)] hover:text-foreground"
+                  : "text-[var(--foreground-3)] hover:text-foreground",
               )}
               title="Grid View"
             >
@@ -320,7 +342,7 @@ export default function ProjectsPage() {
                 "p-1.5 rounded-md transition-all",
                 viewMode === "list"
                   ? "bg-[var(--surface-1)] text-foreground shadow-sm"
-                  : "text-[var(--foreground-3)] hover:text-foreground"
+                  : "text-[var(--foreground-3)] hover:text-foreground",
               )}
               title="List View"
             >
@@ -389,9 +411,9 @@ export default function ProjectsPage() {
             variant="ghost"
             size="sm"
             onClick={() => {
-              setSearchQuery("")
-              setWorkspaceFilter("ALL")
-              setStatusFilter("ALL")
+              setSearchQuery("");
+              setWorkspaceFilter("ALL");
+              setStatusFilter("ALL");
             }}
             className="text-xs text-[var(--foreground-3)] hover:text-foreground h-9"
           >
@@ -406,29 +428,34 @@ export default function ProjectsPage() {
           <EmptyState
             icon={FolderOpen}
             title={projects.length === 0 ? "No projects created yet" : "No matching projects"}
-            description={projects.length === 0 
-              ? "Get started by creating your first workspace project to orchestrate agent workflows." 
-              : "No projects match your current search queries or filters. Try adjusting them."
+            description={
+              projects.length === 0
+                ? "Get started by creating your first workspace project to orchestrate agent workflows."
+                : "No projects match your current search queries or filters. Try adjusting them."
             }
             actionLabel={projects.length === 0 ? "New Project +" : "Clear Filters"}
-            onAction={projects.length === 0 ? () => setShowModal(true) : () => {
-              setSearchQuery("")
-              setWorkspaceFilter("ALL")
-              setStatusFilter("ALL")
-            }}
+            onAction={
+              projects.length === 0
+                ? () => setShowModal(true)
+                : () => {
+                    setSearchQuery("");
+                    setWorkspaceFilter("ALL");
+                    setStatusFilter("ALL");
+                  }
+            }
           />
         ) : (
           Object.entries(groupedProjects).map(([workspaceName, workspaceProjects]) => {
-            const icon = getWorkspaceIcon(workspaceName)
-            
+            const icon = getWorkspaceIcon(workspaceName);
+
             return (
               <div key={workspaceName} className="space-y-4">
-                
                 {/* Workspace Section Header */}
                 <div className="flex items-center gap-2 border-b border-[var(--glass-border)] pb-2">
                   <span className="text-sm">{icon}</span>
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--foreground-2)]">
-                    {workspaceName} · {workspaceProjects.length} project{workspaceProjects.length !== 1 ? "s" : ""}
+                    {workspaceName} · {workspaceProjects.length} project
+                    {workspaceProjects.length !== 1 ? "s" : ""}
                   </h3>
                 </div>
 
@@ -437,11 +464,10 @@ export default function ProjectsPage() {
                   /* Grid View */
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
                     {workspaceProjects.map((project) => (
-                      <div 
+                      <div
                         key={project.id}
                         className="glass-panel p-5 bg-[var(--surface-1)] hover:bg-[var(--surface-2)]/20 transition-all duration-300 rounded-xl border border-[var(--glass-border)] shadow-sm flex flex-col justify-between min-h-[220px] relative group overflow-hidden"
                       >
-                        
                         {/* Top half */}
                         <div className="space-y-1">
                           <div className="flex items-center justify-between">
@@ -469,7 +495,10 @@ export default function ProjectsPage() {
                                 {project.name}
                               </h4>
                             </Link>
-                            <Badge variant={project.priority.toLowerCase() as any} className="scale-90 origin-right">
+                            <Badge
+                              variant={project.priority.toLowerCase() as any}
+                              className="scale-90 origin-right"
+                            >
                               {project.priority}
                             </Badge>
                           </div>
@@ -486,12 +515,15 @@ export default function ProjectsPage() {
                           <div className="flex items-center justify-between text-xs text-[var(--foreground-2)] border-t border-[var(--glass-border)]/50 pt-2.5">
                             {/* Tasks and Members */}
                             <div className="flex items-center gap-2">
-                              <span className="flex items-center gap-1" title={`${project.tasksCount} tasks`}>
+                              <span
+                                className="flex items-center gap-1"
+                                title={`${project.tasksCount} tasks`}
+                              >
                                 <CheckSquare className="size-3.5 text-[var(--foreground-3)]" />
                                 <span className="font-mono text-xs">{project.tasksCount}</span>
                               </span>
                               <span className="text-[var(--foreground-3)]">·</span>
-                              
+
                               {/* Member stack */}
                               <div className="flex -space-x-1.5">
                                 {project.members.slice(0, 3).map((initials, idx) => (
@@ -515,10 +547,14 @@ export default function ProjectsPage() {
                             </div>
 
                             {/* Due Date */}
-                            <span className={cn(
-                              "flex items-center gap-1 font-mono text-[11px]",
-                              project.isOverdue ? "text-red font-bold" : "text-[var(--foreground-3)]"
-                            )}>
+                            <span
+                              className={cn(
+                                "flex items-center gap-1 font-mono text-[11px]",
+                                project.isOverdue
+                                  ? "text-red font-bold"
+                                  : "text-[var(--foreground-3)]",
+                              )}
+                            >
                               <Calendar className="size-3.5" />
                               <span>Due {project.dueDate}</span>
                             </span>
@@ -531,11 +567,15 @@ export default function ProjectsPage() {
                               {project.leadAgent ? (
                                 <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--surface-2)] border border-[var(--glass-border)] text-[10px] font-medium text-[var(--foreground-2)]">
                                   <span className="size-1 bg-primary rounded-full" />
-                                  <span className="font-mono text-[9px] text-[var(--foreground-3)]">{project.leadAgent.initials}</span>
+                                  <span className="font-mono text-[9px] text-[var(--foreground-3)]">
+                                    {project.leadAgent.initials}
+                                  </span>
                                   <span>{project.leadAgent.name}</span>
                                 </div>
                               ) : (
-                                <span className="text-[10px] text-[var(--foreground-3)] italic">No Lead</span>
+                                <span className="text-[10px] text-[var(--foreground-3)] italic">
+                                  No Lead
+                                </span>
                               )}
                             </div>
 
@@ -556,13 +596,15 @@ export default function ProjectsPage() {
                             <span>{project.progress}%</span>
                           </div>
                           <div className="w-full h-1 bg-[var(--surface-3)] rounded-full overflow-hidden">
-                            <div 
-                              className={cn("h-full rounded-full transition-all duration-500", getProgressBg(project))}
+                            <div
+                              className={cn(
+                                "h-full rounded-full transition-all duration-500",
+                                getProgressBg(project),
+                              )}
                               style={{ width: `${project.progress}%` }}
                             />
                           </div>
                         </div>
-
                       </div>
                     ))}
                   </div>
@@ -570,7 +612,7 @@ export default function ProjectsPage() {
                   /* List View */
                   <div className="space-y-2">
                     {workspaceProjects.map((project) => (
-                      <div 
+                      <div
                         key={project.id}
                         className="glass-panel p-4 bg-[var(--surface-1)] hover:bg-[var(--surface-2)]/20 transition-all duration-300 rounded-xl border border-[var(--glass-border)] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 group"
                       >
@@ -586,7 +628,10 @@ export default function ProjectsPage() {
                               {getWorkspaceIcon(project.workspace)} {project.workspace}
                             </span>
                             {renderStatusBadge(project.status)}
-                            <Badge variant={project.priority.toLowerCase() as any} className="scale-90">
+                            <Badge
+                              variant={project.priority.toLowerCase() as any}
+                              className="scale-90"
+                            >
                               {project.priority}
                             </Badge>
                           </div>
@@ -632,15 +677,21 @@ export default function ProjectsPage() {
                                 <span>{project.leadAgent.name}</span>
                               </div>
                             ) : (
-                              <span className="text-[9px] text-[var(--foreground-3)] italic">No Lead</span>
+                              <span className="text-[9px] text-[var(--foreground-3)] italic">
+                                No Lead
+                              </span>
                             )}
                           </div>
 
                           {/* Due Date */}
-                          <div className={cn(
-                            "w-[90px] text-right font-mono text-[11px]",
-                            project.isOverdue ? "text-red font-bold" : "text-[var(--foreground-3)]"
-                          )}>
+                          <div
+                            className={cn(
+                              "w-[90px] text-right font-mono text-[11px]",
+                              project.isOverdue
+                                ? "text-red font-bold"
+                                : "text-[var(--foreground-3)]",
+                            )}
+                          >
                             Due {project.dueDate}
                           </div>
 
@@ -658,8 +709,11 @@ export default function ProjectsPage() {
                               <span>{project.progress}%</span>
                             </div>
                             <div className="w-full h-1 bg-[var(--surface-3)] rounded-full overflow-hidden">
-                              <div 
-                                className={cn("h-full rounded-full transition-all duration-500", getProgressBg(project))}
+                              <div
+                                className={cn(
+                                  "h-full rounded-full transition-all duration-500",
+                                  getProgressBg(project),
+                                )}
                                 style={{ width: `${project.progress}%` }}
                               />
                             </div>
@@ -676,14 +730,12 @@ export default function ProjectsPage() {
                             </button>
                           </div>
                         </div>
-
                       </div>
                     ))}
                   </div>
                 )}
-
               </div>
-            )
+            );
           })
         )}
       </div>
@@ -692,7 +744,6 @@ export default function ProjectsPage() {
       <AnimatePresence>
         {showModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
-            
             {/* Backdrop Click Dismiss */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -711,7 +762,6 @@ export default function ProjectsPage() {
               onSubmit={handleCreateProject}
               className="relative z-10 w-full max-w-[480px] glass-panel rounded-2xl p-6 bg-[var(--surface-1)] border border-[var(--glass-border)] shadow-2xl space-y-5"
             >
-              
               {/* Header */}
               <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-3">
                 <h3 className="text-sm font-bold text-foreground">Create Project</h3>
@@ -726,7 +776,6 @@ export default function ProjectsPage() {
 
               {/* Form Fields */}
               <div className="space-y-4">
-                
                 {/* Project Name */}
                 <div className="space-y-1.5">
                   <label className="font-mono text-label-caps uppercase tracking-wider text-[var(--foreground-2)]">
@@ -823,7 +872,6 @@ export default function ProjectsPage() {
                     <option value="Flux">Flux</option>
                   </select>
                 </div>
-
               </div>
 
               {/* Actions Footer */}
@@ -836,20 +884,14 @@ export default function ProjectsPage() {
                 >
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  variant="default"
-                  className="text-xs"
-                >
+                <Button type="submit" variant="default" className="text-xs">
                   Create Project
                 </Button>
               </div>
-
             </motion.form>
           </div>
         )}
       </AnimatePresence>
-
     </PageTransition>
-  )
+  );
 }

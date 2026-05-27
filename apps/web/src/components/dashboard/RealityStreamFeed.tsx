@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { useStreamEvents } from "@/hooks/useStream"
-import { Bot, User, Cpu, AlertTriangle } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useStreamEvents } from "@/hooks/useStream";
+import { Bot, User, Cpu, AlertTriangle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function RealityStreamFeed() {
-  const { data: events = [], isLoading } = useStreamEvents()
+  const { data: events = [], isLoading } = useStreamEvents();
 
   if (isLoading) {
-    return <div className="h-64 animate-pulse rounded-xl bg-[var(--surface-2)]" />
+    return <div className="h-64 animate-pulse rounded-xl bg-[var(--surface-2)]" />;
   }
 
   // Only take latest 8 events for dashboard view
-  const recentEvents = events.slice(0, 8)
+  const recentEvents = events.slice(0, 8);
 
   return (
     <div className="flex h-full flex-col rounded-xl border border-glass-border bg-surface-container">
@@ -22,17 +22,17 @@ export function RealityStreamFeed() {
       <div className="custom-scrollbar flex-1 overflow-y-auto p-2">
         <div className="space-y-2">
           {recentEvents.map((event) => {
-            const variant = event.display?.variant
-            const isError = variant === "critical" || event.type === "webhook_failed"
-            const isAgent = event.actor.type === "agent"
-            const isUser = event.actor.type === "user"
+            const variant = event.display?.variant;
+            const isError = variant === "critical" || event.type === "webhook_failed";
+            const isAgent = event.actor.type === "agent";
+            const isUser = event.actor.type === "user";
 
-            const Icon = isError ? AlertTriangle : isAgent ? Bot : isUser ? User : Cpu
+            const Icon = isError ? AlertTriangle : isAgent ? Bot : isUser ? User : Cpu;
             const bgColor = isError
               ? "bg-error-red/10 text-error-red"
               : isAgent
                 ? "bg-primary/10 text-primary"
-                : "bg-surface-variant text-on-surface-variant"
+                : "bg-surface-variant text-on-surface-variant";
 
             return (
               <div
@@ -42,7 +42,7 @@ export function RealityStreamFeed() {
                 <div
                   className={cn(
                     "mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md",
-                    bgColor
+                    bgColor,
                   )}
                 >
                   <Icon className="size-3.5" />
@@ -61,10 +61,10 @@ export function RealityStreamFeed() {
                   </p>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
     </div>
-  )
+  );
 }

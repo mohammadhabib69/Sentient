@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Terminal } from "lucide-react"
-import { buttonVariants } from "@/components/ui/button"
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Terminal } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 
 const TABS = [
   { href: "/developers", label: "Overview" },
   { href: "/developers/api-keys", label: "API Keys" },
   { href: "/developers/webhooks", label: "Webhooks" },
   { href: "/developers/marketplace", label: "Marketplace" },
-]
+];
 
 export default function DevelopersLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <div className="flex h-[calc(100vh-100px)] flex-col relative overflow-hidden pb-10 bg-gradient-to-br from-[hsl(var(--primary))]/5 to-[hsl(var(--secondary))]/5 backdrop-blur-lg">
@@ -33,7 +33,7 @@ export default function DevelopersLayout({ children }: { children: React.ReactNo
           href="#docs"
           className={cn(
             buttonVariants({ variant: "ghost", size: "sm" }),
-            "border border-[var(--glass-border)] bg-transparent text-[var(--foreground-2)] hover:text-foreground shrink-0 self-start sm:self-auto"
+            "border border-[var(--glass-border)] bg-transparent text-[var(--foreground-2)] hover:text-foreground shrink-0 self-start sm:self-auto",
           )}
         >
           View API Docs ↗
@@ -43,7 +43,7 @@ export default function DevelopersLayout({ children }: { children: React.ReactNo
       <div className="mb-8 border-b border-[var(--glass-border)]">
         <nav className="-mb-px flex gap-6">
           {TABS.map((tab) => {
-            const isActive = pathname === tab.href
+            const isActive = pathname === tab.href;
             return (
               <Link
                 key={tab.href}
@@ -52,19 +52,17 @@ export default function DevelopersLayout({ children }: { children: React.ReactNo
                   "border-b-2 py-3 text-sm font-medium transition-colors",
                   isActive
                     ? "border-[hsl(var(--primary))] text-[hsl(var(--primary))]"
-                    : "border-transparent text-[var(--foreground-2)] hover:border-[var(--glass-border)] hover:text-foreground"
+                    : "border-transparent text-[var(--foreground-2)] hover:border-[var(--glass-border)] hover:text-foreground",
                 )}
               >
                 {tab.label}
               </Link>
-            )
+            );
           })}
         </nav>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-4 scrollbar-hide">
-        {children}
-      </div>
+      <div className="flex-1 overflow-y-auto pr-4 scrollbar-hide">{children}</div>
     </div>
-  )
+  );
 }

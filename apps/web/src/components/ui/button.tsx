@@ -1,7 +1,7 @@
-import { Button as ButtonPrimitive } from "@base-ui/react/button"
-import { cva, type VariantProps } from "class-variance-authority"
+import { Button as ButtonPrimitive } from "@base-ui/react/button";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center rounded-[10px] border border-transparent text-sm font-medium whitespace-nowrap transition-all duration-150 outline-none select-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--primary))]/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -21,11 +21,9 @@ const buttonVariants = cva(
         ghost:
           "text-[var(--foreground-2)] hover:bg-muted hover:text-foreground active:bg-[var(--surface-3)]",
         // Danger: red-tinted bg, red border
-        danger:
-          "bg-red/12 text-red border-red/30 hover:bg-red/20 active:bg-red/28",
+        danger: "bg-red/12 text-red border-red/30 hover:bg-red/20 active:bg-red/28",
         // Destructive: alias of danger for shadcn compat
-        destructive:
-          "bg-red/12 text-red border-red/30 hover:bg-red/20 active:bg-red/28",
+        destructive: "bg-red/12 text-red border-red/30 hover:bg-red/20 active:bg-red/28",
         // Link: text-only with underline
         link: "text-[hsl(var(--primary))] underline-offset-4 hover:underline",
         // Glass: translucent glass-style button for sidebar/floating panels
@@ -47,8 +45,8 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
-)
+  },
+);
 
 function Button({
   className,
@@ -62,7 +60,7 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
-  )
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

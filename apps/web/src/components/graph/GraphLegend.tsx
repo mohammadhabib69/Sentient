@@ -1,13 +1,21 @@
-"use client"
+"use client";
 
 export function GraphLegend() {
   const items = [
-    { label: "Projects", className: "rounded bg-primary border border-primary/50 shadow-[0_0_8px_rgba(170,204,211,0.5)]" },
+    {
+      label: "Projects",
+      className:
+        "rounded bg-primary border border-primary/50 shadow-[0_0_8px_rgba(170,204,211,0.5)]",
+    },
     { label: "AI Agents", className: "rounded-full bg-forest-green" },
     { label: "Tasks", className: "rounded-full bg-mist-teal" },
     { label: "Users", className: "rounded-full bg-secondary" },
-    { label: "Critical Issue", className: "rounded-full bg-error-red graph-pulse-error", isCritical: true },
-  ] as const
+    {
+      label: "Critical Issue",
+      className: "rounded-full bg-error-red graph-pulse-error",
+      isCritical: true,
+    },
+  ] as const;
 
   return (
     <div className="pointer-events-none absolute bottom-6 left-6 z-40 flex flex-col gap-3 rounded-xl border border-glass-border bg-surface-container-high/60 p-4 shadow-2xl backdrop-blur-xl">
@@ -25,5 +33,5 @@ export function GraphLegend() {
         </div>
       ))}
     </div>
-  )
+  );
 }

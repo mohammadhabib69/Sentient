@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { MOCK_HEATMAP_DATA } from "@/mocks/fixtures/analytics.fixture"
-import { Calendar } from "lucide-react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { MOCK_HEATMAP_DATA } from "@/mocks/fixtures/analytics.fixture";
+import { Calendar } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function ProductivityHeatmap() {
   return (
@@ -21,24 +21,24 @@ export function ProductivityHeatmap() {
           {Array.from({ length: 12 }).map((_, colIndex) => (
             <div key={colIndex} className="flex flex-col gap-1">
               {Array.from({ length: 7 }).map((_, rowIndex) => {
-                const index = colIndex * 7 + rowIndex
-                if (index >= 90) return null
-                const data = MOCK_HEATMAP_DATA[index]
-                
+                const index = colIndex * 7 + rowIndex;
+                if (index >= 90) return null;
+                const data = MOCK_HEATMAP_DATA[index];
+
                 // Color intensity logic
-                let intensityClass = "bg-[var(--surface-3)]" // empty
-                if (data && data.value > 80) intensityClass = "bg-[hsl(var(--primary))]"
-                else if (data && data.value > 50) intensityClass = "bg-[hsl(var(--primary))]/70"
-                else if (data && data.value > 20) intensityClass = "bg-[hsl(var(--primary))]/40"
-                else if (data && data.value > 0) intensityClass = "bg-[hsl(var(--primary))]/20"
+                let intensityClass = "bg-[var(--surface-3)]"; // empty
+                if (data && data.value > 80) intensityClass = "bg-[hsl(var(--primary))]";
+                else if (data && data.value > 50) intensityClass = "bg-[hsl(var(--primary))]/70";
+                else if (data && data.value > 20) intensityClass = "bg-[hsl(var(--primary))]/40";
+                else if (data && data.value > 0) intensityClass = "bg-[hsl(var(--primary))]/20";
 
                 return (
-                  <div 
-                    key={rowIndex} 
+                  <div
+                    key={rowIndex}
                     className={cn("size-3.5 rounded-[2px]", intensityClass)}
                     title={data ? `${data.value} tasks on ${data.date}` : ""}
                   />
-                )
+                );
               })}
             </div>
           ))}
@@ -56,5 +56,5 @@ export function ProductivityHeatmap() {
         </div>
       </div>
     </div>
-  )
+  );
 }
