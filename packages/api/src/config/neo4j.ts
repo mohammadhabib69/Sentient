@@ -1,11 +1,5 @@
 import neo4j, { Driver } from "neo4j-driver";
 import { env } from "./env.js";
-import fs from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 type GlobalNeo4j = {
   neo4jDriver?: Driver;
@@ -46,24 +40,24 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export async function initNeo4jConstraints(): Promise<void> {
-  const schemaPath = path.resolve(__dirname, "../../../../graph/cypher/001_schema.cypher");
-  try {
-    const cypherContent = await fs.readFile(schemaPath, "utf-8");
-    const queries = cypherContent
-      .split(";")
-      .map((q) => q.trim())
-      .filter((q) => q.length > 0 && !q.startsWith("//"));
+  const constraints = [
+    "CREATE CONSTRAINT org_id IF NOT EXISTS FOR (o:Organization) REQUIRE o.id IS UNIQUE",
+    "CREATE CONSTRAINT user_id IF NOT EXISTS FOR (u:User) REQUIRE u.id IS UNIQUE",
+    "CREATE CONSTRAINT workspace_id IF NOT EXISTS FOR (w:Workspace) REQUIRE w.id IS UNIQUE",
+    "CREATE CONSTRAINT project_id IF NOT EXISTS FOR (p:Project) REQUIRE p.id IS UNIQUE",
+    "CREATE CONSTRAINT task_id IF NOT EXISTS FOR (t:Task) REQUIRE t.id IS UNIQUE",
+    "CREATE CONSTRAINT agent_id IF NOT EXISTS FOR (a:Agent) REQUIRE a.id IS UNIQUE",
+  ];
 
-    const session = neo4jDriver.session();
-    try {
-      for (const query of queries) {
-        await session.run(query);
-      }
-      console.log("[neo4j] Constraints and indexes initialized.");
-    } finally {
-      await session.close();
+  const session = neo4jDriver.session();
+  try {
+    for (const query of constraints) {
+      await session.run(query);
     }
+    console.log("[neo4j] Constraints and indexes initialized.");
   } catch (error) {
     console.error("[neo4j] Failed to initialize constraints:", error);
+  } finally {
+    await session.close();
   }
 }

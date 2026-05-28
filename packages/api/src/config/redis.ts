@@ -1,4 +1,4 @@
-import Redis from "ioredis";
+import { Redis } from "ioredis";
 import { env } from "./env.js";
 
 type GlobalRedis = {
@@ -14,18 +14,18 @@ function createRedisClient(url: string, name: string): Redis {
     enableReadyCheck: true,
   });
 
-  client.on("error", (err) => {
+  client.on("error", (err: Error) => {
     console.error(`[redis:${name}] connection error`, err);
   });
 
   void client
     .ping()
-    .then((res) => {
+    .then((res: string) => {
       if (res !== "PONG") {
         console.warn(`[redis:${name}] unexpected PING response: ${res}`);
       }
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       console.error(`[redis:${name}] PING failed`, err);
     });
 
