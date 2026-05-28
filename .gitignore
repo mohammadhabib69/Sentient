@@ -51,5 +51,6 @@ packages/database/generated/
 # Misc
 .vercel/
 .netlify/
+.kiro/
 
 PRD/
