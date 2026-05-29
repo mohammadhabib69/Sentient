@@ -20,6 +20,15 @@ const envSchema = z.object({
   S3_ACCESS_KEY: z.string().optional(),
   S3_SECRET_KEY: z.string().optional(),
   S3_REGION: z.string().optional(),
+  // Google OAuth
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  GOOGLE_CALLBACK_URL: z.string().url().optional(),
+  // Email configuration
+  EMAIL_FROM: z.string().email().optional(),
+  // Frontend URLs for OAuth redirects
+  FRONTEND_DASHBOARD_URL: z.string().url().optional(),
+  FRONTEND_LOGIN_URL: z.string().url().optional(),
 });
 
 export const env = envSchema.parse(process.env);

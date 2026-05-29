@@ -141,6 +141,18 @@ model User {
   lastActiveAt  DateTime? @map("last_active_at") @db.Timestamptz(6)
   createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
 
+  // Email verification fields
+  emailVerifyToken  String?   @map("email_verify_token")
+  emailVerifyExpiry DateTime? @map("email_verify_expiry") @db.Timestamptz(6)
+
+  // Password reset fields
+  resetPasswordToken  String?   @map("reset_password_token")
+  resetPasswordExpiry DateTime? @map("reset_password_expiry") @db.Timestamptz(6)
+
+  // Brute force protection fields
+  failedLoginAttempts Int       @default(0) @map("failed_login_attempts")
+  lockedUntil         DateTime? @map("locked_until") @db.Timestamptz(6)
+
   organization         Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
   sessions             Session[]
   createdWorkspaces    Workspace[]    @relation("WorkspaceCreator")
