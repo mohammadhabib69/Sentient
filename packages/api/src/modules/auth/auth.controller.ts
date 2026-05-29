@@ -61,7 +61,7 @@ export class AuthController {
       const validationResult = registerSchema.safeParse(req.body);
       if (!validationResult.success) {
         const errors: Record<string, string[]> = {};
-        validationResult.error.errors.forEach((err) => {
+        validationResult.error.issues.forEach((err) => {
           const path = err.path.join('.');
           if (!errors[path]) {
             errors[path] = [];
@@ -109,7 +109,7 @@ export class AuthController {
       const validationResult = loginSchema.safeParse(req.body);
       if (!validationResult.success) {
         const errors: Record<string, string[]> = {};
-        validationResult.error.errors.forEach((err) => {
+        validationResult.error.issues.forEach((err) => {
           const path = err.path.join('.');
           if (!errors[path]) {
             errors[path] = [];
@@ -357,7 +357,7 @@ export class AuthController {
       const validationResult = forgotPasswordSchema.safeParse(req.body);
       if (!validationResult.success) {
         const errors: Record<string, string[]> = {};
-        validationResult.error.errors.forEach((err) => {
+        validationResult.error.issues.forEach((err) => {
           const path = err.path.join('.');
           if (!errors[path]) {
             errors[path] = [];
@@ -396,7 +396,7 @@ export class AuthController {
       const validationResult = resetPasswordSchema.safeParse(req.body);
       if (!validationResult.success) {
         const errors: Record<string, string[]> = {};
-        validationResult.error.errors.forEach((err) => {
+        validationResult.error.issues.forEach((err) => {
           const path = err.path.join('.');
           if (!errors[path]) {
             errors[path] = [];
@@ -507,6 +507,44 @@ export class AuthController {
       });
     } catch (error) {
       next(error);
+    }
+  }
+
+  /**
+   * GET /v1/auth/google/callback
+   * 
+   * Handles Google OAuth callback
+   * 
+   * Requirements: 4.9, 4.10
+   */
+  async googleCallback(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      // Extract Google profile from Passport
+      const googleProfile = req.user as any;
+
+      if (!googleProfile) {
+        throw new UnauthorizedError();
+      }
+
+      const deviceInfo = extractDeviceInfo(req);
+
+      // Authenticate or create user
+      // Requirements: 4.1-4.8
+      const result = await authService.loginWithGoogle(googleProfile, deviceInfo);
+
+      // Set HTTP-only cookies
+      res.cookie('access_token', result.accessToken, accessTokenCookieOptions);
+      res.cookie('refresh_token', result.refreshToken, refreshTokenCookieOptions);
+
+      // Redirect to dashboard
+      // Requirements: 4.10
+      const dashboardUrl = env.FRONTEND_DASHBOARD_URL || env.FRONTEND_URL;
+      res.redirect(dashboardUrl);
+    } catch (error) {
+      // Redirect to login with error
+      // Requirements: 4.10
+      const loginUrl = env.FRONTEND_LOGIN_URL || env.FRONTEND_URL;
+      res.redirect(`${loginUrl}?error=auth_failed`);
     }
   }
 }

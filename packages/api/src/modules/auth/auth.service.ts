@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import { Plan, UserRole } from '@prisma/client';
 import { prisma } from '../../config/prisma.js';
 import { tokenService } from '../../services/token.service.js';
 import { sessionService } from '../../services/session.service.js';
@@ -66,7 +67,8 @@ export class AuthService {
           data: {
             name: `${name}'s Organization`,
             slug: orgSlug,
-            plan: 'FREE',
+            plan: Plan.FREE,
+            graphNodeId: '', // Will be set by graph service
           },
         });
 
@@ -76,7 +78,7 @@ export class AuthService {
             email,
             name,
             passwordHash,
-            role: 'SUPER_ADMIN',
+            role: UserRole.SUPER_ADMIN,
             emailVerified: false,
           },
           include: {
@@ -119,7 +121,7 @@ export class AuthService {
           email,
           name,
           passwordHash,
-          role: 'MEMBER',
+          role: UserRole.MEMBER,
           emailVerified: false,
         },
         include: {
@@ -524,6 +526,128 @@ export class AuthService {
     // Revoke all active sessions for security
     // Requirements: 8.10
     await sessionService.revokeAllUserSessions(matchedUser.id);
+  }
+
+  /**
+   * Authenticates or creates user via Google OAuth
+   * 
+   * @param profile - Google profile data
+   * @param deviceInfo - Device information from request
+   * @returns Authentication result with user, org, and tokens
+   * 
+   * Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8
+   */
+  async loginWithGoogle(
+    profile: {
+      googleId: string;
+      email: string;
+      name: string;
+      avatarUrl?: string;
+    },
+    deviceInfo: DeviceInfo
+  ): Promise<AuthResult> {
+    const { googleId, email, name, avatarUrl } = profile;
+
+    // Find user by googleId or email
+    // Requirements: 4.2, 4.3
+    let user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { googleId },
+          { email },
+        ],
+      },
+      include: {
+        organization: true,
+      },
+    });
+
+    let organization;
+
+    if (user) {
+      // Link Google account if user found by email but no googleId
+      // Requirements: 4.4
+      if (!user.googleId && user.email === email) {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            googleId,
+            avatarUrl: avatarUrl || user.avatarUrl,
+            emailVerified: true, // Google users are pre-verified
+          },
+          include: {
+            organization: true,
+          },
+        });
+      }
+      organization = user.organization;
+    } else {
+      // Create new user and organization
+      // Requirements: 4.5, 4.6
+      const orgSlug = this.generateSlug(name);
+      
+      const result = await prisma.$transaction(async (tx) => {
+        const newOrg = await tx.organization.create({
+          data: {
+            name: `${name}'s Organization`,
+            slug: orgSlug,
+            plan: Plan.FREE,
+            graphNodeId: '', // Will be set by graph service
+          },
+        });
+
+        const newUser = await tx.user.create({
+          data: {
+            orgId: newOrg.id,
+            email,
+            name,
+            googleId,
+            avatarUrl,
+            emailVerified: true, // Google users are pre-verified
+            role: UserRole.SUPER_ADMIN, // First user in new org
+          },
+          include: {
+            organization: true,
+          },
+        });
+
+        return { user: newUser, org: newOrg };
+      });
+
+      user = result.user;
+      organization = result.org;
+    }
+
+    // Generate access and refresh tokens
+    // Requirements: 4.7
+    const accessToken = tokenService.generateAccessToken({
+      sub: user.id,
+      orgId: user.orgId,
+      role: user.role,
+    });
+
+    const refreshToken = tokenService.generateRefreshToken();
+    const refreshTokenHash = await tokenService.hashToken(refreshToken);
+
+    // Calculate refresh token expiry (30 days)
+    const refreshExpiry = new Date();
+    refreshExpiry.setDate(refreshExpiry.getDate() + 30);
+
+    // Create session record
+    // Requirements: 4.8
+    await sessionService.createSession({
+      userId: user.id,
+      refreshTokenHash,
+      deviceInfo,
+      expiresAt: refreshExpiry,
+    });
+
+    return {
+      user: convertUserResponse(user),
+      org: convertOrgResponse(organization),
+      accessToken,
+      refreshToken,
+    };
   }
 }
 
