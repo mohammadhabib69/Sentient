@@ -11,6 +11,10 @@ import type { RegisterInput, LoginInput, ForgotPasswordInput, ResetPasswordInput
 import type { AuthResult, UserWithOrg, toUserResponse, toOrganizationResponse } from './auth.types.js';
 import { toUserResponse as convertUserResponse, toOrganizationResponse as convertOrgResponse } from './auth.types.js';
 
+function authLog(event: string, data: Record<string, unknown>): void {
+  console.log(JSON.stringify({ event, timestamp: new Date().toISOString(), ...data }));
+}
+
 /**
  * Auth Service
  * 
@@ -154,14 +158,6 @@ export class AuthService {
       // Don't throw - email failures should not block registration
     });
 
-    // Generate access and refresh tokens
-    // Requirements: 1.9, 5.1, 5.4
-    const accessToken = tokenService.generateAccessToken({
-      sub: user.id,
-      orgId: user.orgId,
-      role: user.role,
-    });
-
     const refreshToken = tokenService.generateRefreshToken();
     const refreshTokenHash = await tokenService.hashToken(refreshToken);
 
@@ -171,12 +167,23 @@ export class AuthService {
 
     // Create session record
     // Requirements: 1.10, 5.9
-    await sessionService.createSession({
+    const session = await sessionService.createSession({
       userId: user.id,
       refreshTokenHash,
       deviceInfo,
       expiresAt: refreshExpiry,
     });
+
+    // Generate access and refresh tokens
+    // Requirements: 1.9, 5.1, 5.4
+    const accessToken = tokenService.generateAccessToken({
+      sub: user.id,
+      orgId: user.orgId,
+      role: user.role,
+      sid: session.id,
+    });
+
+    authLog('user_registered', { userId: user.id, orgId: user.orgId });
 
     return {
       user: convertUserResponse(user),
@@ -263,6 +270,7 @@ export class AuthService {
         const lockUntil = new Date();
         lockUntil.setMinutes(lockUntil.getMinutes() + 15); // Lock for 15 minutes
         updateData.lockedUntil = lockUntil;
+        authLog('account_locked', { userId: user.id, ip: deviceInfo.ip });
       }
 
       await prisma.user.update({
@@ -270,6 +278,7 @@ export class AuthService {
         data: updateData,
       });
 
+      authLog('login_failed', { emailHash: crypto.createHash('sha256').update(email).digest('hex'), ip: deviceInfo.ip });
       throw invalidCredentialsError;
     }
 
@@ -285,14 +294,6 @@ export class AuthService {
       });
     }
 
-    // Generate access and refresh tokens
-    // Requirements: 3.7
-    const accessToken = tokenService.generateAccessToken({
-      sub: user.id,
-      orgId: user.orgId,
-      role: user.role,
-    });
-
     const refreshToken = tokenService.generateRefreshToken();
     const refreshTokenHash = await tokenService.hashToken(refreshToken);
 
@@ -302,12 +303,23 @@ export class AuthService {
 
     // Create session record with device info
     // Requirements: 3.8
-    await sessionService.createSession({
+    const session = await sessionService.createSession({
       userId: user.id,
       refreshTokenHash,
       deviceInfo,
       expiresAt: refreshExpiry,
     });
+
+    // Generate access and refresh tokens
+    // Requirements: 3.7
+    const accessToken = tokenService.generateAccessToken({
+      sub: user.id,
+      orgId: user.orgId,
+      role: user.role,
+      sid: session.id,
+    });
+
+    authLog('login_success', { userId: user.id, ip: deviceInfo.ip, browser: deviceInfo.browser, os: deviceInfo.os });
 
     return {
       user: convertUserResponse(user),
@@ -386,6 +398,8 @@ export class AuthService {
         emailVerifyExpiry: null,
       },
     });
+
+    authLog('email_verified', { userId: matchedUser.id });
 
     // Send welcome email (non-blocking)
     emailService.sendWelcomeEmail(matchedUser.email, matchedUser.name).catch((error) => {
@@ -474,6 +488,7 @@ export class AuthService {
     // Send reset email
     // Requirements: 8.6
     await emailService.sendPasswordResetEmail(email, resetToken, user.name);
+    authLog('password_reset_requested', { userId: user.id });
   }
 
   /**
@@ -526,6 +541,7 @@ export class AuthService {
     // Revoke all active sessions for security
     // Requirements: 8.10
     await sessionService.revokeAllUserSessions(matchedUser.id);
+    authLog('password_reset_completed', { userId: matchedUser.id });
   }
 
   /**
@@ -618,14 +634,6 @@ export class AuthService {
       organization = result.org;
     }
 
-    // Generate access and refresh tokens
-    // Requirements: 4.7
-    const accessToken = tokenService.generateAccessToken({
-      sub: user.id,
-      orgId: user.orgId,
-      role: user.role,
-    });
-
     const refreshToken = tokenService.generateRefreshToken();
     const refreshTokenHash = await tokenService.hashToken(refreshToken);
 
@@ -635,11 +643,20 @@ export class AuthService {
 
     // Create session record
     // Requirements: 4.8
-    await sessionService.createSession({
+    const session = await sessionService.createSession({
       userId: user.id,
       refreshTokenHash,
       deviceInfo,
       expiresAt: refreshExpiry,
+    });
+
+    // Generate access and refresh tokens
+    // Requirements: 4.7
+    const accessToken = tokenService.generateAccessToken({
+      sub: user.id,
+      orgId: user.orgId,
+      role: user.role,
+      sid: session.id,
     });
 
     return {

@@ -6,7 +6,8 @@ const envSchema = z.object({
   NEO4J_URI: z.string(),
   NEO4J_USER: z.string(),
   NEO4J_PASSWORD: z.string(),
-  JWT_SECRET: z.string().min(32),
+  JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
+  COOKIE_SECRET: z.string().min(32, "COOKIE_SECRET must be at least 32 characters"),
   JWT_EXPIRES_IN: z.string().default("15m"),
   REFRESH_TOKEN_EXPIRES_IN: z.string().default("30d"),
   PORT: z.coerce.number().default(3001),
@@ -21,14 +22,16 @@ const envSchema = z.object({
   S3_SECRET_KEY: z.string().optional(),
   S3_REGION: z.string().optional(),
   // Google OAuth
-  GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional(),
-  GOOGLE_CALLBACK_URL: z.string().url().optional(),
+  GOOGLE_CLIENT_ID: z.string().min(1, "GOOGLE_CLIENT_ID is required"),
+  GOOGLE_CLIENT_SECRET: z.string().min(1, "GOOGLE_CLIENT_SECRET is required"),
+  GOOGLE_CALLBACK_URL: z.string().url("GOOGLE_CALLBACK_URL must be a valid URL"),
   // Email configuration
-  EMAIL_FROM: z.string().email().optional(),
-  // Frontend URLs for OAuth redirects
-  FRONTEND_DASHBOARD_URL: z.string().url().optional(),
-  FRONTEND_LOGIN_URL: z.string().url().optional(),
+  EMAIL_FROM: z.string().email("EMAIL_FROM must be a valid email address"),
+  // Frontend URLs for OAuth redirects and email links
+  FRONTEND_DASHBOARD_URL: z.string().url("FRONTEND_DASHBOARD_URL must be a valid URL"),
+  FRONTEND_LOGIN_URL: z.string().url("FRONTEND_LOGIN_URL must be a valid URL"),
+  FRONTEND_VERIFY_EMAIL_URL: z.string().url("FRONTEND_VERIFY_EMAIL_URL must be a valid URL"),
+  FRONTEND_RESET_PASSWORD_URL: z.string().url("FRONTEND_RESET_PASSWORD_URL must be a valid URL"),
 });
 
 export const env = envSchema.parse(process.env);

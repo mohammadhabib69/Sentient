@@ -12,7 +12,7 @@ import {
   revokeSessionSchema,
 } from './auth.schema.js';
 import { toSessionResponse } from './auth.types.js';
-import { ValidationError, UnauthorizedError, AppError } from '../../utils/errors.js';
+import { ValidationError, UnauthorizedError, AppError, ErrorCode } from '../../utils/errors.js';
 import { env } from '../../config/env.js';
 
 /**
@@ -204,6 +204,7 @@ export class AuthController {
           // Revoke session
           // Requirements: 7.2, 7.3
           await sessionService.revokeSession(session.id);
+          console.log(JSON.stringify({ event: 'logout', userId: session.userId, timestamp: new Date().toISOString() }));
         }
       }
 
@@ -241,6 +242,7 @@ export class AuthController {
       // Revoke all user sessions
       // Requirements: 7.6, 7.7
       const count = await sessionService.revokeAllUserSessions(userId);
+      console.log(JSON.stringify({ event: 'logout_all', userId, sessionsRevoked: count, timestamp: new Date().toISOString() }));
 
       // Clear cookies
       // Requirements: 7.8
@@ -485,7 +487,7 @@ export class AuthController {
       // Validate session ID
       const validationResult = revokeSessionSchema.safeParse(req.params);
       if (!validationResult.success) {
-        throw new AppError('Invalid session ID', 400, 'INVALID_SESSION_ID');
+        throw new AppError('Invalid session ID', 400, ErrorCode.VALIDATION_ERROR);
       }
 
       const { sessionId } = validationResult.data;

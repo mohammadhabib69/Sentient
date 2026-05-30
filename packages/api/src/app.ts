@@ -17,6 +17,10 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["Set-Cookie"],
+    maxAge: 86400, // 24 hours - cache preflight requests
   }),
 );
 app.use(helmet());
@@ -28,4 +32,9 @@ app.use(globalRateLimiter);
 // Requirements: 17.2
 app.use(passport.initialize());
 
-// Routes and error handlers are registered in index.ts
+// Register v1 routes
+import { v1Router } from "./routes/v1/index.js";
+app.use("/v1", v1Router);
+
+// Register global error handler
+app.use(errorHandler);

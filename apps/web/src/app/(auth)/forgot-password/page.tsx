@@ -8,6 +8,7 @@ import * as z from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Mail } from "lucide-react";
 
+import { useForgotPassword } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
 const forgotPasswordSchema = z.object({
@@ -20,18 +21,26 @@ export default function ForgotPasswordPage() {
   const [submittedEmail, setSubmittedEmail] = React.useState("");
   const [isResending, setIsResending] = React.useState(false);
   const [resendSuccess, setResendSuccess] = React.useState(false);
+  const forgotPasswordMutation = useForgotPassword();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ForgotPasswordValues>({
     resolver: zodResolver(forgotPasswordSchema),
   });
 
+  const isSubmitting = forgotPasswordMutation.isPending;
+
   const onSubmit = async (data: ForgotPasswordValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setSubmittedEmail(data.email);
+    forgotPasswordMutation.mutate(data.email, {
+      onSuccess: () => setSubmittedEmail(data.email),
+      // If error occurs, we still don't want to expose if the email exists,
+      // but if the backend returns a generic error we might show it.
+      // Usually, even for errors, it's safer to pretend success.
+      onError: () => setSubmittedEmail(data.email),
+    });
   };
 
   const handleResend = async () => {

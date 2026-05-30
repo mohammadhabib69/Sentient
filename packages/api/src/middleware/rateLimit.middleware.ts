@@ -7,6 +7,7 @@ export const globalRateLimiter = rateLimit({
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === "test",
   message: {
     success: false,
     error: {
@@ -26,6 +27,7 @@ export const registerRateLimit = rateLimit({
   max: 5,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === "test",
   store: new RedisStore({
     // @ts-expect-error - RedisStore types are incompatible with ioredis
     sendCommand: (...args: unknown[]) => redisClient.call(...(args as [string, ...string[]])),
@@ -50,6 +52,7 @@ export const loginRateLimit = rateLimit({
   max: 10,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === "test",
   store: new RedisStore({
     // @ts-expect-error - RedisStore types are incompatible with ioredis
     sendCommand: (...args: unknown[]) => redisClient.call(...(args as [string, ...string[]])),
@@ -74,6 +77,7 @@ export const forgotPasswordRateLimit = rateLimit({
   max: 3,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === "test",
   store: new RedisStore({
     // @ts-expect-error - RedisStore types are incompatible with ioredis
     sendCommand: (...args: unknown[]) => redisClient.call(...(args as [string, ...string[]])),
@@ -98,6 +102,7 @@ export const verificationRateLimit = rateLimit({
   max: 3,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === "test",
   store: new RedisStore({
     // @ts-expect-error - RedisStore types are incompatible with ioredis
     sendCommand: (...args: unknown[]) => redisClient.call(...(args as [string, ...string[]])),

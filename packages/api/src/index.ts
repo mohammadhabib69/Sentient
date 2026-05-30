@@ -19,7 +19,9 @@ import {
   graphSyncQueue,
   notificationQueue,
   billingQueue,
+  sessionCleanupQueue,
 } from "./jobs/queues.js";
+import "./jobs/sessionCleanup.worker.js";
 
 let server: ReturnType<typeof app.listen> | null = null;
 
@@ -58,6 +60,7 @@ async function startServer(): Promise<void> {
       new BullMQAdapter(graphSyncQueue),
       new BullMQAdapter(notificationQueue),
       new BullMQAdapter(billingQueue),
+      new BullMQAdapter(sessionCleanupQueue),
     ],
     serverAdapter: serverAdapter,
   });
@@ -67,11 +70,14 @@ async function startServer(): Promise<void> {
   // Send a test job to email-queue for verification
   await emailQueue.add("test-job", { to: "test@example.com", subject: "Hello BullMQ" });
 
-  // 7) Register all module routes under /v1
-  expressApp.use("/v1", v1Router);
+  // Schedule daily session cleanup job
+  await sessionCleanupQueue.add(
+    "cleanup",
+    {},
+    { repeat: { pattern: "0 3 * * *" }, jobId: "session-cleanup-daily" },
+  );
 
-  // 8) Register error handler (must be after routes)
-  expressApp.use(errorHandler);
+
 
   // 9) Start listening on PORT
   await new Promise<void>((resolve) => {

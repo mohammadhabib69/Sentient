@@ -1,19 +1,12 @@
 import { Prisma } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
-import { AppError } from "../utils/errors.js";
-
-interface ErrorResponseBody {
-  success: false;
-  error: {
-    message: string;
-    code: string;
-    statusCode: number;
-  };
-}
+import type { ErrorResponse } from "../types/shared.types.js";
+import { AppError, ErrorCode } from "../utils/errors.js";
+import { authLogger } from "../utils/auth-logger.js";
 
 export function errorHandler(
   err: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   _next: NextFunction,
 ): void {
@@ -21,8 +14,15 @@ export function errorHandler(
     return;
   }
 
-  // Always log full server-side error details.
-  console.error(err);
+  // Extract context information
+  const userId = (req.user as { id?: string } | undefined)?.id;
+  const ip = req.ip || req.socket.remoteAddress || "unknown";
+  const method = req.method;
+  const path = req.path;
+
+  // Log error with structured logging
+  // Requirements: Error handling
+  authLogger.authError(err, ip, userId, method, path);
 
   let normalizedError: AppError;
 
@@ -31,15 +31,19 @@ export function errorHandler(
   } else if (err instanceof Prisma.PrismaClientKnownRequestError) {
     normalizedError = mapPrismaError(err);
   } else {
-    normalizedError = new AppError("Internal server error", 500, "INTERNAL_ERROR");
+    normalizedError = new AppError(
+      "Internal server error",
+      500,
+      ErrorCode.INTERNAL_ERROR,
+    );
   }
 
-  const body: ErrorResponseBody = {
+  const body: ErrorResponse = {
     success: false,
     error: {
+      code: normalizedError.code,
       message: normalizedError.message,
-      code: normalizedError.code ?? "INTERNAL_ERROR",
-      statusCode: normalizedError.statusCode,
+      ...(normalizedError.details && { details: normalizedError.details }),
     },
   };
 
@@ -49,12 +53,24 @@ export function errorHandler(
 function mapPrismaError(error: Prisma.PrismaClientKnownRequestError): AppError {
   switch (error.code) {
     case "P2002":
-      return new AppError("Resource already exists", 409, "CONFLICT");
+      return new AppError(
+        "Resource already exists",
+        409,
+        "CONFLICT" as ErrorCode,
+      );
     case "P2025":
-      return new AppError("Resource not found", 404, "NOT_FOUND");
+      return new AppError("Resource not found", 404, "NOT_FOUND" as ErrorCode);
     case "P2003":
-      return new AppError("Operation violates data constraints", 409, "CONFLICT");
+      return new AppError(
+        "Operation violates data constraints",
+        409,
+        "CONFLICT" as ErrorCode,
+      );
     default:
-      return new AppError("Database operation failed", 500, "DATABASE_ERROR");
+      return new AppError(
+        "Database operation failed",
+        500,
+        "DATABASE_ERROR" as ErrorCode,
+      );
   }
 }

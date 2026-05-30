@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { env } from '../config/env.js';
 import { prisma } from '../config/prisma.js';
 import type { UserRole } from '@prisma/client';
+import { AppError, ErrorCode } from '../utils/errors.js';
 
 /**
  * Token payload structure for JWT access tokens
@@ -15,6 +16,7 @@ export interface TokenPayload {
   type: 'access';     // token type
   iat: number;        // issued at
   exp: number;        // expires at
+  sid?: string;       // session ID (optional)
 }
 
 /**
@@ -115,6 +117,10 @@ export class TokenService {
    * Requirements: 5.5, 16.1
    */
   async hashToken(token: string): Promise<string> {
+    if (token.length === 128) {
+      const sha256 = crypto.createHash('sha256').update(token).digest('hex');
+      return `sha256:${sha256}`;
+    }
     return bcrypt.hash(token, this.bcryptRounds);
   }
 
@@ -128,6 +134,10 @@ export class TokenService {
    * Requirements: 5.5, 16.10
    */
   async compareToken(token: string, hash: string): Promise<boolean> {
+    if (hash.startsWith('sha256:')) {
+      const sha256 = crypto.createHash('sha256').update(token).digest('hex');
+      return `sha256:${sha256}` === hash;
+    }
     return bcrypt.compare(token, hash);
   }
 
@@ -162,24 +172,27 @@ export class TokenService {
 
     // Validate session exists
     if (!session) {
-      throw new Error('INVALID_TOKEN');
+      throw new AppError('INVALID_TOKEN', 401, ErrorCode.INVALID_TOKEN);
     }
 
     // Validate session is not revoked
     if (session.revoked) {
-      throw new Error('INVALID_TOKEN');
+      throw new AppError('INVALID_TOKEN', 401, ErrorCode.INVALID_TOKEN);
     }
 
     // Validate session is not expired
     if (session.expiresAt < new Date()) {
-      throw new Error('TOKEN_EXPIRED');
+      throw new AppError('TOKEN_EXPIRED', 401, ErrorCode.TOKEN_EXPIRED);
     }
+
+    const newSessionId = crypto.randomUUID();
 
     // Generate new token pair
     const newAccessToken = this.generateAccessToken({
       sub: session.user.id,
       orgId: session.user.orgId,
       role: session.user.role,
+      sid: newSessionId,
     });
 
     const newRefreshToken = this.generateRefreshToken();
@@ -199,6 +212,7 @@ export class TokenService {
       // Create new session
       prisma.session.create({
         data: {
+          id: newSessionId,
           userId: session.userId,
           refreshToken: hashedNewRefreshToken,
           deviceInfo: session.deviceInfo as any,
@@ -206,6 +220,8 @@ export class TokenService {
         },
       }),
     ]);
+
+    console.log(JSON.stringify({ event: 'token_refreshed', userId: session.userId, timestamp: new Date().toISOString() }));
 
     return {
       accessToken: newAccessToken,

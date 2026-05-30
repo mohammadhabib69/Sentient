@@ -8,6 +8,8 @@ import * as z from "zod";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 
+import { useRegister } from "@/hooks/useAuth";
+import { authService } from "@/services/auth.service";
 import { Button } from "@/components/ui/button";
 
 const registerSchema = z.object({
@@ -24,19 +26,32 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [passwordValue, setPasswordValue] = React.useState("");
+  const registerMutation = useRegister();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    window.location.href = "/onboarding/org";
+    // We split full name into first/last for the backend
+    const nameParts = data.name.trim().split(" ");
+    const firstName = nameParts[0] || "User";
+    const lastName = nameParts.slice(1).join(" ") || "";
+    
+    registerMutation.mutate({
+      email: data.email,
+      password: data.password,
+      firstName,
+      lastName,
+      organizationName: `${firstName}'s Organization`,
+    });
   };
+
+  const isSubmitting = registerMutation.isPending;
 
   // Calculate password strength (0 to 4 segments)
   const calculateStrength = (pass: string): number => {
@@ -91,7 +106,7 @@ export default function RegisterPage() {
       {/* 4. Google OAuth Button */}
       <button
         type="button"
-        onClick={() => (window.location.href = "/onboarding/org")}
+        onClick={() => authService.googleLogin()}
         className="flex h-[44px] w-full items-center justify-center gap-2 rounded-[10px] border border-[var(--border)] dark:border-[rgba(116,149,155,0.18)] bg-card text-foreground hover:bg-[var(--surface-3)] text-sm font-medium transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
       >
         <svg className="size-4" viewBox="0 0 24 24">
@@ -253,6 +268,11 @@ export default function RegisterPage() {
         </div>
 
         {/* Submit Button */}
+        {registerMutation.isError && (
+          <p className="text-xs text-[var(--red)] font-sans mt-1">
+            {registerMutation.error?.message || "Registration failed. Please try again."}
+          </p>
+        )}
         <Button
           type="submit"
           className="w-full h-[44px] rounded-lg bg-forest-green hover:bg-forest-green/90 text-white font-medium text-sm transition-all shadow-md mt-4"

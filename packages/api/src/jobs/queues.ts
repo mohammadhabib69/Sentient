@@ -45,3 +45,8 @@ export const billingQueue = new Queue("billing-queue", {
   connection: bullRedisClient,
   defaultJobOptions,
 });
+
+export const sessionCleanupQueue = new Queue("session-cleanup-queue", {
+  connection: bullRedisClient,
+  defaultJobOptions,
+});

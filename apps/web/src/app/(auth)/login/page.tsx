@@ -8,6 +8,8 @@ import * as z from "zod";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 
+import { useLogin } from "@/hooks/useAuth";
+import { authService } from "@/services/auth.service";
 import { Button } from "@/components/ui/button";
 
 const loginSchema = z.object({
@@ -19,20 +21,21 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
+  const loginMutation = useLogin();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    // Mock login delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    window.location.href = "/dashboard";
+    loginMutation.mutate(data);
   };
+  
+  const isSubmitting = loginMutation.isPending;
 
   return (
     <motion.div
@@ -64,7 +67,7 @@ export default function LoginPage() {
       {/* 5. Google OAuth Button */}
       <button
         type="button"
-        onClick={() => (window.location.href = "/dashboard")}
+        onClick={() => authService.googleLogin()}
         className="flex h-[44px] w-full items-center justify-center gap-2 rounded-[10px] border border-[var(--border)] dark:border-[rgba(116,149,155,0.18)] bg-card text-foreground hover:bg-[var(--surface-3)] text-sm font-medium transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
       >
         <svg className="size-4" viewBox="0 0 24 24">
@@ -163,6 +166,11 @@ export default function LoginPage() {
         </div>
 
         {/* 10. Sign In Button */}
+        {loginMutation.isError && (
+          <p className="text-xs text-[var(--red)] font-sans mt-1">
+            {loginMutation.error?.message || "Invalid credentials. Please try again."}
+          </p>
+        )}
         <Button
           type="submit"
           className="w-full h-[44px] rounded-lg bg-forest-green hover:bg-forest-green/90 text-white font-medium text-sm transition-all shadow-md mt-2"

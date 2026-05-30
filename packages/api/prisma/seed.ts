@@ -4,9 +4,10 @@ import {
   Plan,
   PrismaClient,
   ProjectStatus,
-  TaskPriority,
+  Priority,
   TaskStatus,
   UserRole,
+  SubscriptionStatus,
 } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
@@ -33,7 +34,8 @@ async function main(): Promise<void> {
     data: {
       name: "Acme Corp",
       slug: "acme-corp",
-      plan: Plan.pro,
+      plan: Plan.PRO,
+      graphNodeId: "org-acme-corp",
       settings: {
         timezone: "Asia/Dhaka",
         locale: "en-US",
@@ -47,7 +49,7 @@ async function main(): Promise<void> {
         orgId: org.id,
         email: "mohammad.habib@acme.com",
         name: "Mohammad Habib",
-        role: UserRole.super_admin,
+        role: UserRole.SUPER_ADMIN,
         emailVerified: true,
       },
     }),
@@ -56,7 +58,7 @@ async function main(): Promise<void> {
         orgId: org.id,
         email: "admin@acme.com",
         name: "Ava Admin",
-        role: UserRole.org_admin,
+        role: UserRole.ORG_ADMIN,
         emailVerified: true,
       },
     }),
@@ -65,7 +67,7 @@ async function main(): Promise<void> {
         orgId: org.id,
         email: "manager@acme.com",
         name: "Mason Manager",
-        role: UserRole.manager,
+        role: UserRole.MANAGER,
         emailVerified: true,
       },
     }),
@@ -74,7 +76,7 @@ async function main(): Promise<void> {
         orgId: org.id,
         email: "member.one@acme.com",
         name: "Mila Member",
-        role: UserRole.member,
+        role: UserRole.MEMBER,
         emailVerified: true,
       },
     }),
@@ -83,7 +85,7 @@ async function main(): Promise<void> {
         orgId: org.id,
         email: "member.two@acme.com",
         name: "Noah Member",
-        role: UserRole.member,
+        role: UserRole.MEMBER,
         emailVerified: true,
       },
     }),
@@ -99,6 +101,7 @@ async function main(): Promise<void> {
       orgId: org.id,
       name: "Engineering",
       description: "Product engineering workspace",
+      graphNodeId: "ws-engineering",
       createdBy: superAdmin.id,
     },
   });
@@ -108,6 +111,7 @@ async function main(): Promise<void> {
       orgId: org.id,
       name: "Marketing",
       description: "Growth and content workspace",
+      graphNodeId: "ws-marketing",
       createdBy: superAdmin.id,
     },
   });
@@ -118,9 +122,10 @@ async function main(): Promise<void> {
         orgId: org.id,
         workspaceId: engineering.id,
         name: "Platform Revamp",
-        description: "Modernize core platform services",
-        status: ProjectStatus.active,
-        priority: TaskPriority.high,
+        metadata: { description: "Modernize core platform services" },
+        status: ProjectStatus.ACTIVE,
+        priority: Priority.HIGH,
+        graphNodeId: "proj-platform-revamp",
         createdBy: superAdmin.id,
       },
     }),
@@ -129,9 +134,10 @@ async function main(): Promise<void> {
         orgId: org.id,
         workspaceId: engineering.id,
         name: "Mobile Launch",
-        description: "iOS and Android launch readiness",
-        status: ProjectStatus.paused,
-        priority: TaskPriority.medium,
+        metadata: { description: "iOS and Android launch readiness" },
+        status: ProjectStatus.PAUSED,
+        priority: Priority.MEDIUM,
+        graphNodeId: "proj-mobile-launch",
         createdBy: manager.id,
       },
     }),
@@ -140,9 +146,10 @@ async function main(): Promise<void> {
         orgId: org.id,
         workspaceId: marketing.id,
         name: "Brand Refresh",
-        description: "Website and campaign rebrand",
-        status: ProjectStatus.completed,
-        priority: TaskPriority.low,
+        metadata: { description: "Website and campaign rebrand" },
+        status: ProjectStatus.COMPLETED,
+        priority: Priority.LOW,
+        graphNodeId: "proj-brand-refresh",
         createdBy: superAdmin.id,
       },
     }),
@@ -151,26 +158,27 @@ async function main(): Promise<void> {
         orgId: org.id,
         workspaceId: marketing.id,
         name: "Channel Expansion",
-        description: "Pilot new acquisition channels",
-        status: ProjectStatus.archived,
-        priority: TaskPriority.critical,
+        metadata: { description: "Pilot new acquisition channels" },
+        status: ProjectStatus.ARCHIVED,
+        priority: Priority.CRITICAL,
+        graphNodeId: "proj-channel-expansion",
         createdBy: manager.id,
       },
     }),
   ]);
 
   const taskStatuses: TaskStatus[] = [
-    TaskStatus.todo,
-    TaskStatus.in_progress,
-    TaskStatus.review,
-    TaskStatus.done,
-    TaskStatus.blocked,
+    TaskStatus.TODO,
+    TaskStatus.IN_PROGRESS,
+    TaskStatus.REVIEW,
+    TaskStatus.DONE,
+    TaskStatus.BLOCKED,
   ];
-  const taskPriorities: TaskPriority[] = [
-    TaskPriority.low,
-    TaskPriority.medium,
-    TaskPriority.high,
-    TaskPriority.critical,
+  const taskPriorities: Priority[] = [
+    Priority.LOW,
+    Priority.MEDIUM,
+    Priority.HIGH,
+    Priority.CRITICAL,
   ];
 
   const taskData = taskStatuses.flatMap((status, statusIdx) =>
@@ -196,6 +204,7 @@ async function main(): Promise<void> {
         assigneeId: assignee,
         dueDate: new Date(Date.now() + (index + 1) * 24 * 60 * 60 * 1000),
         estimatedHours: (index % 8) + 1,
+        graphNodeId: `task-${index + 1}`,
         createdBy: superAdmin.id,
       };
     }),
@@ -208,7 +217,7 @@ async function main(): Promise<void> {
       data: {
         orgId: org.id,
         name: "Aria",
-        type: AgentType.operations,
+        type: AgentType.OPERATIONS,
         config: { specialty: "operations" },
         memoryNs: "acme/operations",
         isActive: true,
@@ -219,7 +228,7 @@ async function main(): Promise<void> {
       data: {
         orgId: org.id,
         name: "Nova",
-        type: AgentType.finance,
+        type: AgentType.FINANCE,
         config: { specialty: "finance" },
         memoryNs: "acme/finance",
         isActive: true,
@@ -230,7 +239,7 @@ async function main(): Promise<void> {
       data: {
         orgId: org.id,
         name: "Echo",
-        type: AgentType.customer,
+        type: AgentType.CUSTOMER,
         config: { specialty: "customer" },
         memoryNs: "acme/customer",
         isActive: true,
@@ -241,7 +250,7 @@ async function main(): Promise<void> {
       data: {
         orgId: org.id,
         name: "Flux",
-        type: AgentType.dev,
+        type: AgentType.DEV,
         config: { specialty: "dev" },
         memoryNs: "acme/dev",
         isActive: true,
@@ -253,14 +262,16 @@ async function main(): Promise<void> {
   await prisma.subscription.create({
     data: {
       orgId: org.id,
-      plan: Plan.pro,
-      status: "active",
+      plan: Plan.PRO,
+      status: SubscriptionStatus.ACTIVE,
       actionsLimit: BigInt(10000),
       actionsUsed: BigInt(250),
+      currentPeriodStart: new Date(),
+      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     },
   });
 
-  const actorTypes: ActorType[] = [ActorType.user, ActorType.agent, ActorType.system];
+  const actorTypes: ActorType[] = [ActorType.USER, ActorType.AGENT, ActorType.SYSTEM];
   const eventTypes = [
     "org.created",
     "user.invited",
