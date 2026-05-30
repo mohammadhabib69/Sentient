@@ -84,6 +84,8 @@ const makeOrg = (overrides = {}) => ({
   slug: 'test-org-abc123',
   plan: 'FREE' as Plan,
   graphNodeId: '',
+  stripeCustId: null,
+  settings: {},
   createdAt: new Date(),
   updatedAt: new Date(),
   ...overrides,

@@ -11,9 +11,7 @@ export interface ApiResponse<T> {
 export interface RegisterInput {
   email: string;
   password?: string;
-  firstName: string;
-  lastName: string;
-  organizationName: string;
+  name: string;
 }
 
 export interface LoginInput {

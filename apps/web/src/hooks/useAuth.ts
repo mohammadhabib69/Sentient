@@ -57,7 +57,11 @@ export function useRegister() {
       if (response.success && response.data) {
         setAuth(response.data.user, response.data.org);
         queryClient.setQueryData(["auth", "user"], response.data);
-        router.push("/dashboard"); // or maybe /verify-email depending on flow
+        if (!response.data.user.emailVerified) {
+          router.push("/verify-email");
+        } else {
+          router.push("/dashboard");
+        }
       }
     },
   });

@@ -23,7 +23,7 @@ export const globalRateLimiter = rateLimit({
  * Requirements: 12.1 - 5 requests per hour per IP
  */
 export const registerRateLimit = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
+  windowMs: 60 * 1000, // 1 minute (temporarily lowered for testing)
   max: 5,
   standardHeaders: true,
   legacyHeaders: false,

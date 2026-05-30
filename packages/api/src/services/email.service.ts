@@ -113,17 +113,15 @@ export class EmailService {
     text: string;
   }): Promise<void> {
     try {
-      // Development mode fallback: log to console
-      // Log to console if no Resend API key OR in development/test environment
-      if (!this.resend || this.isDevelopment || env.NODE_ENV === 'test') {
-        console.log('\n=== EMAIL (Development Mode) ===');
+      // Only log to console if no Resend API key is configured
+      // If a key is present, send real emails even in development
+      if (!this.resend) {
+        console.log('\n=== EMAIL (Development Mode - No API Key) ===');
         console.log(`From: ${this.fromAddress}`);
         console.log(`To: ${options.to}`);
         console.log(`Subject: ${options.subject}`);
         console.log('\n--- Text Content ---');
         console.log(options.text);
-        console.log('\n--- HTML Content ---');
-        console.log(options.html);
         console.log('================================\n');
         return;
       }

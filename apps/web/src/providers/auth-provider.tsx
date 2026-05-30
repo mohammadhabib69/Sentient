@@ -5,6 +5,16 @@ import * as React from "react";
 // import { useRouter, usePathname } from "next/navigation"
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  // TODO: Implement actual Zustand auth check and redirects based on pathname
+  // Fix for blank screen when returning from OAuth via the browser "Back" button (BFCache)
+  React.useEffect(() => {
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, []);
+
   return <>{children}</>;
 }

@@ -8,6 +8,16 @@ import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/ui.store";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useLogout, useCurrentUser } from "@/hooks/useAuth";
 
 // ─── Breadcrumb Component ─────────────────────────────────────
 const PAGE_CRUMBS: Record<string, { parent?: string; label: string }> = {
@@ -105,6 +115,10 @@ function SearchPill() {
 
 // ─── Main Topbar Component ────────────────────────────────────
 export function Topbar() {
+  const { data: userData } = useCurrentUser();
+  const logoutMutation = useLogout();
+  const user = userData?.user;
+
   // We'll mock a notification count here, normally comes from a store
   const unreadNotifications = 3;
 
@@ -150,14 +164,39 @@ export function Topbar() {
 
         <ThemeToggle />
 
-        <button className="ml-1 flex items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background">
-          <Avatar className="size-8">
-            <AvatarImage src="/avatars/user.png" alt="User Avatar" />
-            <AvatarFallback className="bg-[hsl(var(--primary))]/15 text-[hsl(var(--primary))] text-xs font-semibold">
-              MH
-            </AvatarFallback>
-          </Avatar>
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="ml-1 flex items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background">
+              <Avatar className="size-8">
+                <AvatarImage src="/avatars/user.png" alt="User Avatar" />
+                <AvatarFallback className="bg-[hsl(var(--primary))]/15 text-[hsl(var(--primary))] text-xs font-semibold">
+                  {user?.name ? user.name.substring(0, 2).toUpperCase() : "MH"}
+                </AvatarFallback>
+              </Avatar>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">
+                    {user?.name || "User"}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user?.email || "super.admin@sentient.ai"}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem 
+              className="text-red-500 cursor-pointer focus:bg-red-500/10 focus:text-red-500"
+              onClick={() => logoutMutation.mutate()}
+            >
+              Log out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

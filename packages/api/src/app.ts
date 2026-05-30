@@ -32,6 +32,16 @@ app.use(globalRateLimiter);
 // Requirements: 17.2
 app.use(passport.initialize());
 
+// Health check root route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "Sentient API is running",
+    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Register v1 routes
 import { v1Router } from "./routes/v1/index.js";
 app.use("/v1", v1Router);

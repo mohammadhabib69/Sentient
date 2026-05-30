@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={cn(geist.variable, jetbrainsMono.variable)}>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased" suppressHydrationWarning>
         <ThemeProvider>
           <MSWProvider>
             <QueryProvider>

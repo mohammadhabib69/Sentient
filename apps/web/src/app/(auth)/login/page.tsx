@@ -19,6 +19,28 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
+const extractErrorMessage = (error: any, fallback: string) => {
+  const data = error?.response?.data;
+  if (!data) return fallback;
+
+  if (data.error?.details && typeof data.error.details === "object") {
+    const msgs = Object.values(data.error.details).flat();
+    if (msgs.length > 0) return msgs.join(", ");
+  }
+
+  if (data.details && typeof data.details === "object") {
+    const msgs = Object.values(data.details).flat();
+    if (msgs.length > 0) return msgs.join(", ");
+  }
+
+  if (Array.isArray(data.message)) return data.message.join(", ");
+  if (typeof data.message === "string") return data.message;
+  if (typeof data.error === "string") return data.error;
+  if (typeof data.error?.message === "string") return data.error.message;
+
+  return fallback;
+};
+
 export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
   const loginMutation = useLogin();
@@ -167,9 +189,16 @@ export default function LoginPage() {
 
         {/* 10. Sign In Button */}
         {loginMutation.isError && (
-          <p className="text-xs text-[var(--red)] font-sans mt-1">
-            {loginMutation.error?.message || "Invalid credentials. Please try again."}
-          </p>
+          <div className="rounded-md bg-[var(--red)]/10 border border-[var(--red)]/20 p-3 mt-4">
+            <p className="text-[13px] text-[var(--red)] font-sans font-medium flex items-start gap-2">
+              <svg className="size-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>{extractErrorMessage(loginMutation.error, "Invalid email or password. Please try again.")}</span>
+            </p>
+          </div>
         )}
         <Button
           type="submit"
