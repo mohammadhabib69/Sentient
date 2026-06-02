@@ -154,7 +154,12 @@ export class ProjectsService {
       }),
       enqueueGraphSync({ action: "CREATE_PROJECT", projectId: created.id }),
     ]);
-    emitToOrg(orgId, "project.created", { id: created.id, name: created.name });
+    emitToOrg(
+      orgId,
+      "project:created",
+      { id: created.id, name: created.name },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return toProjectResponse(created, undefined, 1, 100);
   }
@@ -257,7 +262,12 @@ export class ProjectsService {
       }),
       enqueueGraphSync({ action: "UPDATE_PROJECT", projectId: id }),
     ]);
-    emitToOrg(orgId, "project.updated", { id, changes });
+    emitToOrg(
+      orgId,
+      "project:updated",
+      { id, changes },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return toProjectResponse(updated);
   }
@@ -292,7 +302,12 @@ export class ProjectsService {
       }),
       enqueueGraphSync({ action: "DELETE_PROJECT", projectId: id }),
     ]);
-    emitToOrg(orgId, "project.deleted", { id });
+    emitToOrg(
+      orgId,
+      "project:deleted",
+      { id },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return { id, deleted: true };
   }
@@ -408,7 +423,12 @@ export class ProjectsService {
         actorType: ActorType.USER,
       }),
     ]);
-    emitToOrg(orgId, "project.member.added", { projectId, userId: input.userId, role: input.role });
+    emitToOrg(
+      orgId,
+      "project:member_added",
+      { projectId, userId: input.userId, role: input.role },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return { id: member.id, userId: input.userId, role: input.role, added: true };
   }
@@ -444,7 +464,12 @@ export class ProjectsService {
         actorType: ActorType.USER,
       }),
     ]);
-    emitToOrg(orgId, "project.member.removed", { projectId, userId });
+    emitToOrg(
+      orgId,
+      "project:member_removed",
+      { projectId, userId },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return { userId, removed: true };
   }

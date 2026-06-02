@@ -1,6 +1,9 @@
 import { randomUUID } from "node:crypto";
 import { ActorType, type Event as PrismaEvent } from "@prisma/client";
 import { prisma } from "../../config/prisma.js";
+import { redisClient } from "../../config/redis.js";
+import { env } from "../../config/env.js";
+import { emitToOrg } from "../../websocket/events.js";
 
 /**
  * Event types emitted by the Phase 5 CRUD services.
@@ -77,7 +80,7 @@ export class EventsService {
 
     const version = (last?.version ?? 0) + 1;
 
-    return prisma.event.create({
+    const event = await prisma.event.create({
       data: {
         id,
         orgId: params.orgId,
@@ -90,6 +93,56 @@ export class EventsService {
         version,
         occurredAt,
       },
+    });
+
+    // Phase 6 §10: mirror to Redis Stream and broadcast to org.
+    // Both are best-effort — failures here must not block the caller
+    // (the event is already durable in Postgres).
+    void this.publishToStream(event, params).catch((err: unknown) => {
+      console.error("[events] stream publish failed", err);
+    });
+
+    return event;
+  }
+
+  /**
+   * XADD into the Reality Stream + emit `stream:event` to the org room.
+   * Both are fire-and-forget at the call site.
+   */
+  private async publishToStream(
+    event: PrismaEvent,
+    params: LogEventParams,
+  ): Promise<void> {
+    // XADD sentient:events:stream MAXLEN ~ 10000 * orgId … eventId … type
+    await redisClient.xadd(
+      env.REDIS_STREAM_KEY,
+      "MAXLEN",
+      "~",
+      String(env.REDIS_STREAM_MAX_LEN),
+      "*",
+      "orgId",
+      event.orgId,
+      "eventId",
+      event.id,
+      "type",
+      event.type,
+      "aggregateId",
+      event.aggregateId,
+      "aggregateType",
+      event.aggregateType,
+    );
+
+    emitToOrg(params.orgId, "stream:event", {
+      id: event.id,
+      type: event.type,
+      aggregateId: event.aggregateId,
+      aggregateType: event.aggregateType,
+      payload: event.payload,
+      actor: {
+        id: params.actorId,
+        type: params.actorType,
+      },
+      occurredAt: event.occurredAt.toISOString(),
     });
   }
 

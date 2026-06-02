@@ -4,9 +4,9 @@ import { env } from './env.js';
 
 /**
  * Passport Configuration
- * 
+ *
  * Configures Passport.js with Google OAuth strategy for authentication.
- * 
+ *
  * Requirements: 4.1, 4.2, 17.1, 17.2
  */
 

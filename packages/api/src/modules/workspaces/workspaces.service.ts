@@ -98,7 +98,12 @@ export class WorkspacesService {
       }),
       enqueueGraphSync({ action: "CREATE_WORKSPACE", workspaceId: created.id }),
     ]);
-    emitToOrg(orgId, "workspace.created", { id: created.id, name: created.name });
+    emitToOrg(
+      orgId,
+      "workspace:created",
+      { id: created.id, name: created.name },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return toWorkspaceResponse(created);
   }
@@ -173,7 +178,12 @@ export class WorkspacesService {
       }),
       enqueueGraphSync({ action: "UPDATE_WORKSPACE", workspaceId: id }),
     ]);
-    emitToOrg(orgId, "workspace.updated", { id, changes });
+    emitToOrg(
+      orgId,
+      "workspace:updated",
+      { id, changes },
+      { id: actorId, type: ActorType.USER },
+    );
 
     const memberCount = await prisma.user.count({ where: { orgId } });
     return toWorkspaceResponse({
@@ -231,7 +241,12 @@ export class WorkspacesService {
       }),
       enqueueGraphSync({ action: "DELETE_WORKSPACE", workspaceId: id }),
     ]);
-    emitToOrg(orgId, "workspace.deleted", { id });
+    emitToOrg(
+      orgId,
+      "workspace:deleted",
+      { id },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return { id, deleted: true };
   }
@@ -291,7 +306,12 @@ export class WorkspacesService {
         userId: input.userId,
       }),
     ]);
-    emitToOrg(orgId, "member.added", { workspaceId, userId: input.userId, role: input.role });
+    emitToOrg(
+      orgId,
+      "workspace:member_added",
+      { workspaceId, userId: input.userId, role: input.role },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return { userId: input.userId, role: input.role, added: true };
   }
@@ -324,7 +344,12 @@ export class WorkspacesService {
         actorType: ActorType.USER,
       }),
     ]);
-    emitToOrg(orgId, "member.removed", { workspaceId, userId });
+    emitToOrg(
+      orgId,
+      "workspace:member_removed",
+      { workspaceId, userId },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return { userId, removed: true };
   }

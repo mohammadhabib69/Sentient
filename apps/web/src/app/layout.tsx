@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import { QueryProvider } from "@/providers/query-provider";
 import { AuthProvider } from "@/providers/auth-provider";
 import { MSWProvider } from "@/providers/msw-provider";
+import { RealtimeProvider } from "@/providers/RealtimeProvider";
 import { Toaster } from "sonner";
 
 const geist = Geist({
@@ -35,8 +36,10 @@ export default function RootLayout({
           <MSWProvider>
             <QueryProvider>
               <AuthProvider>
-                {children}
-                <Toaster position="bottom-right" richColors theme="system" />
+                <RealtimeProvider>
+                  {children}
+                  <Toaster position="bottom-right" richColors theme="system" />
+                </RealtimeProvider>
               </AuthProvider>
             </QueryProvider>
           </MSWProvider>

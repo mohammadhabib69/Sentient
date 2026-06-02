@@ -1,10 +1,11 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import { Plan, UserRole } from '@prisma/client';
+import { ActorType, Plan, SubscriptionStatus, UserRole, type User, type Organization } from '@prisma/client';
 import { prisma } from '../../config/prisma.js';
 import { tokenService } from '../../services/token.service.js';
 import { sessionService } from '../../services/session.service.js';
 import { emailService } from '../../services/email.service.js';
+import { eventsService } from '../events/events.service.js';
 import { AppError, ConflictError, UnauthorizedError } from '../../utils/errors.js';
 import type { DeviceInfo } from '../../services/session.service.js';
 import type { RegisterInput, LoginInput, ForgotPasswordInput, ResetPasswordInput } from './auth.schema.js';
@@ -577,12 +578,159 @@ export class AuthService {
   }
 
   /**
+   * Find an existing user by Google identity, link an existing email-based
+   * account, or provision a brand new user + org in a single transaction.
+   *
+   * This is the pure "identity" layer for Google sign-in. It does NOT
+   * create sessions, mint tokens, or set cookies — those concerns are
+   * handled by `loginWithGoogle` after this method returns.
+   *
+   * Behaviour:
+   *  1. Lookup by `googleId` first; if found, refresh avatar if it changed.
+   *  2. Otherwise lookup by `email`; if found, link the Google identity
+   *     to the existing account (mark `emailVerified = true`).
+   *  3. Otherwise create a new org (with a free subscription) and a new
+   *     user, with `role: super_admin` and `emailVerified: true`.
+   *  4. Append a `user.created` event to the event store so the rest of
+   *     the system can react (analytics, presence, audit).
+   *
+   * @returns The resolved `user` and `organization` (with relations).
+   *
+   * Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6
+   */
+  async findOrCreateGoogleUser({
+    googleId,
+    email,
+    name,
+    avatarUrl,
+  }: {
+    googleId: string;
+    email: string;
+    name: string;
+    avatarUrl?: string;
+  }): Promise<{ user: User; org: Organization }> {
+    const normalizedEmail = email.toLowerCase();
+
+    // 1. Existing user with this Google identity.
+    let user = await prisma.user.findFirst({
+      where: { googleId },
+      include: { organization: true },
+    });
+
+    if (user) {
+      if (avatarUrl && user.avatarUrl !== avatarUrl) {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { avatarUrl, lastActiveAt: new Date() },
+          include: { organization: true },
+        });
+      } else {
+        // Always bump lastActiveAt on returning Google users.
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { lastActiveAt: new Date() },
+          include: { organization: true },
+        });
+      }
+      return { user, org: user.organization };
+    }
+
+    // 2. Existing user with the same email — link the Google identity.
+    const existingByEmail = await prisma.user.findFirst({
+      where: { email: normalizedEmail },
+      include: { organization: true },
+    });
+
+    if (existingByEmail) {
+      user = await prisma.user.update({
+        where: { id: existingByEmail.id },
+        data: {
+          googleId,
+          avatarUrl: avatarUrl ?? existingByEmail.avatarUrl,
+          emailVerified: true, // Google-verified email
+          lastActiveAt: new Date(),
+        },
+        include: { organization: true },
+      });
+      return { user, org: user.organization };
+    }
+
+    // 3. Brand new user — provision org + user + free subscription atomically.
+    const firstName = (name || normalizedEmail.split("@")[0] || "User").trim();
+    const orgName = `${firstName}'s Organization`;
+    const orgSlug =
+      this.generateSlug(orgName) + "-" + crypto.randomBytes(3).toString("hex");
+
+    const result = await prisma.$transaction(async (tx) => {
+      const org = await tx.organization.create({
+        data: {
+          name: orgName,
+          slug: orgSlug,
+          plan: Plan.FREE,
+          settings: {},
+          graphNodeId: "",
+        },
+      });
+
+      const newUser = await tx.user.create({
+        data: {
+          orgId: org.id,
+          email: normalizedEmail,
+          name: firstName,
+          avatarUrl: avatarUrl ?? null,
+          googleId,
+          role: UserRole.SUPER_ADMIN, // First user in a brand-new org
+          emailVerified: true, // Trusted via Google
+          attributes: {},
+          lastActiveAt: new Date(),
+        },
+        include: { organization: true },
+      });
+
+      await tx.subscription.create({
+        data: {
+          orgId: org.id,
+          plan: Plan.FREE,
+          status: SubscriptionStatus.ACTIVE,
+          agentLimit: 2,
+          actionsLimit: BigInt(100),
+          actionsUsed: BigInt(0),
+          currentPeriodStart: new Date(),
+          currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        },
+      });
+
+      return { user: newUser, org };
+    });
+
+    // 4. Enqueue graph sync + log the user.created event (best-effort).
+    //    Graph sync for a brand-new user is handled by the org-level
+    //    reconciliation job; we just log the event for the audit stream.
+    try {
+      await eventsService.logEvent({
+        orgId: result.org.id,
+        type: "user.created",
+        aggregateId: result.user.id,
+        aggregateType: "user",
+        payload: { method: "google_oauth", email: normalizedEmail },
+        actorId: result.user.id,
+        actorType: ActorType.USER,
+      });
+    } catch (err) {
+      // Event store is best-effort — never block sign-in.
+      console.error("[auth] failed to log user.created event:", err);
+    }
+
+    return result;
+  }
+
+  /**
    * Authenticates or creates user via Google OAuth
-   * 
+   *
    * @param profile - Google profile data
    * @param deviceInfo - Device information from request
    * @returns Authentication result with user, org, and tokens
-   * 
+   *
    * Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8
    */
   async loginWithGoogle(
@@ -633,7 +781,7 @@ export class AuthService {
       // Create new user and organization
       // Requirements: 4.5, 4.6
       const orgSlug = this.generateSlug(name);
-      
+
       const result = await prisma.$transaction(async (tx) => {
         const newOrg = await tx.organization.create({
           data: {

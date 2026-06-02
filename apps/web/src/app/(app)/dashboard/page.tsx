@@ -1,22 +1,18 @@
 "use client";
 
-import { useTasks } from "@/hooks/useTasks";
-import { usePendingActions } from "@/hooks/useAgents";
-import { MetricCard } from "@/components/dashboard/MetricCard";
+import { LiveMetricsGrid } from "@/components/dashboard/LiveMetricsGrid";
 import { AgentStatusGrid } from "@/components/dashboard/AgentStatusGrid";
 import { ProjectsOverview } from "@/components/dashboard/ProjectsOverview";
 import { RealityStreamFeed } from "@/components/dashboard/RealityStreamFeed";
 import { TopologyMiniGraph } from "@/components/dashboard/TopologyMiniGraph";
-import { CheckCircle2, ShieldAlert, Activity, HeartPulse, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { PageTransition } from "@/components/shared/PageTransition";
 
 export default function DashboardPage() {
-  const { data: tasks = [] } = useTasks();
-  const { data: pendingActions = [] } = usePendingActions();
-
-  const activeTasksCount = tasks.filter((t) => t.status === "in_progress").length;
-  const pendingCount = pendingActions.length;
-
+  // Phase 6 §11: metric cards are driven by `useUIStore.dashboardMetrics`
+  // (populated from the `metrics:updated` socket event), so no React
+  // Query fetch is needed here. The other panels below fetch their own
+  // data (projects, agents, stream, topology) via their own hooks.
   return (
     <PageTransition className="flex h-full flex-col gap-6 relative pb-20">
       <div className="mb-2">
@@ -26,29 +22,8 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* ── Top Row: Metrics ── */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <MetricCard
-          title="Active Tasks"
-          value={activeTasksCount}
-          subtext="across all projects"
-          icon={CheckCircle2}
-        />
-        <MetricCard
-          title="Pending Approvals"
-          value={pendingCount}
-          subtext={pendingCount > 0 ? "Requires attention" : "All clear"}
-          icon={ShieldAlert}
-          amberTint={pendingCount > 0}
-        />
-        <MetricCard
-          title="Agent Actions"
-          value="10.7k"
-          subtext="+12% from yesterday"
-          icon={Activity}
-        />
-        <MetricCard title="System Health" value="99.9%" subtext="Operational" icon={HeartPulse} />
-      </div>
+      {/* ── Top Row: Live Metrics (Phase 6 §11) ── */}
+      <LiveMetricsGrid />
 
       {/* ── Middle Row: Projects & Agents ── */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLogout, useCurrentUser } from "@/hooks/useAuth";
+import { PresenceAvatars } from "@/components/presence/PresenceAvatars";
 
 // ─── Breadcrumb Component ─────────────────────────────────────
 const PAGE_CRUMBS: Record<string, { parent?: string; label: string }> = {
@@ -141,6 +142,8 @@ export function Topbar() {
 
       {/* ── Right: Actions & User ── */}
       <div className="flex flex-1 items-center justify-end gap-1.5 sm:gap-2">
+        <PresenceAvatars className="mr-2 hidden md:flex" />
+
         <button
           className="flex size-9 items-center justify-center rounded-full text-[var(--foreground-2)] hover:bg-muted hover:text-foreground transition-colors"
           title="Activity"

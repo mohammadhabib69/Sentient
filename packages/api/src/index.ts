@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { createServer } from "http";
 import { app } from "./app.js";
 import { env } from "./config/env.js";
 import { neo4jDriver } from "./config/neo4j.js";
@@ -6,6 +7,11 @@ import { prisma } from "./config/prisma.js";
 import { redisClient } from "./config/redis.js";
 import { v1Router } from "./routes/v1/index.js";
 import { errorHandler } from "./middleware/error.middleware.js";
+import { initWebSocket } from "./websocket/index.js";
+import {
+  startMetricsBroadcaster,
+  stopMetricsBroadcaster,
+} from "./websocket/metrics.broadcaster.js";
 
 // Bull Board imports
 import { createBullBoard } from "@bull-board/api";
@@ -24,7 +30,7 @@ import {
 import "./jobs/sessionCleanup.worker.js";
 import "./jobs/graphSync.worker.js";
 
-let server: ReturnType<typeof app.listen> | null = null;
+let server: ReturnType<typeof createServer> | null = null;
 
 async function startServer(): Promise<void> {
   // 1) Import and run env validation
@@ -84,9 +90,18 @@ async function startServer(): Promise<void> {
 
 
 
-  // 9) Start listening on PORT
+  // 9) Create HTTP server, attach Socket.io, then start listening.
+  //    We use `http.createServer(app)` so Socket.io can share the same port.
+  const httpServer = createServer(expressApp);
+  const io = initWebSocket(httpServer);
+  expressApp.set("io", io);
+
+  // 9a) Start the periodic metrics broadcaster (PRD §11) so dashboard
+  //     cards update without a page refresh.
+  startMetricsBroadcaster();
+
   await new Promise<void>((resolve) => {
-    server = expressApp.listen(env.PORT, () => {
+    server = httpServer.listen(env.PORT, () => {
       console.log(`API listening on port ${env.PORT}`);
       resolve();
     });
@@ -95,6 +110,8 @@ async function startServer(): Promise<void> {
   // 8) Register graceful shutdown (SIGTERM, SIGINT)
   const gracefulShutdown = async (signal: string): Promise<void> => {
     console.log(`Received ${signal}, shutting down gracefully...`);
+
+    stopMetricsBroadcaster();
 
     if (server) {
       await new Promise<void>((resolve, reject) => {

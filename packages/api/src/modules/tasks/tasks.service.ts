@@ -3,6 +3,7 @@ import { prisma } from "../../config/prisma.js";
 import { eventsService, EventType } from "../events/events.service.js";
 import { enqueueGraphSync } from "../graph/graphSync.helper.js";
 import { emitToOrg } from "../../websocket/events.js";
+import { broadcastOrgMetrics } from "../../websocket/metrics.broadcaster.js";
 import { paginateCursor } from "../../utils/pagination.js";
 import { NotFoundError, ForbiddenError, AppError } from "../../utils/errors.js";
 import type {
@@ -177,7 +178,13 @@ export class TasksService {
         enqueueGraphSync({ action: "ASSIGN_TASK", taskId: created.id, userId: created.assigneeId }),
       ]);
     }
-    emitToOrg(orgId, "task.created", { id: created.id, title: created.title, projectId: created.projectId });
+    emitToOrg(
+      orgId,
+      "task:created",
+      { id: created.id, title: created.title, projectId: created.projectId },
+      { id: actorId, type: ActorType.USER },
+    );
+    void broadcastOrgMetrics(orgId).catch(() => undefined);
 
     return toTaskResponse(created);
   }
@@ -299,7 +306,15 @@ export class TasksService {
       );
     }
     await Promise.allSettled([...eventPromises, ...queuePromises]);
-    emitToOrg(orgId, "task.updated", { id, changes });
+    emitToOrg(
+      orgId,
+      "task:updated",
+      { id, changes },
+      { id: actorId, type: ActorType.USER },
+    );
+    if (changes.status || changes.assigneeId) {
+      void broadcastOrgMetrics(orgId).catch(() => undefined);
+    }
 
     return toTaskResponse(updated);
   }
@@ -339,7 +354,13 @@ export class TasksService {
       }),
       enqueueGraphSync({ action: "DELETE_TASK", taskId: id }),
     ]);
-    emitToOrg(orgId, "task.deleted", { id });
+    emitToOrg(
+      orgId,
+      "task:deleted",
+      { id },
+      { id: actorId, type: ActorType.USER },
+    );
+    void broadcastOrgMetrics(orgId).catch(() => undefined);
 
     return { id, deleted: true };
   }
@@ -458,7 +479,15 @@ export class TasksService {
         actorType: ActorType.USER,
       });
       await enqueueGraphSync({ action: "UPDATE_TASK", taskId: id });
-      emitToOrg(orgId, "task.moved", { id, from: { status: oldStatus, position: oldPos }, to: { status: newStatus, position: newPos } });
+      emitToOrg(
+        orgId,
+        "task:moved",
+        { id, from: { status: oldStatus, position: oldPos }, to: { status: newStatus, position: newPos } },
+        { id: actorId, type: ActorType.USER },
+      );
+      if (oldStatus !== newStatus) {
+        void broadcastOrgMetrics(orgId).catch(() => undefined);
+      }
 
       return toTaskResponse(updated);
     });
@@ -506,7 +535,13 @@ export class TasksService {
       }),
       ...ids.map((tid) => enqueueGraphSync({ action: "UPDATE_TASK", taskId: tid })),
     ]);
-    emitToOrg(orgId, "tasks.bulk_moved", { count: ids.length });
+    emitToOrg(
+      orgId,
+      "tasks:bulk_moved",
+      { count: ids.length },
+      { id: actorId, type: ActorType.USER },
+    );
+    void broadcastOrgMetrics(orgId).catch(() => undefined);
 
     return { updated: ids.length };
   }
@@ -564,7 +599,12 @@ export class TasksService {
       actorId,
       actorType: ActorType.USER,
     });
-    emitToOrg(orgId, "task.comment_added", { taskId, commentId: created.id });
+    emitToOrg(
+      orgId,
+      "task:comment_added",
+      { taskId, commentId: created.id },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return toTaskCommentResponse(created);
   }

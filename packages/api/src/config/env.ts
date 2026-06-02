@@ -39,6 +39,12 @@ const envSchema = z.object({
   FRONTEND_LOGIN_URL: z.string().url("FRONTEND_LOGIN_URL must be a valid URL"),
   FRONTEND_VERIFY_EMAIL_URL: z.string().url("FRONTEND_VERIFY_EMAIL_URL must be a valid URL"),
   FRONTEND_RESET_PASSWORD_URL: z.string().url("FRONTEND_RESET_PASSWORD_URL must be a valid URL"),
+  // WebSocket / Socket.io
+  WS_CORS_ORIGIN: z.string().url().default("http://localhost:3000"),
+  WS_PATH: z.string().default("/socket.io"),
+  // Redis Streams (Reality Stream live feed)
+  REDIS_STREAM_KEY: z.string().default("sentient:events:stream"),
+  REDIS_STREAM_MAX_LEN: z.coerce.number().default(10000),
 });
 
 export const env = envSchema.parse(process.env);

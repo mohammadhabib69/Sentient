@@ -117,11 +117,16 @@ export class FilesService {
       actorId: params.uploaderId,
       actorType: ActorType.USER,
     });
-    emitToOrg(params.orgId, "file.uploaded", {
-      id: created.id,
-      entityType: params.entityType,
-      entityId: params.entityId,
-    });
+    emitToOrg(
+      params.orgId,
+      "file:uploaded",
+      {
+        id: created.id,
+        entityType: params.entityType,
+        entityId: params.entityId,
+      },
+      { id: params.uploaderId, type: ActorType.USER },
+    );
 
     return toFileResponse(created, url);
   }
@@ -177,7 +182,12 @@ export class FilesService {
       actorId,
       actorType: ActorType.USER,
     });
-    emitToOrg(orgId, "file.deleted", { id: fileId });
+    emitToOrg(
+      orgId,
+      "file:deleted",
+      { id: fileId },
+      { id: actorId, type: ActorType.USER },
+    );
 
     return { id: fileId, deleted: true };
   }

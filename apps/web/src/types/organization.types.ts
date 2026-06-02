@@ -17,5 +17,6 @@ export interface User {
   name: string;
   avatarUrl: string | null;
   role: UserRole;
+  emailVerified: boolean;
   lastActiveAt: string;
 }

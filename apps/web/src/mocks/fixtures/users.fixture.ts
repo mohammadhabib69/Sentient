@@ -11,6 +11,7 @@ export const MOCK_USERS: User[] = [
     name: "Mohammad Habib",
     avatarUrl: "/avatars/user.png",
     role: "super_admin",
+    emailVerified: true,
     lastActiveAt: now,
   },
   {
@@ -20,6 +21,7 @@ export const MOCK_USERS: User[] = [
     name: "Sarah Jenkins",
     avatarUrl: null,
     role: "org_admin",
+    emailVerified: true,
     lastActiveAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
   },
   {
@@ -29,6 +31,7 @@ export const MOCK_USERS: User[] = [
     name: "Alex Patel",
     avatarUrl: null,
     role: "manager",
+    emailVerified: true,
     lastActiveAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
   },
   {
@@ -38,6 +41,7 @@ export const MOCK_USERS: User[] = [
     name: "Chen Wei",
     avatarUrl: null,
     role: "member",
+    emailVerified: true,
     lastActiveAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
   },
   {
@@ -47,6 +51,7 @@ export const MOCK_USERS: User[] = [
     name: "Emily Ross",
     avatarUrl: null,
     role: "member",
+    emailVerified: false,
     lastActiveAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
   },
 ];
