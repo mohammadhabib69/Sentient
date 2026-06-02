@@ -9,6 +9,7 @@ import { filesRouter } from "../../modules/files/files.routes.js";
 import { graphRouter } from "../../modules/graph/graph.routes.js";
 import { searchRouter } from "../../modules/search/search.routes.js";
 import { presenceRouter } from "../../modules/presence/presence.routes.js";
+import { analyticsRouter } from "../../modules/analytics/analytics.routes.js";
 
 export const v1Router = Router();
 
@@ -22,3 +23,4 @@ v1Router.use("/files", filesRouter);
 v1Router.use("/graph", graphRouter);
 v1Router.use("/search", searchRouter);
 v1Router.use("/presence", presenceRouter);
+v1Router.use("/analytics", analyticsRouter);

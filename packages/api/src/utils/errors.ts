@@ -17,6 +17,7 @@ export const ErrorCode = {
   FILE_TOO_LARGE: "FILE_TOO_LARGE",
   FILE_TYPE_NOT_ALLOWED: "FILE_TYPE_NOT_ALLOWED",
   WORKSPACE_HAS_PROJECTS: "WORKSPACE_HAS_PROJECTS",
+  REPLAY_IN_PROGRESS: "REPLAY_IN_PROGRESS",
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];

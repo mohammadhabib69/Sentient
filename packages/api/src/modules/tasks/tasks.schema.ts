@@ -41,6 +41,12 @@ export const createTaskSchema = z.object({
 
 /**
  * PATCH /v1/tasks/:id — partial update.
+ *
+ * `expectedVersion` enables optimistic concurrency:
+ *   - Omit / undefined → no check (default).
+ *   - `-1`            → explicit "skip check" (used by agent actions).
+ *   - N >= 0          → update proceeds only if the current per-aggregate
+ *                       event version is N. Mismatch raises ConflictError.
  */
 export const updateTaskSchema = z
   .object({
@@ -57,6 +63,7 @@ export const updateTaskSchema = z
       .transform((v) => (v ? new Date(v) : undefined))
       .optional(),
     estimatedHours: z.coerce.number().min(0).max(10000).optional(),
+    expectedVersion: z.coerce.number().int().min(-1).optional(),
   })
   .refine(
     (data) =>

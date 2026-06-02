@@ -12,6 +12,11 @@ import {
   startMetricsBroadcaster,
   stopMetricsBroadcaster,
 } from "./websocket/metrics.broadcaster.js";
+import {
+  startOutboxPoller,
+  stopOutboxPoller,
+  processOutboxBatch,
+} from "./jobs/outbox.worker.js";
 
 // Bull Board imports
 import { createBullBoard } from "@bull-board/api";
@@ -100,6 +105,10 @@ async function startServer(): Promise<void> {
   //     cards update without a page refresh.
   startMetricsBroadcaster();
 
+  // 9b) Start the outbox poller (Phase 7 §4). Drains pending outbox
+  //     entries to Socket.io, Redis Stream, and CQRS projectors.
+  startOutboxPoller();
+
   await new Promise<void>((resolve) => {
     server = httpServer.listen(env.PORT, () => {
       console.log(`API listening on port ${env.PORT}`);
@@ -112,6 +121,18 @@ async function startServer(): Promise<void> {
     console.log(`Received ${signal}, shutting down gracefully...`);
 
     stopMetricsBroadcaster();
+    stopOutboxPoller();
+
+    // Drain remaining outbox entries (Phase 7 §11) — best effort.
+    try {
+      console.log("[Shutdown] Draining outbox...");
+      const result = await processOutboxBatch();
+      console.log(
+        `[Shutdown] Outbox drained: processed=${result.processed} errors=${result.errors}`,
+      );
+    } catch (err) {
+      console.error("[Shutdown] outbox drain failed", err);
+    }
 
     if (server) {
       await new Promise<void>((resolve, reject) => {

@@ -45,6 +45,13 @@ const envSchema = z.object({
   // Redis Streams (Reality Stream live feed)
   REDIS_STREAM_KEY: z.string().default("sentient:events:stream"),
   REDIS_STREAM_MAX_LEN: z.coerce.number().default(10000),
+  // Event Sourcing (Phase 7)
+  EVENT_STORE_RETENTION_DAYS: z.coerce.number().default(365),
+  EVENT_REPLAY_BATCH_SIZE: z.coerce.number().default(100),
+  OUTBOX_POLL_INTERVAL_MS: z.coerce.number().default(1000),
+  OUTBOX_MAX_RETRIES: z.coerce.number().default(5),
+  OUTBOX_BATCH_SIZE: z.coerce.number().default(50),
+  READ_MODEL_REBUILD_LOCK_TTL: z.coerce.number().default(300),
 });
 
 export const env = envSchema.parse(process.env);

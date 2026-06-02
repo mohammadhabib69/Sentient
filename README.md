@@ -98,6 +98,85 @@ sentient/
 - [x] Document `.env.example`.
 - [x] Add CI/CD workflows and GitHub branch protection.
 
+## Phase 7 — Event Sourcing + CQRS
+
+The event store from Phase 5 is upgraded to a production-grade event sourcing
+system. Every state change is the source of truth; CQRS read models serve
+fast queries; the Outbox pattern guarantees zero event loss; the Reality
+Stream is powered entirely by events.
+
+### Highlights
+
+- **Event store hardening** — strict Zod payload validation, idempotency
+  keys (24h dedupe), per-aggregate versioning, and optional
+  `causationId` / `correlationId` for event chains.
+- **Outbox pattern** — `logEvent()` writes the event and the outbox row
+  in one transaction. A polling worker (every 1s) drains the outbox
+  into Socket.io, the Redis Stream, and the projectors, with
+  exponential backoff retries (5s → 15s → 45s → 135s → 405s) and a
+  dead-letter table after 5 attempts.
+- **CQRS read models** — 4 projector-driven tables:
+  `project_read_models`, `agent_read_models`, `org_metrics_read_models`,
+  `user_activity_read_models`. The dashboard reads from
+  `OrgMetricsReadModel` rather than running live scans.
+- **Event replay engine** — `POST /v1/events/replay` (super_admin)
+  rebuilds any read model by replaying the event history. One replay
+  per org at a time (Redis lock). Supports dry-run.
+- **Aggregate reconstruction** — `GET /v1/events/aggregate/:type/:id`
+  replays the event timeline for one entity and derives its current
+  state.
+- **Advanced event query API** — `GET /v1/events` now supports
+  `typePrefix`, `actorId`, `minVersion`, `sortOrder`, and full
+  cursor pagination.
+- **Dead letter queue endpoints** — `GET /v1/events/dead-letters`,
+  `POST /v1/events/dead-letters/:id/retry`,
+  `GET /v1/events/outbox/stats`.
+- **Analytics endpoints** — `GET /v1/analytics/overview` reads from
+  `OrgMetricsReadModel`; `task-velocity` and `agent-performance` query
+  TimescaleDB continuous aggregates (`task_velocity_daily`,
+  `agent_performance_daily`, `active_users_hourly`).
+- **Optimistic concurrency** — `updateTask()` accepts
+  `expectedVersion`; mismatch raises 409.
+- **Event-driven notifications** — the `notificationProjector` turns
+  `task.assigned` / `task.comment_added` / `agent.action.created` into
+  notifications. No more direct `notificationsService.create()` calls
+  from controllers.
+- **Reality Stream** — `stream:event` is now emitted by the outbox
+  poller (after the event is durable in the DB), with new `version` and
+  `causationId` fields in the envelope.
+
+### New endpoints
+
+```
+GET    /v1/events                            # advanced query
+GET    /v1/events/aggregate/:type/:id        # reconstruct timeline
+GET    /v1/events/dead-letters               # org_admin+
+POST   /v1/events/dead-letters/:id/retry     # org_admin+
+GET    /v1/events/outbox/stats               # super_admin
+POST   /v1/events/replay                     # super_admin
+GET    /v1/analytics/overview                # OrgMetricsReadModel
+GET    /v1/analytics/task-velocity?days=N
+GET    /v1/analytics/agent-performance?days=N&agentId=...
+```
+
+### New env vars
+
+```
+EVENT_STORE_RETENTION_DAYS=365
+EVENT_REPLAY_BATCH_SIZE=100
+OUTBOX_POLL_INTERVAL_MS=1000
+OUTBOX_MAX_RETRIES=5
+OUTBOX_BATCH_SIZE=50
+READ_MODEL_REBUILD_LOCK_TTL=300
+```
+
+Apply the TimescaleDB continuous aggregates once per environment:
+
+```bash
+docker exec -i sentient-postgres psql -U sentient -d sentient \
+  < packages/database/prisma/migrations/timescale_continuous_aggregates.sql
+```
+
 ## Documentation
 
 - [Setup Guide](docs/SETUP.md)

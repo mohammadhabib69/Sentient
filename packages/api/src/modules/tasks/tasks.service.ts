@@ -5,7 +5,7 @@ import { enqueueGraphSync } from "../graph/graphSync.helper.js";
 import { emitToOrg } from "../../websocket/events.js";
 import { broadcastOrgMetrics } from "../../websocket/metrics.broadcaster.js";
 import { paginateCursor } from "../../utils/pagination.js";
-import { NotFoundError, ForbiddenError, AppError } from "../../utils/errors.js";
+import { NotFoundError, ForbiddenError, AppError, ConflictError } from "../../utils/errors.js";
 import type {
   CreateTaskInput,
   UpdateTaskInput,
@@ -214,6 +214,11 @@ export class TasksService {
    * PATCH /v1/tasks/:id — partial update.
    *
    * Enforces ABAC: a `MEMBER` can only edit their own assigned tasks.
+   *
+   * Phase 7 adds optimistic concurrency. When the caller supplies
+   * `expectedVersion >= 0` we look up the current per-aggregate event
+   * version and reject with `ConflictError` (HTTP 409) on mismatch.
+   * Pass `expectedVersion: -1` (or omit it) to skip the check.
    */
   async updateTask(
     orgId: string,
@@ -229,6 +234,20 @@ export class TasksService {
 
     if (actorRole === "MEMBER" && existing.assigneeId !== actorId) {
       throw new ForbiddenError("Members can only edit their own assigned tasks");
+    }
+
+    // Optimistic concurrency check (Phase 7 §3.3).
+    if (input.expectedVersion !== undefined && input.expectedVersion !== -1) {
+      const versionResult = await prisma.event.aggregate({
+        where: { aggregateId: id, aggregateType: "task" },
+        _max: { version: true },
+      });
+      const currentVersion = versionResult._max.version ?? 0;
+      if (currentVersion !== input.expectedVersion) {
+        throw new ConflictError(
+          "Task was modified by another user. Please refresh and try again.",
+        );
+      }
     }
 
     // Build a per-field diff.

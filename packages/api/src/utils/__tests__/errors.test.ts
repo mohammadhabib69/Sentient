@@ -38,9 +38,9 @@ describe("ErrorCode constants", () => {
     expect(ErrorCode.WORKSPACE_HAS_PROJECTS).toBe("WORKSPACE_HAS_PROJECTS");
   });
 
-  it("should have exactly 15 error codes (12 original + 3 Phase 5 additions)", () => {
+  it("should have exactly 16 error codes (12 original + 3 Phase 5 + 1 Phase 7)", () => {
     const errorCodes = Object.keys(ErrorCode);
-    expect(errorCodes).toHaveLength(15);
+    expect(errorCodes).toHaveLength(16);
   });
 });
 
