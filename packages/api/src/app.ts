@@ -42,6 +42,10 @@ app.get("/", (req, res) => {
   });
 });
 
+// Alias /health to the v1 health route so legacy / external probes work
+import { healthRouter } from "./modules/health/health.routes.js";
+app.use("/health", healthRouter);
+
 // Register v1 routes
 import { v1Router } from "./routes/v1/index.js";
 app.use("/v1", v1Router);

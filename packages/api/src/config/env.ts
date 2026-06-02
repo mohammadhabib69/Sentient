@@ -21,6 +21,13 @@ const envSchema = z.object({
   S3_ACCESS_KEY: z.string().optional(),
   S3_SECRET_KEY: z.string().optional(),
   S3_REGION: z.string().optional(),
+  S3_PUBLIC_URL: z.string().url().optional(),
+  /// Max upload size in megabytes. Defaults to 10 MB.
+  MAX_FILE_SIZE_MB: z.coerce.number().default(10),
+  /// Comma-separated allow-list of MIME types for uploads.
+  ALLOWED_FILE_TYPES: z
+    .string()
+    .default("image/jpeg,image/png,image/webp,application/pdf,text/plain"),
   // Google OAuth
   GOOGLE_CLIENT_ID: z.string().min(1, "GOOGLE_CLIENT_ID is required"),
   GOOGLE_CLIENT_SECRET: z.string().min(1, "GOOGLE_CLIENT_SECRET is required"),

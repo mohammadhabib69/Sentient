@@ -39,7 +39,7 @@ export class AuthService {
    * Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 1.10, 1.11, 1.12
    */
   async register(data: RegisterInput, deviceInfo: DeviceInfo): Promise<AuthResult> {
-    const { name, email, password } = data;
+    const { name, email, password, orgName } = data;
 
     // Check if user already exists in any organization
     const existingUser = await prisma.user.findFirst({
@@ -61,7 +61,39 @@ export class AuthService {
     let user;
     let organization;
 
-    if (isFirstUser) {
+    // If the caller asked for a new org by name, always provision one and
+    // make them ORG_ADMIN. This is the expected Phase 5+ onboarding path.
+    if (orgName) {
+      const orgSlug = `${this.generateSlug(orgName)}-${crypto.randomBytes(3).toString("hex")}`;
+
+      const result = await prisma.$transaction(async (tx) => {
+        const newOrg = await tx.organization.create({
+          data: {
+            name: orgName,
+            slug: orgSlug,
+            plan: Plan.FREE,
+            graphNodeId: "",
+          },
+        });
+
+        const newUser = await tx.user.create({
+          data: {
+            orgId: newOrg.id,
+            email,
+            name,
+            passwordHash,
+            role: UserRole.ORG_ADMIN,
+            emailVerified: false,
+          },
+          include: { organization: true },
+        });
+
+        return { user: newUser, org: newOrg };
+      });
+
+      user = result.user;
+      organization = result.org;
+    } else if (isFirstUser) {
       // Create organization and user with super_admin role
       // Requirements: 1.6
       const orgSlug = this.generateSlug(name);

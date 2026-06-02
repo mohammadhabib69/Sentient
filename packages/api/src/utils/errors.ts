@@ -14,6 +14,9 @@ export const ErrorCode = {
   RATE_LIMITED: "RATE_LIMITED",
   ACCOUNT_LOCKED: "ACCOUNT_LOCKED",
   INTERNAL_ERROR: "INTERNAL_ERROR",
+  FILE_TOO_LARGE: "FILE_TOO_LARGE",
+  FILE_TYPE_NOT_ALLOWED: "FILE_TYPE_NOT_ALLOWED",
+  WORKSPACE_HAS_PROJECTS: "WORKSPACE_HAS_PROJECTS",
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];

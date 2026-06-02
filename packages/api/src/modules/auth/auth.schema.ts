@@ -18,6 +18,12 @@ export const registerSchema = z.object({
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[0-9]/, 'Password must contain at least one number')
     .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
+  /**
+   * Optional org name. When supplied, a brand-new Organization is
+   * provisioned and the new user is created as ORG_ADMIN. When omitted
+   * the user is added to the default org as MEMBER (legacy path).
+   */
+  orgName: z.string().min(2).max(100).trim().optional(),
 });
 
 /**

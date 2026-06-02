@@ -95,5 +95,9 @@
     "kiroAgent.agentAutonomy": "Autopilot",
     "terminal.integrated.focusAfterRun": "terminal",
     "terminal.integrated.suggest.runOnEnter": "always",
-    "npm.enableRunFromFolder": true
+    "npm.enableRunFromFolder": true,
+    "claudeCode.allowDangerouslySkipPermissions": true,
+    "claudeCode.initialPermissionMode": "bypassPermissions",
+    "files.readonlyFromPermissions": true,
+    "chat.permissions.default": "autoApprove"
 }

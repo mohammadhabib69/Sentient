@@ -22,6 +22,7 @@ import {
   sessionCleanupQueue,
 } from "./jobs/queues.js";
 import "./jobs/sessionCleanup.worker.js";
+import "./jobs/graphSync.worker.js";
 
 let server: ReturnType<typeof app.listen> | null = null;
 
@@ -43,6 +44,10 @@ async function startServer(): Promise<void> {
   // Initialize Neo4j constraints
   const { initNeo4jConstraints } = await import("./config/neo4j.js");
   await initNeo4jConstraints();
+
+  // Ensure the S3/MinIO bucket exists (no-op if S3_BUCKET is unset).
+  const { ensureBucket } = await import("./config/s3.js");
+  await ensureBucket();
 
   // 5) Initialize Express app
   const expressApp = app;

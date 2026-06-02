@@ -32,11 +32,15 @@ describe("ErrorCode constants", () => {
     expect(ErrorCode.RATE_LIMITED).toBe("RATE_LIMITED");
     expect(ErrorCode.ACCOUNT_LOCKED).toBe("ACCOUNT_LOCKED");
     expect(ErrorCode.INTERNAL_ERROR).toBe("INTERNAL_ERROR");
+    // Phase 5 additions
+    expect(ErrorCode.FILE_TOO_LARGE).toBe("FILE_TOO_LARGE");
+    expect(ErrorCode.FILE_TYPE_NOT_ALLOWED).toBe("FILE_TYPE_NOT_ALLOWED");
+    expect(ErrorCode.WORKSPACE_HAS_PROJECTS).toBe("WORKSPACE_HAS_PROJECTS");
   });
 
-  it("should have exactly 12 error codes", () => {
+  it("should have exactly 15 error codes (12 original + 3 Phase 5 additions)", () => {
     const errorCodes = Object.keys(ErrorCode);
-    expect(errorCodes).toHaveLength(12);
+    expect(errorCodes).toHaveLength(15);
   });
 });
 

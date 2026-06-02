@@ -5,9 +5,11 @@ import { neo4jDriver } from "../../config/neo4j.js";
 
 type ServiceStatus = "ok" | "error";
 
-export const healthRouter = Router();
-
-healthRouter.get("/", async (_req, res) => {
+/**
+ * Shared health handler — returns JSON with all 5 service statuses.
+ * Mounted at both `/v1/health` (under v1Router) and `/health` (top-level alias).
+ */
+export async function healthHandler(_req: any, res: any): Promise<void> {
   const [postgres, redis, neo4j, pgvector, timescale] = await Promise.all([
     checkPostgres(),
     checkRedis(),
@@ -26,7 +28,11 @@ healthRouter.get("/", async (_req, res) => {
     timestamp: new Date().toISOString(),
     services,
   });
-});
+}
+
+export const healthRouter = Router();
+
+healthRouter.get("/", healthHandler);
 
 async function checkPostgres(): Promise<ServiceStatus> {
   try {
