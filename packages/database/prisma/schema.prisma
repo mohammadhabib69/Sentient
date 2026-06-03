@@ -121,6 +121,7 @@ model Organization {
   files         File[]
   subscriptions Subscription[]
   webhooks      Webhook[]
+  customAgents  CustomAgent[]
 
   @@index([plan])
   @@map("organizations")
@@ -163,6 +164,7 @@ model User {
   approvedAgentActions AgentAction[]  @relation("AgentActionApprover")
   notifications        Notification[]
   uploadedFiles        File[]         @relation("FileUploader")
+  createdCustomAgents  CustomAgent[]
 
   @@unique([orgId, email])
   @@index([orgId, role])
@@ -561,4 +563,100 @@ model Webhook {
   @@index([orgId, isActive])
   @@index([lastTriggered])
   @@map("webhooks")
+}
+
+// ──────────────────────────────────────────────────────────────
+// Custom Agent Builder (Phase 9)
+// ──────────────────────────────────────────────────────────────
+
+/// A custom agent created by a user through the no-code builder.
+model CustomAgent {
+  id              String    @id @default(uuid()) @db.Uuid
+  orgId           String    @map("org_id") @db.Uuid
+  createdBy       String    @map("created_by") @db.Uuid
+  name            String
+  description     String?
+  isPublished     Boolean   @default(false) @map("is_published")
+  isActive        Boolean   @default(true) @map("is_active")
+
+  // Flow definition — JSON representation of React Flow nodes and edges
+  flowDefinition  Json      @map("flow_definition")
+
+  // Compiled agent code (generated from flow)
+  compiledCode    String?   @map("compiled_code")
+
+  // Metadata
+  version         Int       @default(1)
+  publishedAt     DateTime? @map("published_at") @db.Timestamptz(6)
+  publishedBy     String?   @map("published_by") @db.Uuid
+
+  // Stats
+  executionCount  BigInt    @default(0) @map("execution_count")
+  successCount    BigInt    @default(0) @map("success_count")
+  failureCount    BigInt    @default(0) @map("failure_count")
+
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  creator         User           @relation(fields: [createdBy], references: [id])
+  org             Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  versions        CustomAgentVersion[]
+  executions      CustomAgentExecution[]
+
+  @@index([orgId])
+  @@index([createdBy])
+  @@index([isPublished])
+  @@map("custom_agents")
+}
+
+/// Version history — one entry per save.
+model CustomAgentVersion {
+  id              String   @id @default(uuid()) @db.Uuid
+  customAgentId   String   @map("custom_agent_id") @db.Uuid
+  version         Int                            // 1, 2, 3, ...
+  flowDefinition  Json     @map("flow_definition")
+  compiledCode    String?  @map("compiled_code")
+  changeNote      String?  @map("change_note")
+  createdBy       String   @map("created_by") @db.Uuid
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  customAgent     CustomAgent @relation(fields: [customAgentId], references: [id], onDelete: Cascade)
+
+  @@index([customAgentId])
+  @@index([version])
+  @@map("custom_agent_versions")
+}
+
+/// Execution log — one entry per custom agent run.
+model CustomAgentExecution {
+  id                String    @id @default(uuid()) @db.Uuid
+  customAgentId     String    @map("custom_agent_id") @db.Uuid
+  orgId             String    @map("org_id") @db.Uuid
+
+  triggeredBy       String    @map("triggered_by")     // Event ID or user ID
+  triggerType       String    @map("trigger_type")     // 'manual', 'event', 'schedule'
+
+  status            String    @default("pending")      // pending | running | success | failed | timeout
+  startedAt         DateTime? @map("started_at") @db.Timestamptz(6)
+  completedAt       DateTime? @map("completed_at") @db.Timestamptz(6)
+
+  // Execution trace
+  input             Json      @default("{}")
+  output            Json      @default("{}")
+  proposedActions   Int       @default(0) @map("proposed_actions")
+
+  // Error handling
+  errorMessage      String?   @map("error_message")
+  errorStack        String?   @map("error_stack")
+
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  customAgent       CustomAgent @relation(fields: [customAgentId], references: [id], onDelete: Cascade)
+
+  @@index([customAgentId])
+  @@index([orgId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("custom_agent_executions")
 }

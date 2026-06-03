@@ -1,20 +1,16 @@
 "use client";
 
 import { AgentBuilderCanvas } from "@/components/agents/AgentBuilderCanvas";
-import { useCustomAgent, useCreateCustomAgent } from "@/hooks/useCustomAgents";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useCustomAgent } from "@/hooks/useCustomAgents";
+import { useParams } from "next/navigation";
 import { Node, Edge } from "@xyflow/react";
 
-export default function Page() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id") || undefined;
-  const cloneId = searchParams.get("clone") || undefined;
+export default function EditAgentPage() {
+  const params = useParams();
+  const id = params.id as string;
 
   const { data: agent, isLoading } = useCustomAgent(id);
 
-  // Convert API flow definition to React Flow nodes/edges
   const initialFlow = agent?.flowDefinition
     ? {
         nodes: (agent.flowDefinition.nodes as any[]).map((n) => ({

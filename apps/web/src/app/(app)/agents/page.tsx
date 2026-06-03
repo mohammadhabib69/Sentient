@@ -31,7 +31,7 @@ export default function AgentsPage() {
   };
 
   const handleReject = (id: string) => {
-    rejectMutation.mutate(id);
+    rejectMutation.mutate({ actionId: id });
   };
 
   return (

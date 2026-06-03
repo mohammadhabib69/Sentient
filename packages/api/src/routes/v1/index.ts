@@ -11,6 +11,7 @@ import { searchRouter } from "../../modules/search/search.routes.js";
 import { presenceRouter } from "../../modules/presence/presence.routes.js";
 import { analyticsRouter } from "../../modules/analytics/analytics.routes.js";
 import { agentsRouter } from "../../modules/agents/agents.routes.js";
+import { customAgentsRouter, registryRouter } from "../../modules/agents/builder/custom-agents.routes.js";
 
 export const v1Router = Router();
 
@@ -26,3 +27,5 @@ v1Router.use("/search", searchRouter);
 v1Router.use("/presence", presenceRouter);
 v1Router.use("/analytics", analyticsRouter);
 v1Router.use("/agents", agentsRouter);
+v1Router.use("/agents/custom", customAgentsRouter);
+v1Router.use("/agents/registry", registryRouter);

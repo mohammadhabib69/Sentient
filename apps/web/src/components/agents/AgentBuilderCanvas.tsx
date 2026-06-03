@@ -48,6 +48,10 @@ import {
   Maximize2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useUpdateCustomAgent, usePublishCustomAgent, useTestCustomAgent, type SandboxTestResult } from "@/hooks/useCustomAgents";
+import { toast } from "sonner";
+import { useHotkeys } from "react-hotkeys-hook";
+import { VersionHistoryPanel } from "./VersionHistoryPanel";
 
 // ─── Custom Node Components ────────────────────────────────────
 
@@ -313,11 +317,25 @@ const initialEdges: Edge[] = [
 ];
 
 // ─── Inner Canvas Component ─────────────────────────────────────
-function CanvasContent() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+interface CanvasContentProps {
+  agentId?: string;
+  initialFlow?: { nodes: Node[]; edges: Edge[] };
+  onSaved?: (agentId: string) => void;
+}
+
+function CanvasContent({ agentId, initialFlow, onSaved }: CanvasContentProps) {
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialFlow?.nodes ?? initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialFlow?.edges ?? initialEdges);
   const { screenToFlowPosition, zoomIn, zoomOut, fitView } = useReactFlow();
   const { zoom } = useViewport();
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [isTestingOpen, setIsTestingOpen] = useState(false);
+  const [testResult, setTestResult] = useState<SandboxTestResult | null>(null);
+
+  const updateMutation = useUpdateCustomAgent(agentId!);
+  const publishMutation = usePublishCustomAgent(agentId!);
+  const testMutation = useTestCustomAgent(agentId!);
 
   // History stack for Undo/Redo
   const [history, setHistory] = useState<{ nodes: Node[]; edges: Edge[] }[]>([]);
@@ -481,6 +499,87 @@ function CanvasContent() {
     );
   }, [nodes, setNodes, setEdges, saveStateToHistory]);
 
+  // ─── Save Flow ─────────────────────────────────────────────────
+  const handleSave = useCallback(async () => {
+    if (!agentId) {
+      toast.error("Save agent first by creating a new agent");
+      return;
+    }
+    setIsSaving(true);
+    try {
+      await updateMutation.mutateAsync({
+        flowDefinition: {
+          nodes: nodes.map((n) => ({
+            id: n.id,
+            type: n.type ?? "",
+            position: n.position,
+            data: n.data,
+          })),
+          edges: edges.map((e) => ({
+            id: e.id,
+            source: e.source,
+            target: e.target,
+            sourceHandle: e.sourceHandle,
+            targetHandle: e.targetHandle,
+          })),
+        },
+        changeNote: "Updated flow from builder",
+      });
+      toast.success("Agent saved successfully");
+      onSaved?.(agentId);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to save agent");
+    } finally {
+      setIsSaving(false);
+    }
+  }, [agentId, nodes, edges, updateMutation, onSaved]);
+
+  // ─── Publish Agent ─────────────────────────────────────────────
+  const handlePublish = useCallback(async () => {
+    if (!agentId) return;
+    try {
+      await publishMutation.mutateAsync(1);
+      toast.success("Agent published successfully");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to publish agent");
+    }
+  }, [agentId, publishMutation]);
+
+  // ─── Test Agent ────────────────────────────────────────────────
+  const handleTest = useCallback(
+    async (testInput: Record<string, unknown>) => {
+      if (!agentId) {
+        toast.error("Save agent before testing");
+        return;
+      }
+      try {
+        const result = await testMutation.mutateAsync({ input: testInput });
+        setTestResult(result);
+        if (result.success) {
+          toast.success(`Test passed in ${result.durationMs}ms`);
+        } else {
+          toast.error(`Test failed: ${result.error}`);
+        }
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Test failed");
+      }
+    },
+    [agentId, testMutation],
+  );
+
+  // ─── Keyboard Shortcuts ──────────────────────────────────────────
+  useHotkeys("mod+z", handleUndo, [handleUndo]);
+  useHotkeys("mod+y", handleRedo, [handleRedo]);
+  useHotkeys("mod+s", (e) => {
+    e.preventDefault();
+    handleSave();
+  }, [handleSave]);
+  useHotkeys("delete,backspace", (e) => {
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+    e.preventDefault();
+    deleteSelected();
+  }, [deleteSelected]);
+
   return (
     <div className="flex flex-col h-full w-full select-none">
       {/* ── Page Header (above canvas) ── */}
@@ -497,18 +596,69 @@ function CanvasContent() {
 
         {/* Right Action Buttons */}
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="font-semibold">
-            Save Draft
+          {agentId && (
+            <VersionHistoryPanel
+              agentId={agentId}
+              currentFlow={{
+                nodes: nodes.map((n) => ({
+                  id: n.id,
+                  type: n.type,
+                  position: n.position,
+                  data: n.data,
+                })),
+                edges: edges.map((e) => ({
+                  id: e.id,
+                  source: e.source,
+                  target: e.target,
+                  sourceHandle: e.sourceHandle,
+                  targetHandle: e.targetHandle,
+                })),
+              }}
+            />
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="font-semibold"
+            onClick={handleSave}
+            disabled={isSaving || !agentId}
+          >
+            {isSaving ? "Saving..." : "Save Draft"}
           </Button>
-          <Button variant="secondary" size="sm" className="font-semibold gap-1.5">
+          <Button
+            variant="secondary"
+            size="sm"
+            className="font-semibold gap-1.5"
+            onClick={() => setIsTestingOpen(true)}
+            disabled={!agentId}
+          >
             <Play className="size-3 fill-current" />
             Test
           </Button>
-          <Button variant="default" size="sm" className="font-semibold gap-1.5">
-            Deploy Agent 🚀
+          <Button
+            variant="default"
+            size="sm"
+            className="font-semibold gap-1.5"
+            onClick={handlePublish}
+            disabled={!agentId || publishMutation.isPending}
+          >
+            {publishMutation.isPending ? "Publishing..." : "Deploy Agent 🚀"}
           </Button>
         </div>
       </header>
+
+      {/* ── Test Modal ──────────────────────────────────────── */}
+      {isTestingOpen && (
+        <TestModal
+          onClose={() => {
+            setIsTestingOpen(false);
+            setTestResult(null);
+          }}
+          onTest={handleTest}
+          isRunning={testMutation.isPending}
+          result={testResult}
+        />
+      )}
 
       {/* ── Content Container (Canvas + Panels) ── */}
       <div className="flex flex-1 relative overflow-hidden bg-[#EAEEF0] dark:bg-[#16191A]">
@@ -1030,10 +1180,99 @@ function CanvasContent() {
   );
 }
 
-export function AgentBuilderCanvas() {
+export function AgentBuilderCanvas({
+  agentId,
+  initialFlow,
+  onSaved,
+}: CanvasContentProps = {}) {
   return (
     <ReactFlowProvider>
-      <CanvasContent />
+      <CanvasContent agentId={agentId} initialFlow={initialFlow} onSaved={onSaved} />
     </ReactFlowProvider>
+  );
+}
+
+// ─── Test Modal ────────────────────────────────────────────────────
+function TestModal({
+  onClose,
+  onTest,
+  isRunning,
+  result,
+}: {
+  onClose: () => void;
+  onTest: (input: Record<string, unknown>) => Promise<void>;
+  isRunning: boolean;
+  result: SandboxTestResult | null;
+}) {
+  const [testInput, setTestInput] = useState("{}");
+
+  const handleRunTest = async () => {
+    try {
+      const parsed = JSON.parse(testInput);
+      await onTest(parsed);
+    } catch {
+      toast.error("Invalid JSON input");
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-lg rounded-xl bg-[var(--surface-1)] border border-[var(--glass-border)] p-6 shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="text-lg font-bold text-foreground mb-4">Test Agent</h3>
+
+        <div className="mb-4">
+          <label className="text-xs font-semibold text-[var(--foreground-2)] mb-1 block">
+            Test Input (JSON)
+          </label>
+          <textarea
+            value={testInput}
+            onChange={(e) => setTestInput(e.target.value)}
+            className="w-full h-28 bg-[var(--surface-2)] border border-[var(--glass-border)] rounded-lg p-3 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-[hsl(var(--primary))] resize-none"
+            placeholder='{"taskId": "uuid", "priority": "high"}'
+          />
+        </div>
+
+        <div className="flex gap-2 mb-4">
+          <Button
+            onClick={handleRunTest}
+            disabled={isRunning}
+            className="flex-1 gap-1.5"
+          >
+            <Play className="size-3 fill-current" />
+            {isRunning ? "Running..." : "Run Test"}
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            Close
+          </Button>
+        </div>
+
+        {result && (
+          <div className="rounded-lg border border-[var(--glass-border)] bg-[var(--surface-2)] p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <span
+                className={`text-xs font-bold ${result.success ? "text-emerald-500" : "text-red-500"}`}
+              >
+                {result.success ? "✓ Success" : "✗ Failed"}
+              </span>
+              <span className="text-[10px] text-[var(--foreground-3)]">
+                {result.durationMs}ms
+              </span>
+            </div>
+            {result.error && (
+              <p className="text-xs text-red-400 mb-2">{result.error}</p>
+            )}
+            <pre className="text-[10px] font-mono text-[var(--foreground-2)] overflow-auto max-h-40">
+              {JSON.stringify(result.output, null, 2)}
+            </pre>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

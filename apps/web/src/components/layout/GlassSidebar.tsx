@@ -16,6 +16,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Rocket,
+  Library,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore, hydrateSidebarState } from "@/store/ui.store";
@@ -36,6 +37,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, shortcut: "⌘1" },
   { label: "Agents", href: "/agents", icon: Bot, shortcut: "⌘2", badge: "agents" },
+  { label: "Agent Registry", href: "/agents/registry", icon: Library, shortcut: "⌘9" },
   { label: "Reality Stream", href: "/stream", icon: Activity, shortcut: "⌘3" },
   { label: "Graph", href: "/graph", icon: GitFork, shortcut: "⌘4" },
   { label: "Projects", href: "/projects", icon: FolderKanban, shortcut: "⌘5" },
@@ -182,12 +184,12 @@ export function GlassSidebar() {
     hydrateSidebarState();
   }, []);
 
-  // Global keyboard shortcuts ⌘1–⌘8
+  // Global keyboard shortcuts ⌘1–⌘9
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (!e.metaKey && !e.ctrlKey) return;
       const num = parseInt(e.key);
-      if (num >= 1 && num <= 8) {
+      if (num >= 1 && num <= 9) {
         e.preventDefault();
         const item = NAV_ITEMS[num - 1];
         if (item) window.location.href = item.href;
@@ -197,9 +199,9 @@ export function GlassSidebar() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Split nav: main items (0–6) and settings (7)
-  const mainItems = NAV_ITEMS.slice(0, 7);
-  const settingsItem = NAV_ITEMS[7]!;
+  // Split nav: main items (0–7) and settings (8)
+  const mainItems = NAV_ITEMS.slice(0, 8);
+  const settingsItem = NAV_ITEMS[8]!;
 
   return (
     <motion.aside

@@ -24,3 +24,49 @@ export interface AgentAction {
   expiresAt: string;
   createdAt: string;
 }
+
+// ─── Custom Agent Builder Types (Phase 9) ──────────────────────────
+
+export interface FlowDefinition {
+  nodes: FlowNode[];
+  edges: FlowEdge[];
+}
+
+export interface FlowNode {
+  id: string;
+  type: string;
+  position: { x: number; y: number };
+  data: Record<string, unknown>;
+}
+
+export interface FlowEdge {
+  id: string;
+  source: string;
+  target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
+}
+
+export interface CustomAgent {
+  id: string;
+  name: string;
+  description?: string;
+  isPublished: boolean;
+  isActive: boolean;
+  version: number;
+  flowDefinition: FlowDefinition;
+  compiledCode?: string;
+  executionCount: number;
+  successCount: number;
+  failureCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SandboxTestResult {
+  executionId: string;
+  success: boolean;
+  output: unknown;
+  durationMs: number;
+  error: string | null;
+}

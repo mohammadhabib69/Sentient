@@ -65,6 +65,14 @@ const envSchema = z.object({
     .enum(["true", "false"])
     .default("true")
     .transform((v) => v === "true"),
+  // Agent Builder (Phase 9)
+  AGENT_BUILDER_SANDBOX_TIMEOUT_MS: z.coerce.number().default(10000),
+  AGENT_BUILDER_MAX_NODES: z.coerce.number().default(50),
+  AGENT_BUILDER_MAX_MEMORY: z.coerce.number().default(104857600),
+  AGENT_BUILDER_PUBLISH_REQUIRES_APPROVAL: z
+    .enum(["true", "false"])
+    .default("true")
+    .transform((v) => v === "true"),
 });
 
 export const env = envSchema.parse(process.env);

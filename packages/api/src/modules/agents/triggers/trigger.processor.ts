@@ -66,4 +66,77 @@ export async function processTriggers(event: OutboxEventEnvelope): Promise<void>
       );
     }
   }
+
+  // ─── Custom agent triggers ─────────────────────────────────────
+  const customAgents = await prisma.customAgent.findMany({
+    where: {
+      orgId: event.orgId,
+      isPublished: true,
+      isActive: true,
+    },
+  });
+
+  for (const customAgent of customAgents) {
+    try {
+      const flow = customAgent.flowDefinition as any;
+
+      // Check if trigger node matches this event
+      const triggerNode = flow.nodes?.find((n: any) =>
+        n.type?.startsWith("trigger"),
+      );
+      if (!triggerNode) continue;
+
+      const triggerConfig = triggerNode.data?.config ?? triggerNode.data ?? {};
+      const [cat, subtype] = (triggerNode.type ?? "").split(":");
+
+      // Check event type match
+      if (cat === "trigger" && subtype === "event") {
+        const eventTypes = triggerConfig.eventType
+          ? Array.isArray(triggerConfig.eventType)
+            ? triggerConfig.eventType
+            : [triggerConfig.eventType]
+          : [];
+
+        if (!eventTypes.includes(event.type)) continue;
+
+        // Check filter expression
+        if (triggerConfig.filterExpression) {
+          try {
+            const context = {
+              event: { type: event.type, payload: event.payload },
+              org: { id: event.orgId },
+            };
+            // eslint-disable-next-line no-eval
+            const shouldRun = eval(triggerConfig.filterExpression);
+            if (!shouldRun) continue;
+          } catch {
+            continue;
+          }
+        }
+
+        // Enqueue job
+        await aiQueue.add(
+          "run-custom-agent",
+          {
+            orgId: event.orgId,
+            customAgentId: customAgent.id,
+            customAgentName: customAgent.name,
+            input: event,
+            triggerEventId: event.id,
+          },
+          {
+            priority: getRiskPriority(event.type),
+            attempts: 2,
+            backoff: { type: "exponential", delay: 5000 },
+          },
+        );
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(
+        `[Trigger] Error processing custom agent ${customAgent.id}:`,
+        message,
+      );
+    }
+  }
 }
