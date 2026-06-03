@@ -4,6 +4,7 @@ import { redisClient } from "../config/redis.js";
 import { env } from "../config/env.js";
 import { emitToOrg } from "../websocket/events.js";
 import { runProjectors } from "../modules/events/projectors/index.js";
+import { processTriggers } from "../modules/agents/triggers/trigger.processor.js";
 import type { OutboxEventEnvelope } from "../modules/events/events.service.js";
 
 /**
@@ -132,6 +133,12 @@ async function deliverEntry(entry: EventOutbox): Promise<void> {
 
     // 3. Run CQRS projectors (each handles its own event-type filter).
     await runProjectors(envelope);
+
+    // 3a. Phase 8 — wake up any matching AI agent triggers. Fire and
+    //     forget so a slow agent can't block outbox delivery.
+    void processTriggers(envelope).catch((err: unknown) => {
+      console.error("[Outbox] processTriggers failed", err);
+    });
 
     // 4. Mark as delivered.
     await prisma.eventOutbox.update({

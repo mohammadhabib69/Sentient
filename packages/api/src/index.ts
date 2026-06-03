@@ -34,6 +34,7 @@ import {
 } from "./jobs/queues.js";
 import "./jobs/sessionCleanup.worker.js";
 import "./jobs/graphSync.worker.js";
+import "./jobs/ai.worker.js";
 
 let server: ReturnType<typeof createServer> | null = null;
 

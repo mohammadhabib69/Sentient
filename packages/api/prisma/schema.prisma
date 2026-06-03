@@ -300,18 +300,21 @@ model Agent {
 }
 
 model AgentAction {
-  id         String            @id @default(uuid()) @db.Uuid
-  agentId    String            @map("agent_id") @db.Uuid
-  orgId      String            @map("org_id") @db.Uuid
-  actionType String            @map("action_type")
-  payload    Json              @default("{}")
-  status     AgentActionStatus @default(PENDING)
-  approvedBy String?           @map("approved_by") @db.Uuid
-  approvedAt DateTime?         @map("approved_at") @db.Timestamptz(6)
-  executedAt DateTime?         @map("executed_at") @db.Timestamptz(6)
-  result     Json?
-  expiresAt  DateTime          @map("expires_at") @db.Timestamptz(6)
-  createdAt  DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  id          String            @id @default(uuid()) @db.Uuid
+  agentId     String            @map("agent_id") @db.Uuid
+  orgId       String            @map("org_id") @db.Uuid
+  actionType  String            @map("action_type")
+  description String?
+  payload     Json              @default("{}")
+  status      AgentActionStatus @default(PENDING)
+  riskLevel   String            @default("low") @map("risk_level")
+  confidence  Decimal           @default(0) @db.Decimal(5, 4)
+  approvedBy  String?           @map("approved_by") @db.Uuid
+  approvedAt  DateTime?         @map("approved_at") @db.Timestamptz(6)
+  executedAt  DateTime?         @map("executed_at") @db.Timestamptz(6)
+  result      Json?
+  expiresAt   DateTime          @map("expires_at") @db.Timestamptz(6)
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
 
   agent        Agent        @relation(fields: [agentId], references: [id], onDelete: Cascade)
   organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)

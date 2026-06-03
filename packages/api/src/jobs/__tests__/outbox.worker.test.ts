@@ -33,6 +33,7 @@ vi.mock("../../config/redis.js", () => ({
     del: (...args: unknown[]) => delMock(...args),
     xadd: (...args: unknown[]) => xaddMock(...args),
   },
+  bullRedisClient: {},
 }));
 
 vi.mock("../../config/prisma.js", () => ({

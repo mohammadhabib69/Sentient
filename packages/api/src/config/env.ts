@@ -52,6 +52,19 @@ const envSchema = z.object({
   OUTBOX_MAX_RETRIES: z.coerce.number().default(5),
   OUTBOX_BATCH_SIZE: z.coerce.number().default(50),
   READ_MODEL_REBUILD_LOCK_TTL: z.coerce.number().default(300),
+  // AI Agents (Phase 8)
+  OPENAI_EMBEDDING_MODEL: z.string().default("text-embedding-3-small"),
+  OPENAI_CHAT_MODEL: z.string().default("gpt-4o-mini"),
+  OPENAI_ADVANCED_MODEL: z.string().default("gpt-4o"),
+  AGENT_MAX_ITERATIONS: z.coerce.number().default(10),
+  AGENT_TIMEOUT_MS: z.coerce.number().default(30000),
+  AGENT_MEMORY_TOP_K: z.coerce.number().default(5),
+  AGENT_AUTO_APPROVE_THRESHOLD: z.coerce.number().default(0.85),
+  AGENT_APPROVAL_TIMEOUT_HOURS: z.coerce.number().default(24),
+  HITL_ENABLED: z
+    .enum(["true", "false"])
+    .default("true")
+    .transform((v) => v === "true"),
 });
 
 export const env = envSchema.parse(process.env);

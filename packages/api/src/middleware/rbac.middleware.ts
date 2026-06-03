@@ -10,7 +10,7 @@ export type Permission =
   | "workspace:create" | "workspace:read"
   | "project:create" | "project:read" | "project:write"
   | "task:create" | "task:read" | "task:write" | "task:write-own"
-  | "agent:manage" | "agent:approve"
+  | "agent:read" | "agent:manage" | "agent:approve"
   | "analytics:read"
   | "billing:manage"
   | "webhook:manage"
@@ -58,6 +58,7 @@ export const rolePermissions: Record<UserRole, RolePermission[]> = {
     "task:create",
     "task:read",
     "task:write-own",
+    "agent:read",
     "stream:read",
   ],
   GUEST: [

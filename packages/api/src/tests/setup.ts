@@ -21,3 +21,6 @@ process.env.GOOGLE_CALLBACK_URL = 'http://localhost:3001/v1/auth/google/callback
 process.env.EMAIL_FROM = 'test@example.com';
 process.env.RESEND_API_KEY = 'test-resend-api-key';
 process.env.NODE_ENV = 'test';
+
+// Phase 8 AI agent test keys
+process.env.OPENAI_API_KEY = 'sk-test-key-for-unit-tests';
