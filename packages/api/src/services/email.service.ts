@@ -120,6 +120,8 @@ export class EmailService {
         console.log(`From: ${this.fromAddress}`);
         console.log(`To: ${options.to}`);
         console.log(`Subject: ${options.subject}`);
+        console.log('\n--- HTML Content ---');
+        console.log(options.html);
         console.log('\n--- Text Content ---');
         console.log(options.text);
         console.log('================================\n');

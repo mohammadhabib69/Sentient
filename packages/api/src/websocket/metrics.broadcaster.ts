@@ -2,6 +2,7 @@ import { AgentActionStatus, TaskStatus } from "@prisma/client";
 import { prisma } from "../config/prisma.js";
 import { redisClient } from "../config/redis.js";
 import { emitToOrg } from "./events.js";
+import { getQueueMetrics } from "../modules/queue/queue-metrics.js";
 
 /**
  * PRD §11 — Live Dashboard Metrics.
@@ -177,5 +178,44 @@ export function stopMetricsBroadcaster(): void {
   if (tickHandle) {
     clearInterval(tickHandle);
     tickHandle = null;
+  }
+}
+
+// ─── Queue metrics broadcast ──────────────────────────────────────────────
+
+const QUEUE_TICK_INTERVAL_MS = 10_000;
+let queueTickHandle: NodeJS.Timeout | null = null;
+
+/**
+ * Periodically fetch queue metrics and emit to all connected sockets
+ * via the `queue:metrics` event (Phase 10 §7).
+ */
+async function broadcastQueueMetrics(): Promise<void> {
+  try {
+    const metrics = await getQueueMetrics();
+    (globalThis as unknown as { __io?: { emit: (e: string, d: unknown) => void } }).__io?.emit(
+      "queue:metrics",
+      {
+        timestamp: new Date().toISOString(),
+        queues: metrics,
+      },
+    );
+  } catch (err) {
+    console.error("[metrics] queue broadcast failed", err);
+  }
+}
+
+export function startQueueMetricsBroadcast(): void {
+  if (queueTickHandle) return;
+  queueTickHandle = setInterval(() => {
+    void broadcastQueueMetrics();
+  }, QUEUE_TICK_INTERVAL_MS);
+  queueTickHandle.unref?.();
+}
+
+export function stopQueueMetricsBroadcast(): void {
+  if (queueTickHandle) {
+    clearInterval(queueTickHandle);
+    queueTickHandle = null;
   }
 }

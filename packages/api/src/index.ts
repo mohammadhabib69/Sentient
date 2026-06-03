@@ -11,6 +11,8 @@ import { initWebSocket } from "./websocket/index.js";
 import {
   startMetricsBroadcaster,
   stopMetricsBroadcaster,
+  startQueueMetricsBroadcast,
+  stopQueueMetricsBroadcast,
 } from "./websocket/metrics.broadcaster.js";
 import {
   startOutboxPoller,
@@ -27,14 +29,22 @@ import {
   aiQueue,
   webhookQueue,
   pdfQueue,
-  graphSyncQueue,
+  scheduleQueue,
   notificationQueue,
+  graphSyncQueue,
   billingQueue,
   sessionCleanupQueue,
-} from "./jobs/queues.js";
+} from "./config/queues.js";
 import "./jobs/sessionCleanup.worker.js";
 import "./jobs/graphSync.worker.js";
 import "./jobs/ai.worker.js";
+import "./jobs/email.worker.js";
+import "./jobs/pdf.worker.js";
+import "./jobs/schedule.worker.js";
+import "./jobs/webhook.worker.js";
+import "./jobs/notification.worker.js";
+import { initializeDefaultSchedules } from "./modules/scheduling/schedule.service.js";
+import { startMetricsCollection } from "./modules/queue/queue-metrics.js";
 
 let server: ReturnType<typeof createServer> | null = null;
 
@@ -70,12 +80,13 @@ async function startServer(): Promise<void> {
 
   createBullBoard({
     queues: [
-      new BullMQAdapter(emailQueue),
       new BullMQAdapter(aiQueue),
+      new BullMQAdapter(emailQueue),
+      new BullMQAdapter(notificationQueue),
       new BullMQAdapter(webhookQueue),
       new BullMQAdapter(pdfQueue),
+      new BullMQAdapter(scheduleQueue),
       new BullMQAdapter(graphSyncQueue),
-      new BullMQAdapter(notificationQueue),
       new BullMQAdapter(billingQueue),
       new BullMQAdapter(sessionCleanupQueue),
     ],
@@ -110,6 +121,17 @@ async function startServer(): Promise<void> {
   //     entries to Socket.io, Redis Stream, and CQRS projectors.
   startOutboxPoller();
 
+  // 9c) Start queue metrics collection (Phase 10 §7).
+  startMetricsCollection();
+  console.log("[Queue] Metrics collection started");
+
+  // 9e) Start real-time queue metrics broadcast via Socket.io.
+  startQueueMetricsBroadcast();
+  console.log("[Queue] Real-time metrics broadcast started");
+
+  // 9d) Initialize default scheduled jobs (Phase 10 §6).
+  await initializeDefaultSchedules();
+
   await new Promise<void>((resolve) => {
     server = httpServer.listen(env.PORT, () => {
       console.log(`API listening on port ${env.PORT}`);
@@ -122,6 +144,7 @@ async function startServer(): Promise<void> {
     console.log(`Received ${signal}, shutting down gracefully...`);
 
     stopMetricsBroadcaster();
+    stopQueueMetricsBroadcast();
     stopOutboxPoller();
 
     // Drain remaining outbox entries (Phase 7 §11) — best effort.

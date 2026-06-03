@@ -671,3 +671,51 @@ model CustomAgentExecution {
   @@index([createdAt])
   @@map("custom_agent_executions")
 }
+
+// ──────────────────────────────────────────────────────────────
+// Queue System (Phase 10)
+// ──────────────────────────────────────────────────────────────
+
+model DeadLetterJob {
+  id          String   @id @default(uuid()) @db.Uuid
+  queueName   String   @map("queue_name")
+  jobId       String   @map("job_id")
+  jobType     String   @map("job_type")
+  jobData     Json     @map("job_data")
+  error       String
+  errorStack  String?  @map("error_stack")
+  attempts    Int
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  @@index([queueName])
+  @@index([createdAt])
+  @@map("dead_letter_jobs")
+}
+
+model WebhookDelivery {
+  id          String   @id @default(uuid()) @db.Uuid
+  webhookId   String   @map("webhook_id")
+  orgId       String   @map("org_id") @db.Uuid
+  status      String   @default("pending")
+  statusCode  Int?     @map("status_code")
+  response    Json?    @default("{}")
+  attempts    Int      @default(0)
+  lastError   String?  @map("last_error")
+  deliveredAt DateTime? @map("delivered_at") @db.Timestamptz(6)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  @@index([webhookId])
+  @@index([orgId])
+  @@index([status])
+  @@map("webhook_deliveries")
+}
+
+model Document {
+  id          String   @id @default(uuid()) @db.Uuid
+  orgId       String   @map("org_id") @db.Uuid
+  name        String
+  mimeType    String   @map("mime_type")
+  size        BigInt
+  storagePath String   @map("storage_path")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  @@index([orgId])
+  @@map("documents")
+}

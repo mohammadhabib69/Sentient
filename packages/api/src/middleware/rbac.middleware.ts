@@ -14,7 +14,8 @@ export type Permission =
   | "analytics:read"
   | "billing:manage"
   | "webhook:manage"
-  | "stream:read";
+  | "stream:read"
+  | "queue:admin";
 
 type RolePermission = Permission | "*";
 
@@ -39,6 +40,7 @@ export const rolePermissions: Record<UserRole, RolePermission[]> = {
     "billing:manage",
     "webhook:manage",
     "stream:read",
+    "queue:admin",
   ],
   MANAGER: [
     "workspace:read",

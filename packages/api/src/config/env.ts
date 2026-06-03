@@ -73,6 +73,28 @@ const envSchema = z.object({
     .enum(["true", "false"])
     .default("true")
     .transform((v) => v === "true"),
+  // Queue System (Phase 10)
+  QUEUE_DEFAULT_ATTEMPTS: z.coerce.number().default(3),
+  QUEUE_BACKOFF_TYPE: z.enum(["exponential", "linear", "fixed"]).default("exponential"),
+  QUEUE_BACKOFF_DELAY_MS: z.coerce.number().default(1000),
+  QUEUE_BACKOFF_MULTIPLIER: z.coerce.number().default(2),
+  QUEUE_MAX_BACKOFF_MS: z.coerce.number().default(60000),
+  QUEUE_STALLED_INTERVAL: z.coerce.number().default(5000),
+  QUEUE_STALLED_COUNT: z.coerce.number().default(2),
+  QUEUE_LOCK_TTL: z.coerce.number().default(30000),
+  // Worker Concurrency (Phase 10)
+  WORKER_AI_CONCURRENCY: z.coerce.number().default(3),
+  WORKER_EMAIL_CONCURRENCY: z.coerce.number().default(5),
+  WORKER_PDF_CONCURRENCY: z.coerce.number().default(2),
+  WORKER_SCHEDULE_CONCURRENCY: z.coerce.number().default(1),
+  // Queue Monitoring (Phase 10)
+  QUEUE_METRICS_INTERVAL_MS: z.coerce.number().default(10000),
+  QUEUE_ALERT_THRESHOLD_SIZE: z.coerce.number().default(100),
+  QUEUE_ALERT_THRESHOLD_AGE_MS: z.coerce.number().default(300000),
+  // SMTP Configuration (Phase 10)
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.string().optional(),
+  SENDGRID_API_KEY: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

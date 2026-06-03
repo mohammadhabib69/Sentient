@@ -413,3 +413,6 @@ export class EventsService {
 }
 
 export const eventsService = new EventsService();
+
+/** Standalone convenience export for calling logEvent without the service instance. */
+export const logEvent = eventsService.logEvent.bind(eventsService);

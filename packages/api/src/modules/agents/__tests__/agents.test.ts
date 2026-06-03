@@ -68,6 +68,9 @@ vi.mock("../../../config/prisma.js", () => ({
       findMany: (...args: unknown[]) => findManyMock(...args),
       update: (...args: unknown[]) => agentUpdateMock(...args),
     },
+    customAgent: {
+      findMany: (...args: unknown[]) => findManyMock(...args),
+    },
     task: {
       findFirst: (...args: unknown[]) => findFirstMock(...args),
       update: (...args: unknown[]) => updateMock(...args),
@@ -129,6 +132,7 @@ vi.mock("../../../jobs/queues.js", () => ({
   notificationQueue: { add: vi.fn() },
   billingQueue: { add: vi.fn() },
   sessionCleanupQueue: { add: vi.fn() },
+  scheduleQueue: { add: vi.fn() },
   defaultJobOptions: {},
 }));
 

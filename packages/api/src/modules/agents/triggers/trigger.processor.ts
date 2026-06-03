@@ -68,13 +68,13 @@ export async function processTriggers(event: OutboxEventEnvelope): Promise<void>
   }
 
   // ─── Custom agent triggers ─────────────────────────────────────
-  const customAgents = await prisma.customAgent.findMany({
+  const customAgents = await prisma.customAgent?.findMany({
     where: {
       orgId: event.orgId,
       isPublished: true,
       isActive: true,
     },
-  });
+  }) ?? [];
 
   for (const customAgent of customAgents) {
     try {

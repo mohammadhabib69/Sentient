@@ -177,6 +177,106 @@ docker exec -i sentient-postgres psql -U sentient -d sentient \
   < packages/database/prisma/migrations/timescale_continuous_aggregates.sql
 ```
 
+## Phase 8 — AI Agents + HITL
+
+Autonomous AI agents (Aria/Nova/Echo/Flux) observe events, detect patterns,
+and propose actions with human-in-the-loop approval. Trigger-based agent
+execution, risk scoring, and confidence evaluation.
+
+### Key features
+
+- **Built-in agents** — 4 agent types with OpenAI-powered decision making
+- **HITL approval** — proposed actions require human approval before execution
+- **Trigger system** — event-driven agent activation via `processTriggers()`
+- **Risk scoring** — actions scored by risk level and confidence threshold
+
+## Phase 9 — No-Code Agent Builder
+
+Visual drag-and-drop builder for creating custom agents without code.
+Users configure flows with trigger → condition → action nodes, test in a
+sandbox, and publish to production with version history.
+
+### Key features
+
+- **Visual canvas** — `@xyflow/react` drag-and-drop with config panel
+- **Flow compiler** — DAG validation, cycle detection, topological sort, code generation
+- **Sandbox** — Node.js `vm` isolated execution with timeout
+- **Version history** — rollback, compare (flow diff), clone
+- **Agent registry** — browse, search, filter (built-in + custom)
+- **Keyboard shortcuts** — Ctrl+Z/Y/S/Del for undo/redo/save/delete
+
+### API endpoints
+
+```
+POST   /v1/agents/custom              # create
+GET    /v1/agents/custom              # list (cursor pagination)
+GET    /v1/agents/custom/:id          # get one
+PATCH  /v1/agents/custom/:id          # update (creates new version)
+DELETE /v1/agents/custom/:id          # delete
+GET    /v1/agents/custom/:id/versions  # list versions
+POST   /v1/agents/custom/:id/publish   # publish
+POST   /v1/agents/custom/:id/test      # sandbox test
+POST   /v1/agents/custom/:id/rollback/:version  # rollback
+POST   /v1/agents/custom/:id/clone     # clone
+GET    /v1/agents/custom/:id/executions # execution logs
+GET    /v1/agents/registry             # browse all agents
+```
+
+## Phase 10 — Queue System
+
+Production-grade queue system with multiple specialized workers, real-time
+monitoring dashboard, dead letter handling, scheduled cron jobs, and
+webhook delivery with retry.
+
+### Key features
+
+- **9 queues** — ai, email, pdf, schedule, webhook, graph-sync, notification, billing, session-cleanup
+- **Specialized workers** — each queue has its own worker with configurable concurrency
+- **Advanced retry** — exponential backoff, max retries, dead letter queue
+- **Email** — Resend/SMTP delivery with HTML templates, retry on failure
+- **PDF generation** — pdfkit task summaries and project reports, S3 storage
+- **Scheduled jobs** — node-cron daily health checks, weekly digest, hourly cleanup
+- **Webhook delivery** — HMAC signatures, 4xx no-retry / 5xx retry logic
+- **Monitoring** — real-time dashboard with Recharts charts, job browser, DLQ tab
+- **Socket.io** — live queue metrics broadcast to connected clients
+
+### New admin endpoints
+
+```
+GET    /v1/admin/metrics                      # queue metrics
+GET    /v1/admin/queue/:queueName/jobs        # browse jobs by status
+POST   /v1/admin/queue/:queueName/jobs/:jobId/retry   # retry a job
+POST   /v1/admin/queue/:queueName/jobs/:jobId/remove  # remove a job
+POST   /v1/admin/queue/:queueName/pause       # pause queue
+POST   /v1/admin/queue/:queueName/resume      # resume queue
+GET    /v1/admin/dead-letters                 # list DLQ jobs
+POST   /v1/admin/dead-letters/:id/retry       # retry DLQ job
+```
+
+### New env vars
+
+```
+QUEUE_DEFAULT_ATTEMPTS=3
+QUEUE_BACKOFF_TYPE=exponential
+QUEUE_BACKOFF_DELAY_MS=1000
+QUEUE_BACKOFF_MULTIPLIER=2
+QUEUE_MAX_BACKOFF_MS=60000
+QUEUE_STALLED_INTERVAL=5000
+QUEUE_STALLED_COUNT=2
+QUEUE_LOCK_TTL=30000
+WORKER_AI_CONCURRENCY=3
+WORKER_EMAIL_CONCURRENCY=5
+WORKER_PDF_CONCURRENCY=2
+WORKER_SCHEDULE_CONCURRENCY=1
+QUEUE_METRICS_INTERVAL_MS=10000
+QUEUE_ALERT_THRESHOLD_SIZE=100
+QUEUE_ALERT_THRESHOLD_AGE_MS=300000
+```
+
+### Bull Board
+
+Queue dashboard available at `http://localhost:3001/admin/queues`
+
 ## Documentation
 
 - [Setup Guide](docs/SETUP.md)
