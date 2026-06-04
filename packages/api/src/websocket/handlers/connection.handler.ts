@@ -1,6 +1,7 @@
 import type { Server, Socket } from "socket.io";
 import { redisClient } from "../../config/redis.js";
 import { getSocketUser } from "../socket.types.js";
+import { registerAnalyticsHandlers } from "../analytics.handler.js";
 import { registerCollaborationHandlers } from "./collaboration.handler.js";
 import { registerPresenceHandlers } from "./presence.handler.js";
 import { registerRoomHandlers } from "./room.handler.js";
@@ -48,6 +49,7 @@ export async function handleConnection(io: Server, socket: Socket): Promise<void
   registerPresenceHandlers(io, socket);
   registerTypingHandlers(io, socket);
   registerCollaborationHandlers(io, socket);
+  registerAnalyticsHandlers(io, socket);
 
   // 5. Cleanup on disconnect.
   socket.on("disconnect", async () => {

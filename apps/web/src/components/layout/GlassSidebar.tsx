@@ -18,6 +18,7 @@ import {
   Rocket,
   Library,
   ListTodo,
+  ServerCog,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore, hydrateSidebarState } from "@/store/ui.store";
@@ -45,6 +46,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Analytics", href: "/analytics", icon: BarChart3, shortcut: "⌘6" },
   { label: "Developers", href: "/developers", icon: Code2, shortcut: "⌘7" },
   { label: "Queue Monitor", href: "/admin/queue-monitoring", icon: ListTodo, shortcut: "⌘0" },
+  { label: "Admin Insights", href: "/admin/analytics", icon: ServerCog, shortcut: "⌘A" },
   { label: "Settings", href: "/settings", icon: Settings, shortcut: "⌘8" },
 ];
 
@@ -207,9 +209,9 @@ export function GlassSidebar() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Split nav: main items (0–8) and settings (9)
-  const mainItems = NAV_ITEMS.slice(0, 9);
-  const settingsItem = NAV_ITEMS[9]!;
+  // Split nav: main items (0–9) and settings (10)
+  const mainItems = NAV_ITEMS.slice(0, 10);
+  const settingsItem = NAV_ITEMS[10]!;
 
   return (
     <motion.aside

@@ -257,6 +257,8 @@ model Task {
   createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt      DateTime?  @map("deleted_at") @db.Timestamptz(6)
+  /// Phase 11 — Analytics. Stamp when a task transitions to DONE.
+  completedAt    DateTime?  @map("completed_at") @db.Timestamptz(6)
 
   project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
   organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
@@ -718,4 +720,123 @@ model Document {
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   @@index([orgId])
   @@map("documents")
+}
+
+// ──────────────────────────────────────────────────────────────
+// Analytics + BI Dashboard (Phase 11)
+// ──────────────────────────────────────────────────────────────
+
+/// Point-in-time capture of all dashboard metrics. Saved snapshots let
+/// users compare yesterday vs last week vs a board meeting baseline.
+model AnalyticsSnapshot {
+  id           String   @id @default(uuid()) @db.Uuid
+  orgId        String   @map("org_id") @db.Uuid
+  /// Human label, e.g. "Monday 9 AM", "EOD Report".
+  name         String
+  description  String?
+  /// All metrics captured at this moment — full JSON document.
+  snapshotData Json     @map("snapshot_data")
+  createdBy    String?  @map("created_by") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([orgId])
+  @@index([createdAt])
+  @@map("analytics_snapshots")
+}
+
+/// Anomalies detected by the analytics engine. Severity comes from the
+/// sigma distance: low (<2σ), warning (2–3σ), critical (>3σ).
+model DetectedAnomaly {
+  id             String    @id @default(uuid()) @db.Uuid
+  orgId          String    @map("org_id") @db.Uuid
+  /// The metric that tripped the detector, e.g. "task_velocity".
+  metric         String
+  /// low | warning | critical
+  severity       String    @default("warning")
+  description    String
+  /// The anomalous value.
+  value          Float
+  /// { min, max, mean, stdDev }.
+  expectedRange  Json      @map("expected_range")
+  /// How many σ away from the mean.
+  deviations     Float
+  detectedAt     DateTime  @default(now()) @map("detected_at") @db.Timestamptz(6)
+  acknowledgedAt DateTime? @map("acknowledged_at") @db.Timestamptz(6)
+  acknowledgedBy String?   @map("acknowledged_by") @db.Uuid
+
+  @@index([orgId])
+  @@index([metric])
+  @@index([severity])
+  @@index([detectedAt])
+  @@map("detected_anomalies")
+}
+
+/// ML-style predictions: project completion date, agent success rate
+/// tomorrow, etc. `predictions` is an array of { date, predicted, confidence }.
+model Forecast {
+  id          String   @id @default(uuid()) @db.Uuid
+  orgId       String   @map("org_id") @db.Uuid
+  /// project | agent | team
+  entityType  String   @map("entity_type")
+  entityId    String   @map("entity_id") @db.Uuid
+  /// Metric being predicted, e.g. "completion_date", "success_rate".
+  metric      String
+  predictions Json
+  /// linear | exponential | polynomial
+  model       String
+  /// 0–1 confidence score.
+  accuracy    Float
+  generatedAt DateTime @default(now()) @map("generated_at") @db.Timestamptz(6)
+  /// Forecasts expire after 7 days.
+  expiresAt   DateTime @map("expires_at") @db.Timestamptz(6)
+
+  @@index([orgId])
+  @@index([entityType, entityId])
+  @@index([expiresAt])
+  @@map("forecasts")
+}
+
+/// User-defined reports that combine multiple metrics with filters.
+model CustomReport {
+  id           String   @id @default(uuid()) @db.Uuid
+  orgId        String   @map("org_id") @db.Uuid
+  createdBy    String   @map("created_by") @db.Uuid
+  name         String
+  description  String?
+  /// Which metric keys to include, e.g. ["task_velocity", "agent_success_rate"].
+  metrics      String[]
+  /// Date range, team filter, etc.
+  filters      Json     @default("{}")
+  isScheduled  Boolean  @default(false) @map("is_scheduled")
+  /// Cron expression for scheduled runs.
+  scheduleExpr String?  @map("schedule_expr")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([orgId])
+  @@index([createdBy])
+  @@map("custom_reports")
+}
+
+/// Each time a report is run, an execution is recorded. Holds output JSON
+/// or a pointer to a generated PDF/CSV file.
+model ReportExecution {
+  id          String    @id @default(uuid()) @db.Uuid
+  reportId    String    @map("report_id") @db.Uuid
+  orgId       String    @map("org_id") @db.Uuid
+  /// pending | completed | failed
+  status      String    @default("pending")
+  /// Generated report data.
+  output      Json?
+  /// S3 URL to a generated PDF/CSV.
+  fileUrl     String?   @map("file_url")
+  startedAt   DateTime? @map("started_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+  error       String?
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([reportId])
+  @@index([orgId])
+  @@index([createdAt])
+  @@map("report_executions")
 }

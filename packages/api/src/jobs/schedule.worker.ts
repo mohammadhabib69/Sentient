@@ -19,9 +19,27 @@ export const scheduleWorker = new Worker(
     if (jobType === "check-project-health") {
       await handleProjectHealthCheck();
     } else if (jobType === "send-weekly-digest") {
-      await handleWeeklyDigest();
+      // Phase 11 — full implementation lives in analytics.worker.ts;
+      // this stub just records the event for backward compat.
+      await logEvent({
+        orgId,
+        type: "scheduled_job.digest_placeholder",
+        aggregateId: job.id!,
+        aggregateType: "job",
+        payload: { jobType },
+        actorId: "system",
+        actorType: "SYSTEM" as any,
+      });
+      return { success: true, jobType, handledBy: "stub" };
     } else if (jobType === "cleanup-old-events") {
       await handleEventCleanup(job.data.retentionDays as number | undefined);
+    } else if (
+      // Phase 11 — these are owned by analytics.worker.ts; both workers
+      // consume from the same queue, so let the other worker take them.
+      jobType === "run-anomaly-detection" ||
+      jobType === "refresh-forecasts"
+    ) {
+      return { skipped: true, jobType, reason: "owned by analytics.worker" };
     } else {
       throw new Error(`Unknown schedule job type: ${jobType}`);
     }
@@ -70,7 +88,10 @@ async function handleProjectHealthCheck(): Promise<void> {
 
 async function handleWeeklyDigest(): Promise<void> {
   console.log("[Schedule] Sending weekly digests...");
-  // Full implementation in Phase 11 (Analytics)
+  // Real implementation lives in analytics.worker.ts (Phase 11).
+  // This stub is kept for backward compat — schedule service still
+  // enqueues the job, and BullMQ delivers to whichever worker
+  // accepts the name first.
 }
 
 async function handleEventCleanup(retentionDays?: number): Promise<void> {

@@ -70,5 +70,29 @@ export async function initializeDefaultSchedules(): Promise<void> {
     enabled: true,
   });
 
+  // Phase 11 — anomaly detection runs at the cadence set in env.
+  // We use a single-hour pattern (every hour on the hour) and let the
+  // env flag short-circuit when ANOMALY_DETECTION_ENABLED=false.
+  const anomalyCron = `0 */${Math.max(1, env.ANOMALY_CHECK_INTERVAL_HOURS)} * * *`;
+  await scheduleJob({
+    id: "anomaly-detection",
+    name: "Anomaly Detection Sweep",
+    cronExpr: anomalyCron,
+    jobType: "run-anomaly-detection",
+    jobData: {},
+    enabled: true,
+  });
+
+  // Phase 11 — forecast refresh. Runs at 3 AM UTC daily so it doesn't
+  // collide with the project-health email job.
+  await scheduleJob({
+    id: "forecast-refresh",
+    name: "Forecast Refresh",
+    cronExpr: "0 3 * * *",
+    jobType: "refresh-forecasts",
+    jobData: {},
+    enabled: true,
+  });
+
   console.log("[Schedule] Default schedules initialized");
 }

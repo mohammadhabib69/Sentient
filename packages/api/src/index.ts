@@ -15,6 +15,10 @@ import {
   stopQueueMetricsBroadcast,
 } from "./websocket/metrics.broadcaster.js";
 import {
+  startAnalyticsBroadcaster,
+  stopAnalyticsBroadcaster,
+} from "./websocket/analytics.handler.js";
+import {
   startOutboxPoller,
   stopOutboxPoller,
   processOutboxBatch,
@@ -41,6 +45,7 @@ import "./jobs/ai.worker.js";
 import "./jobs/email.worker.js";
 import "./jobs/pdf.worker.js";
 import "./jobs/schedule.worker.js";
+import "./jobs/analytics.worker.js";
 import "./jobs/webhook.worker.js";
 import "./jobs/notification.worker.js";
 import { initializeDefaultSchedules } from "./modules/scheduling/schedule.service.js";
@@ -129,6 +134,11 @@ async function startServer(): Promise<void> {
   startQueueMetricsBroadcast();
   console.log("[Queue] Real-time metrics broadcast started");
 
+  // 9f) Start the analytics BI dashboard broadcaster (Phase 11).
+  //     Pushes overview, velocity, agents, projects, anomalies to
+  //     subscribed clients every ANALYTICS_BROADCAST_INTERVAL_MS.
+  startAnalyticsBroadcaster();
+
   // 9d) Initialize default scheduled jobs (Phase 10 §6).
   await initializeDefaultSchedules();
 
@@ -145,6 +155,7 @@ async function startServer(): Promise<void> {
 
     stopMetricsBroadcaster();
     stopQueueMetricsBroadcast();
+    stopAnalyticsBroadcaster();
     stopOutboxPoller();
 
     // Drain remaining outbox entries (Phase 7 §11) — best effort.

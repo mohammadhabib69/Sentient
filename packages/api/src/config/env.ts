@@ -95,6 +95,19 @@ const envSchema = z.object({
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.string().optional(),
   SENDGRID_API_KEY: z.string().optional(),
+  // Analytics (Phase 11)
+  ANALYTICS_ANOMALY_THRESHOLD_SIGMA: z.coerce.number().default(2),
+  ANALYTICS_FORECAST_DAYS: z.coerce.number().default(30),
+  ANALYTICS_RETENTION_MONTHS: z.coerce.number().default(12),
+  ANOMALY_DETECTION_ENABLED: z
+    .enum(["true", "false"])
+    .default("true")
+    .transform((v) => v === "true"),
+  ANOMALY_CHECK_INTERVAL_HOURS: z.coerce.number().default(1),
+  ANOMALY_MIN_DATA_POINTS: z.coerce.number().default(10),
+  ANALYTICS_BROADCAST_INTERVAL_MS: z.coerce.number().default(30000),
+  ANALYTICS_SNAPSHOT_RETENTION_DAYS: z.coerce.number().default(90),
+  ANALYTICS_REPORT_MAX_ROWS: z.coerce.number().default(10000),
 });
 
 export const env = envSchema.parse(process.env);
